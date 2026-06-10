@@ -158,31 +158,28 @@ window.EM = (function () {
     if (!_user) return null;
     const sb = getSB();
 
-    // Upsert: one listing per address per user
-    const existing = await sb.from('listings')
+    // Upsert: one row per address per user in make_me_move table
+    const existing = await sb.from('make_me_move')
       .select('id')
       .eq('user_id', _user.id)
-      .eq('address', opts.address)
+      .eq('unit_address', opts.address)
       .maybeSingle();
 
     let result;
     if (existing.data?.id) {
-      result = await sb.from('listings')
-        .update({ price: opts.price, status: 'active', notes: opts.notes || null, updated_at: new Date().toISOString() })
+      result = await sb.from('make_me_move')
+        .update({ target_price: opts.price, notes: opts.notes || null })
         .eq('id', existing.data.id)
         .select().single();
     } else {
-      result = await sb.from('listings')
+      result = await sb.from('make_me_move')
         .insert({
-          user_id:   _user.id,
-          address:   opts.address,
-          city:      opts.city || '',
-          community: opts.community || null,
-          beds:      opts.beds || null,
-          baths:     opts.baths || null,
-          sqft:      opts.sqft || null,
-          price:     opts.price,
-          notes:     opts.notes || null,
+          user_id:      _user.id,
+          unit_address: opts.address,
+          building_slug: opts.community || 'eichler-direct',
+          target_price: opts.price,
+          is_active:    false,   // pending Tim's approval
+          notes:        opts.notes || null,
         })
         .select().single();
     }
@@ -193,6 +190,8 @@ window.EM = (function () {
     const ppsf = opts.sqft ? Math.round(opts.price / opts.sqft) : null;
     const fmtP = '$' + Number(opts.price).toLocaleString();
     const fmtPpsf = ppsf ? '$' + ppsf.toLocaleString() + '/sf' : '';
+
+    // Tim notification — pending review
     _ejSend(EJ.t_mms_to_tim, {
       to_email:'tim@mcmullen.properties', to_name:'Tim',
       owner_name: (_profile && _profile.full_name) || _user.email,
@@ -201,14 +200,15 @@ window.EM = (function () {
       community: opts.community || '', beds: opts.beds || '',
       baths: opts.baths || '', sqft: opts.sqft || '',
       price: fmtP, ppsf: fmtPpsf, notes: opts.notes || '',
-      subject: 'New Make Me Move: ' + opts.address + ' — ' + fmtP,
+      subject: '⏳ PENDING REVIEW: ' + opts.address + ' — ' + fmtP,
     });
-    _ejSend(EJ.t_welcome, {
+    // Owner confirmation — under review
+    _ejSend(EJ.t_buyer_confirm, {
       to_email: _user.email,
       to_name: (_profile && _profile.full_name) || 'Homeowner',
-      address: opts.address, city: opts.city || '',
-      price: fmtP, ppsf: fmtPpsf,
-      subject: 'Your Make Me Move price is live — ' + opts.address,
+      buyer_name: (_profile && _profile.full_name) || 'Homeowner',
+      address: opts.address,
+      subject: 'Your Make Me Move price is under review — ' + opts.address,
     });
     return listing;
   }
@@ -257,12 +257,12 @@ window.EM = (function () {
 
   async function getMyListings() {
     if (!_user) return [];
+    // Return both active and pending listings
     const { data } = await getSB()
-      .from('listings')
+      .from('make_me_move')
       .select('*')
       .eq('user_id', _user.id)
-      .neq('status', 'removed')
-      .order('created_at', { ascending: false });
+      .order('set_at', { ascending: false });
     return data || [];
   }
 

@@ -198,6 +198,7 @@ body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans
 .listing-status.active  { background: rgba(74,222,128,0.1);  color: var(--green); }
 .listing-status.paused  { background: rgba(251,191,36,0.1);  color: var(--amber); }
 .listing-status.sold    { background: rgba(145,161,186,0.1); color: var(--blue); }
+.listing-status.pending { background: rgba(251,191,36,0.1);  color: var(--amber); }
 .listing-actions { display: flex; gap: 8px; align-items: center; }
 .act-btn {
   background: none; border: 1px solid var(--border); color: var(--muted);
@@ -465,9 +466,9 @@ body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans
       <section id="tab-overview">
         <div class="stats-row">
           <div class="stat-card gold">
-            <div class="stat-label">Points Balance</div>
-            <div class="stat-val" id="ov-pts">0</div>
-            <div class="stat-sub" id="ov-disc">0% off next deal</div>
+            <div class="stat-label">$10K Credit</div>
+            <div class="stat-val" id="ov-credit-val">$10K</div>
+            <div class="stat-sub" id="ov-credit-sub">Set a price to claim</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Active Listings</div>
@@ -480,20 +481,20 @@ body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans
             <div class="stat-sub" id="ov-new-offers">0 new</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Referrals</div>
+            <div class="stat-label">Shared With</div>
             <div class="stat-val" id="ov-refs">0</div>
-            <div class="stat-sub">People you've referred</div>
+            <div class="stat-sub" id="ov-saved">Saved their friends $0</div>
           </div>
         </div>
 
         <!-- Referral link quick copy -->
         <div class="refer-box" style="margin-bottom:20px">
           <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Your Referral Link</div>
-          <div style="font-size:14px;color:var(--text);margin-bottom:4px">Share this link. Earn <strong style="color:var(--gold)">100 points</strong> when anyone you refer closes a deal.</div>
-          <div class="refer-link-row">
-            <span class="refer-link-text" id="ov-ref-link">Loading…</span>
-            <button class="copy-btn" onclick="copyLink('ov-ref-link',this)">Copy</button>
-          </div>
+                  <div class="refer-box" style="margin-bottom:20px">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">The Impossible Offer</div>
+          <div style="font-size:14px;color:var(--text);margin-bottom:8px">Set a Make Me Move price to claim a <strong style="color:var(--gold)">$10,000 account credit</strong> toward your next purchase through McMullen Properties. No points. No tiers.</div>
+          <div id="ov-credit-status" style="font-size:13px;color:var(--muted)">Loading…</div>
+        </div>
         </div>
 
         <!-- Recent offers preview -->
@@ -724,7 +725,7 @@ let _notifs = [];
 // ── Tab switching ──────────────────────────────────────────────────────
 const TAB_TITLES = {
   overview:'Overview', listings:'My Listings', offers:'Offers Received',
-  referrals:'Referrals & Points', notifications:'Notifications', settings:'Settings'
+  referrals:'$10K Credit', notifications:'Notifications', settings:'Settings'
 };
 function switchTab(tab, btn) {
   document.querySelectorAll('.sidebar .sb-link, .mobile-nav .mobile-nav-item')
