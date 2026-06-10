@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methodology · Eichler Market</title>
+<meta name="description" content="How Eichler Market data is sourced: public records, MLS signals, and verified owner input.">
+<link rel="icon" href="/assets/em-favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0e1118;color:#e8e3d8;-webkit-font-smoothing:antialiased;line-height:1.7}
+a{color:#c8a96e;text-decoration:none}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(232,227,216,.08)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
+.nav a.back{font-size:13px;color:rgba(145,161,186,.65)}
+.wrap{max-width:760px;margin:0 auto;padding:64px 28px 96px}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,.7);margin-bottom:14px}
+h1{font-family:'Playfair Display',serif;font-size:clamp(32px,4.5vw,48px);font-weight:500;line-height:1.1;margin-bottom:16px;color:#fff}
+.sub{font-size:16px;color:rgba(232,227,216,.6);margin-bottom:48px;font-weight:300}
+h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:#fff;margin:40px 0 12px}
+h2 .num{color:rgba(200,169,110,.5);font-family:'JetBrains Mono',monospace;font-size:13px;margin-right:10px;vertical-align:middle}
+p{font-size:15px;color:rgba(232,227,216,.78);margin-bottom:14px;font-weight:300}
+strong{color:#e8e3d8;font-weight:600}
+table{width:100%;border-collapse:collapse;margin:24px 0;font-size:14px}
+th{text-align:left;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(145,161,186,.5);border-bottom:1px solid rgba(232,227,216,.14)}
+td{padding:12px;border-bottom:1px solid rgba(232,227,216,.06);color:rgba(232,227,216,.78);vertical-align:top}
+td:first-child{font-weight:600;color:#e8e3d8;white-space:nowrap}
+.footer-legal{margin-top:64px;padding-top:24px;border-top:1px solid rgba(232,227,216,.08);font-size:12px;color:rgba(145,161,186,.45);line-height:1.8}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo">Eichler Market</a>
+  <a href="/" class="back">← Home</a>
+</nav>
+<div class="wrap">
+  <div class="eyebrow">Methodology</div>
+  <h1>How we know what we know.</h1>
+  <p class="sub">Eichler Market's data rests on three pillars: public records, MLS signals, and verified owner input. We tell you which is which.</p>
+
+  <h2><span class="num">01.</span>Public tax records</h2>
+  <p>Every home sale is a matter of public record. We compile county Assessor-Recorder transaction data — sale prices, sale dates, APNs, and building square footage — and match each record to its Eichler community. These are the numbers underneath every "avg $/sf" and "last sale" figure on the site.</p>
+  <p>We do not publish current owner names on community pages. Public records include them, but exposing them publicly is a privacy cost without a benefit to the buyer.</p>
+
+  <h2><span class="num">02.</span>MLS signals &amp; Eichler verification</h2>
+  <p>Homes actively listed on the regional MLS appear with their list price and status. The "Eichler" designation itself comes from <strong>MLS listing tags on sold properties</strong> — when an agent lists a home and tags it as an Eichler, that signal is recorded permanently against the address. Our database of 1,768 homes across 54 communities is built from a decade of these verified sale records, cross-referenced with documented Eichler tract maps and city planning archives.</p>
+  <p>This means our coverage skews toward homes that have <em>sold</em> in the modern MLS era. Eichlers held by the same family for 40+ years may not yet appear — if yours is one, <a href="/dashboard/">add it</a> and we'll verify it against tract records.</p>
+
+  <h2><span class="num">03.</span>Off-market intelligence</h2>
+  <p>Unlisted homes — owners who'd sell at the right price, who've set a Make Me Move figure, or who've received an offer they're considering — exist in every community. We surface them two ways.</p>
+  <p><strong>Owner-initiated:</strong> a homeowner signs up and names a price. That figure is visible to buyers who submit a formal offer; it is not public, not on Zillow, and never creates a price history.</p>
+  <p><strong>Buyer-initiated:</strong> a buyer submits an offer on any home, listed or not. We route it to the owner through standard channels and track the response privately in the buyer's dashboard.</p>
+
+  <h2>Why "flat 3%" works</h2>
+  <p>The typical 5–6% sell-side commission on a $3M Eichler is $150–180K split across agents. That's a lot of friction on a transaction where the buyer pool is highly specific and often already watching the neighborhood. Our flat 3% covers the full transaction — offer management, escrow, closing, disclosures. Owners keep more; buyers know the number.</p>
+
+  <h2>Data sources by record type</h2>
+  <table>
+    <tr><th>Record</th><th>Source</th></tr>
+    <tr><td>Sale history</td><td>County Assessor-Recorder bulk records, normalized by APN to the community level.</td></tr>
+    <tr><td>Eichler designation</td><td>MLS listing tags on sold homes, cross-referenced with documented Eichler tract maps (Palo Alto, Sunnyvale, San Jose planning archives) and the original Eichler Homes Inc. subdivision filings.</td></tr>
+    <tr><td>Community boundaries</td><td>Original subdivision tract maps with informal adjustments where natural boundaries differ from the recorded line.</td></tr>
+    <tr><td>Home coordinates</td><td>Google Geocoding API at the parcel level, validated against city bounding boxes.</td></tr>
+    <tr><td>Make Me Move prices</td><td>Owner-submitted, reviewed by Tim McMullen before publication.</td></tr>
+    <tr><td>Listing status</td><td>Weekly sweep of public-facing brokerage sites; MLS feed integration planned.</td></tr>
+  </table>
+
+  <p>Questions about a specific figure? Email <a href="mailto:tim@eichlermarket.com">tim@eichlermarket.com</a>.</p>
+
+  <div class="footer-legal">
+    Eichler Market · A McMullen Properties initiative · Tim McMullen, DRE #02016832 · McMullen Properties operates under Real Broker (DRE #02228473).<br>
+    All information deemed reliable but not guaranteed. Sale data sourced from public records and may contain errors or omissions. Nothing on this site constitutes legal, tax, or investment advice. Eichler Market is not affiliated with Eichler Homes Inc. or its successors; "Eichler" is used descriptively to identify the architectural housing type.<br>
+    <a href="/">Return to home</a>
+  </div>
+</div>
+</body>
+</html>
