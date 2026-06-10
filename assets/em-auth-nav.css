@@ -1,0 +1,87 @@
+/* ══════════════════════════════════════════════════════════════════
+   em-auth-nav.css — Eichler Market Auth Nav Elements
+   Append this to em.css AND cm.css
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Auth nav container — add class="em-auth-nav" to nav right section */
+.em-auth-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Signed-in user link */
+.em-nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  transition: opacity .15s;
+}
+.em-nav-user:hover { opacity: .8; }
+
+/* Avatar circle */
+.em-nav-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(200,169,110,0.15);
+  border: 1.5px solid rgba(200,169,110,0.35);
+  color: #c8a96e;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Display name */
+.em-nav-name {
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,.75);
+  max-width: 100px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 680px) { .em-nav-name { display: none; } }
+
+/* Points badge */
+.em-nav-pts {
+  font-size: 11px; font-weight: 700; color: #c8a96e;
+  background: rgba(200,169,110,0.1);
+  border: 1px solid rgba(200,169,110,0.2);
+  padding: 3px 9px; border-radius: 100px;
+  white-space: nowrap;
+}
+@media (max-width: 840px) { .em-nav-pts { display: none; } }
+
+/* Notification bell */
+.em-nav-bell {
+  position: relative;
+  display: flex; align-items: center;
+  color: rgba(145,161,186,0.65);
+  cursor: pointer; transition: color .15s;
+  text-decoration: none;
+}
+.em-nav-bell:hover { color: rgba(255,255,255,.8); }
+
+/* Unread count badge */
+.em-nav-badge {
+  position: absolute;
+  top: -5px; right: -5px;
+  width: 16px; height: 16px;
+  background: #c8a96e; color: #1a1f2e;
+  font-size: 9px; font-weight: 700;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Sign-in link (not logged in) */
+.em-nav-signin {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .04em; color: rgba(255,255,255,.65);
+  text-decoration: none;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 7px 14px; border-radius: 100px;
+  transition: all .15s; white-space: nowrap;
+}
+.em-nav-signin:hover {
+  background: rgba(200,169,110,0.12);
+  border-color: rgba(200,169,110,0.25);
+  color: #c8a96e;
+}
