@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eichler Market — Share Card</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#060a12;min-height:100vh;font-family:"DM Sans",system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:40px 24px;}
+.hint{font-size:12px;color:rgba(145,161,186,.3);letter-spacing:.06em;text-align:center;}
+.hint a{color:#c8a96e;text-decoration:none;}
+.card{
+  width:1200px;height:630px;
+  position:relative;overflow:hidden;border-radius:20px;
+  font-family:"DM Sans",system-ui,sans-serif;
+  transform-origin:top center;
+}
+.photo{
+  position:absolute;inset:0;
+  background:url('https://cdn.prod.website-files.com/65a1ca4354f63bd7376b5027/69dfc101baabf5d962e33f4a_image%20-%202026-04-15T094520.936.jpg') center/cover no-repeat;
+}
+.overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top, rgba(7,12,20,.97) 0%, rgba(7,12,20,.72) 35%, rgba(7,12,20,.18) 62%, transparent 80%),
+    linear-gradient(to right, rgba(7,12,20,.45) 0%, rgba(7,12,20,.1) 48%, transparent 72%);
+}
+.grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(145,161,186,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(145,161,186,.05) 1px,transparent 1px),
+    linear-gradient(rgba(145,161,186,.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(145,161,186,.02) 1px,transparent 1px);
+  background-size:120px 120px,120px 120px,30px 30px,30px 30px;
+  opacity:.7;
+}
+.inner{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:0 56px 48px;
+}
+.eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.el{width:28px;height:1.5px;background:#c8a96e;}
+.et{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,.6);}
+.logo{font-family:"Playfair Display",Georgia,serif;font-size:84px;font-weight:700;color:#fff;line-height:1;letter-spacing:-.03em;margin-bottom:12px;}
+.tagline{font-size:26px;color:rgba(145,161,186,.5);line-height:1.5;margin-bottom:36px;font-weight:300;}
+.tagline em{color:#c8a96e;font-style:italic;}
+.rule{width:580px;height:1px;background:rgba(255,255,255,.08);margin-bottom:26px;}
+.stats{display:flex;gap:0;}
+.stat{flex:1;max-width:150px;padding-right:24px;margin-right:24px;border-right:1px solid rgba(255,255,255,.08);}
+.stat:last-child{border-right:none;padding-right:0;margin-right:0;}
+.sv{font-family:"Playfair Display",Georgia,serif;font-size:44px;font-weight:700;color:#fff;line-height:1;margin-bottom:5px;}
+.sl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(145,161,186,.3);}
+.url{position:absolute;top:36px;right:44px;font-size:13px;color:rgba(145,161,186,.22);font-weight:500;}
+.house{position:absolute;top:32px;left:52px;opacity:.5;}
+</style>
+</head>
+<body>
+<div class="hint">eichler-market.pages.dev/share — <a href="/">Back to site</a></div>
+<div class="card" id="card">
+  <div class="photo"></div>
+  <div class="overlay"></div>
+  <div class="grid"></div>
+  <div class="house">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="1.3" stroke-linecap="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </div>
+  <div class="url">eichler-market.pages.dev</div>
+  <div class="inner">
+    <div class="eyebrow"><span class="el"></span><span class="et">Silicon Valley · Eichler Homes</span></div>
+    <div class="logo">Eichler Market</div>
+    <div class="tagline">Every Eichler is for sale for <em>the right price.</em></div>
+    <div class="rule"></div>
+    <div class="stats">
+      <div class="stat"><div class="sv">1,768</div><div class="sl">Homes tracked</div></div>
+      <div class="stat"><div class="sv">54</div><div class="sl">Named tracts</div></div>
+      <div class="stat"><div class="sv">$2.1M</div><div class="sl">Median price</div></div>
+      <div class="stat"><div class="sv">$1,342</div><div class="sl">Avg $/sqft</div></div>
+    </div>
+  </div>
+</div>
+<div class="hint">Chrome DevTools → device toolbar → 1200×630 → ⌘⇧P → Capture screenshot</div>
+<script>
+function sc(){var c=document.getElementById('card');var s=Math.min(1,(window.innerWidth-80)/1200);c.style.transform='scale('+s+')';c.style.marginBottom=((s-1)*630)+'px';}
+sc();window.addEventListener('resize',sc);
+</script>
+<script src="/assets/cm-track.js" defer></script>
+</body>
+</html>

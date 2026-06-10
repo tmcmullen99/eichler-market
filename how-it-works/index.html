@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>How It Works · Eichler Market Silicon Valley</title>
+<meta name="description" content="Eichler Market connects Eichler buyers and sellers across Silicon Valley without listings. Submit an offer on any home, any time. Flat 3% fee if a deal closes.">
+<meta property="og:title" content="How Eichler Market Works">
+<meta property="og:image" content="https://cdn.prod.website-files.com/65a1ca4354f63bd7376b5027/69dfc101baabf5d962e33f4a_image%20-%202026-04-15T094520.936.jpg">
+<link rel="icon" href="/assets/em-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*,::before,::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0e1118;color:#fff;-webkit-font-smoothing:antialiased}
+:root{--n:#1a1f2e;--warm:#c8a96e;--g:#91a1ba;--b:#e8ebf0;--nav-h:56px;--safe-b:env(safe-area-inset-bottom,0px)}
+a{text-decoration:none;color:inherit}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);background:rgba(14,17,24,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid rgba(255,255,255,.07)}
+.nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+.nav-icon{width:30px;height:30px;background:rgba(200,169,110,.15);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
+.nav-back{font-size:12px;color:rgba(145,161,186,.5);display:flex;align-items:center;gap:6px;transition:color .15s}
+.nav-back:hover{color:rgba(145,161,186,.8)}
+.nav-cta{background:var(--warm);color:#1a1f2e;border:none;padding:9px 20px;font-size:12px;font-weight:700;letter-spacing:.03em;border-radius:100px;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.nav-cta:hover{opacity:.88}
+
+/* ── HERO ── */
+.hiw-hero{padding:calc(var(--nav-h) + 70px) 28px 80px;background:linear-gradient(165deg,#0e1118 0%,#1a1f2e 100%);position:relative;overflow:hidden;text-align:center}
+.hiw-hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hiw-glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.hiw-glow-1{width:500px;height:500px;background:rgba(200,169,110,.06);top:-150px;left:50%;transform:translateX(-50%)}
+.hiw-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,.75);margin-bottom:20px;position:relative;z-index:1}
+.hiw-eyebrow::before,.hiw-eyebrow::after{content:'';width:24px;height:1px;background:rgba(200,169,110,.35)}
+.hiw-h1{font-family:'Playfair Display',serif;font-size:clamp(38px,5vw,62px);font-weight:500;line-height:1.08;letter-spacing:-.025em;margin-bottom:20px;position:relative;z-index:1}
+.hiw-h1 em{color:var(--warm);font-style:italic}
+.hiw-sub{font-size:17px;line-height:1.8;color:rgba(255,255,255,.5);max-width:560px;margin:0 auto 40px;font-weight:300;position:relative;z-index:1}
+.hiw-hero-ctas{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;position:relative;z-index:1}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:var(--warm);color:#1a1f2e;border:none;padding:14px 28px;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;font-family:inherit;transition:opacity .15s,transform .1s;text-decoration:none}
+.btn-p:hover{opacity:.9;transform:translateY(-1px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);color:#fff;border:1.5px solid rgba(255,255,255,.18);padding:13px 28px;font-size:14px;font-weight:500;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none}
+.btn-s:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+
+/* ── WHAT IS ── */
+.hiw-what{background:#fff;padding:80px 28px}
+.hiw-section{max-width:1100px;margin:0 auto}
+.hiw-section-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--warm);margin-bottom:12px}
+.hiw-section-h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3.5vw,42px);font-weight:700;color:#1a1f2e;margin-bottom:16px;line-height:1.15}
+.hiw-section-p{font-size:16px;color:#4b5563;line-height:1.85;max-width:680px;margin-bottom:40px;font-weight:300}
+.hiw-cols{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.hiw-col-img{border-radius:16px;overflow:hidden;aspect-ratio:4/3}
+.hiw-col-img img{width:100%;height:100%;object-fit:cover;display:block}
+.hiw-feature-list{display:flex;flex-direction:column;gap:20px}
+.hiw-feature{display:flex;gap:16px;align-items:flex-start}
+.hiw-feature-icon{width:40px;height:40px;background:rgba(200,169,110,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.hiw-feature-icon svg{width:18px;height:18px;stroke:#c8a96e;fill:none;stroke-width:2;stroke-linecap:round}
+.hiw-feature-title{font-size:15px;font-weight:700;color:#1a1f2e;margin-bottom:4px}
+.hiw-feature-desc{font-size:14px;color:#6b7280;line-height:1.65}
+
+/* ── PROCESS STEPS ── */
+.hiw-process{background:#f5f7fa;padding:80px 28px}
+.hiw-process-tabs{display:flex;gap:0;background:rgba(26,31,46,.05);border-radius:12px;padding:4px;margin-bottom:48px;width:fit-content}
+.hiw-tab{padding:10px 22px;font-size:13px;font-weight:600;color:#6b7280;border:none;background:none;cursor:pointer;font-family:inherit;border-radius:9px;transition:all .2s}
+.hiw-tab.on{background:#fff;color:#1a1f2e;box-shadow:0 2px 8px rgba(26,31,46,.1)}
+.hiw-steps{display:none}
+.hiw-steps.on{display:flex;flex-direction:column;gap:0}
+.hiw-step{display:grid;grid-template-columns:64px 1fr;gap:28px;padding:28px 0;border-bottom:1px solid rgba(232,235,240,.8);align-items:start}
+.hiw-step:last-child{border-bottom:none}
+.hiw-step-num{width:48px;height:48px;border-radius:50%;background:#1a1f2e;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;font-weight:700;flex-shrink:0}
+.hiw-step.highlight .hiw-step-num{background:var(--warm);color:#1a1f2e}
+.hiw-step-title{font-size:17px;font-weight:700;color:#1a1f2e;margin-bottom:6px}
+.hiw-step-body{font-size:14px;color:#6b7280;line-height:1.75}
+.hiw-step-tag{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.2);padding:5px 11px;border-radius:6px;font-size:11px;font-weight:600;color:#9a7840}
+
+/* ── MAKE ME MOVE ── */
+.hiw-mms{background:linear-gradient(135deg,#1a1f2e 0%,#0e1118 100%);padding:80px 28px;position:relative;overflow:hidden}
+.hiw-mms::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hiw-mms-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1}
+.hiw-mms-label{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,.65);margin-bottom:14px}
+.hiw-mms-h2{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,40px);font-weight:500;line-height:1.15;margin-bottom:16px;color:#fff}
+.hiw-mms-p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:28px;font-weight:300}
+.hiw-mms-list{display:flex;flex-direction:column;gap:14px}
+.hiw-mms-item{display:flex;align-items:flex-start;gap:11px}
+.hiw-mms-check{width:20px;height:20px;background:rgba(200,169,110,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.hiw-mms-check svg{width:10px;height:10px;stroke:#c8a96e;fill:none;stroke-width:3;stroke-linecap:round}
+.hiw-mms-item-text{font-size:14px;color:rgba(255,255,255,.7);line-height:1.6}
+.hiw-mms-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:32px;backdrop-filter:blur(16px)}
+.hiw-mms-card-label{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,169,110,.55);margin-bottom:20px}
+.hiw-mms-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.hiw-mms-price{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#fff}
+.hiw-mms-badge{background:rgba(200,169,110,.15);color:var(--warm);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px}
+.hiw-mms-addr{font-size:14px;color:rgba(145,161,186,.6);margin-bottom:20px}
+.hiw-mms-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.hiw-mms-stat{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:12px}
+.hiw-mms-stat-v{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:2px}
+.hiw-mms-stat-l{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(145,161,186,.4)}
+
+/* ── FEES ── */
+.hiw-fees{background:#fff;padding:80px 28px}
+.hiw-fees-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.hiw-fee-card{border:1px solid #e8ebf0;border-radius:16px;padding:32px 28px;position:relative;transition:border-color .2s,box-shadow .2s}
+.hiw-fee-card:hover{border-color:rgba(200,169,110,.35);box-shadow:0 4px 24px rgba(200,169,110,.08)}
+.hiw-fee-card.featured{border-color:rgba(200,169,110,.35);background:linear-gradient(135deg,rgba(200,169,110,.05) 0%,#fff 100%)}
+.hiw-fee-card-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--warm);margin-bottom:12px}
+.hiw-fee-card-price{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:#1a1f2e;margin-bottom:4px}
+.hiw-fee-card-sub{font-size:13px;color:#6b7280;margin-bottom:20px}
+.hiw-fee-list{display:flex;flex-direction:column;gap:10px}
+.hiw-fee-item{display:flex;align-items:center;gap:9px;font-size:13px;color:#374151}
+.hiw-fee-item svg{width:14px;height:14px;stroke:var(--warm);fill:none;stroke-width:2.5;stroke-linecap:round;flex-shrink:0}
+
+/* ── FAQ ── */
+.hiw-faq{background:#f5f7fa;padding:80px 28px}
+.hiw-faq-list{display:flex;flex-direction:column;gap:0;max-width:740px;margin-top:40px}
+.hiw-faq-item{border-bottom:1px solid #e8ebf0}
+.hiw-faq-q{display:flex;align-items:center;justify-content:space-between;padding:20px 0;cursor:pointer;gap:16px;-webkit-tap-highlight-color:transparent}
+.hiw-faq-q-text{font-size:15px;font-weight:600;color:#1a1f2e;flex:1}
+.hiw-faq-chevron{width:20px;height:20px;flex-shrink:0;stroke:#91a1ba;fill:none;stroke-width:2;stroke-linecap:round;transition:transform .22s}
+.hiw-faq-item.open .hiw-faq-chevron{transform:rotate(180deg)}
+.hiw-faq-a{display:none;padding:0 0 18px;font-size:14px;color:#6b7280;line-height:1.8}
+.hiw-faq-item.open .hiw-faq-a{display:block}
+
+/* ── CTA BAND ── */
+.hiw-cta{background:var(--warm);padding:60px 28px;text-align:center}
+.hiw-cta h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);font-weight:700;color:#1a1f2e;margin-bottom:12px}
+.hiw-cta p{font-size:16px;color:rgba(26,31,46,.65);max-width:500px;margin:0 auto 32px}
+.hiw-cta-btns{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn-dark{display:inline-flex;align-items:center;gap:8px;background:#1a1f2e;color:#fff;border:none;padding:14px 28px;font-size:14px;font-weight:700;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;transition:opacity .15s}
+.btn-dark:hover{opacity:.85}
+.btn-light{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.3);color:#1a1f2e;border:none;padding:14px 28px;font-size:14px;font-weight:600;border-radius:12px;cursor:pointer;font-family:inherit;text-decoration:none;transition:all .15s}
+.btn-light:hover{background:rgba(255,255,255,.5)}
+
+/* Responsive */
+@media(max-width:860px){.hiw-cols,.hiw-mms-inner,.hiw-fees-grid{grid-template-columns:1fr}.hiw-col-img{display:none}}
+@media(max-width:600px){.hiw-process-tabs{flex-wrap:wrap;width:100%}.hiw-tab{flex:1}.hiw-step{grid-template-columns:48px 1fr;gap:16px}}
+
+/* ── Footer How It Works ── */
+.footer-hiw{background:#0d1119;border-top:1px solid rgba(255,255,255,.07);padding:48px 0 40px;}
+.footer-hiw-inner{max-width:1200px;margin:0 auto;padding:0 64px;}
+.footer-hiw-eyebrow{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,169,110,.6);margin-bottom:24px;}
+.footer-hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:28px;}
+.footer-hiw-step{display:flex;gap:12px;align-items:flex-start;}
+.footer-hiw-num{width:24px;height:24px;border-radius:50%;background:rgba(200,169,110,.2);border:1px solid rgba(200,169,110,.4);color:var(--warm);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.footer-hiw-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.footer-hiw-body{font-size:11px;color:rgba(145,161,186,.5);line-height:1.65;}
+.footer-hiw-fee{display:flex;align-items:center;gap:16px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap;}
+.footer-hiw-fee-item{display:flex;align-items:baseline;gap:7px;}
+.footer-hiw-pct{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--warm);}
+.footer-hiw-fee-l{font-size:11px;color:rgba(145,161,186,.45);}
+.footer-hiw-fee-sep{color:rgba(145,161,186,.2);font-size:14px;}
+@media(max-width:860px){
+  .footer-hiw-steps{grid-template-columns:1fr 1fr;gap:20px;}
+  .footer-hiw-inner{padding:0 24px;}
+}
+@media(max-width:600px){
+  .footer-hiw-steps{grid-template-columns:1fr;}
+  .footer-hiw{padding:36px 0 28px;}
+  .footer-hiw-fee{gap:12px;}
+}
+
+</style>
+<!-- Eichler Market Auth -->
+<link rel="stylesheet" href="/assets/em-auth-nav.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/em-supabase.js" defer></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-brand">
+    <div class="nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span class="nav-logo">Eichler Market</span>
+  </a>
+  <span class="nav-sep"></span>
+  <span class="nav-crumb">How It Works</span>
+  <span class="nav-spacer"></span>
+  <button class="nav-cta" onclick="window.location='/'">Browse homes →</button>
+  <span class="em-auth-nav" id="em-auth-nav"></span>
+</nav>
+
+<!-- HERO -->
+<section class="hiw-hero">
+  <div class="hiw-glow hiw-glow-1"></div>
+  <div class="hiw-eyebrow">Eichler Market · Silicon Valley</div>
+  <h1 class="hiw-h1">Every Eichler is for sale<br>for <em>the right price.</em></h1>
+  <p class="hiw-sub">A private marketplace connecting Eichler buyers and sellers across 28 Silicon Valley tracts — without listings, without agents in the middle, and without the usual friction.</p>
+  <div class="hiw-hero-ctas">
+    <a href="/" class="btn-p">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Browse 1,298 homes
+    </a>
+    <a href="#buyer" class="btn-s">For buyers</a>
+    <a href="#seller" class="btn-s">For sellers</a>
+  </div>
+</section>
+
+<!-- WHAT IS EICHLER MARKET -->
+<section class="hiw-what">
+  <div class="hiw-section">
+    <div class="hiw-section-label">The Platform</div>
+    <h2 class="hiw-section-h2">An Eichler-only marketplace<br>built around a simple idea.</h2>
+    <p class="hiw-section-p">Most of the best Eichler transactions never hit the MLS. They happen through community, through relationships, through someone knowing someone. Eichler Market brings that process online — with data, transparency, and a direct line to a specialist agent who has actually sold at record prices.</p>
+    <div class="hiw-cols">
+      <div class="hiw-col-img">
+        <img src="https://cdn.prod.website-files.com/65a1ca4354f63bd7376b503e/69a99697fb4d4a120c2ccdb7_1694%20Clay%20Dr-Twilight-3.jpg" alt="1694 Clay Drive, Los Altos">
+      </div>
+      <div class="hiw-feature-list">
+        <div class="hiw-feature">
+          <div class="hiw-feature-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div>
+            <div class="hiw-feature-title">1,298 homes tracked</div>
+            <div class="hiw-feature-desc">Every Eichler sold in Silicon Valley mapped by tract, price, and $/sqft. Real data, not aggregator estimates.</div>
+          </div>
+        </div>
+        <div class="hiw-feature">
+          <div class="hiw-feature-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div>
+            <div class="hiw-feature-title">No listing required</div>
+            <div class="hiw-feature-desc">Buyers submit offers on any home. Sellers set a Make Me Move price. Nothing needs to be "on market" for a deal to happen.</div>
+          </div>
+        </div>
+        <div class="hiw-feature">
+          <div class="hiw-feature-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div>
+            <div class="hiw-feature-title">Flat 3% fee if it closes</div>
+            <div class="hiw-feature-desc">One side. One agent. One commission. No dual-sided 6% deals. If the transaction doesn't close, you pay nothing.</div>
+          </div>
+        </div>
+        <div class="hiw-feature">
+          <div class="hiw-feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+          <div>
+            <div class="hiw-feature-title">Record results</div>
+            <div class="hiw-feature-desc">1694 Clay Drive, Los Altos — $5,250,000 at $2,043/sqft. The highest $/sqft ever for a 5-bedroom home in South Los Altos. Sold in 1 day.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS: BUYERS + SELLERS -->
+<section class="hiw-process" id="buyer">
+  <div class="hiw-section">
+    <div class="hiw-section-label">Step by Step</div>
+    <h2 class="hiw-section-h2">Simple for buyers.<br>Straightforward for sellers.</h2>
+
+    <div class="hiw-process-tabs">
+      <button class="hiw-tab on" onclick="switchTab('buyer')">I'm a buyer</button>
+      <button class="hiw-tab" id="tab-seller" onclick="switchTab('seller')">I own an Eichler</button>
+    </div>
+
+    <!-- BUYER STEPS -->
+    <div class="hiw-steps on" id="steps-buyer">
+      <div class="hiw-step">
+        <div class="hiw-step-num">1</div>
+        <div>
+          <div class="hiw-step-title">Browse the map</div>
+          <div class="hiw-step-body">Every Eichler in Silicon Valley is plotted on the map — all 1,298 of them across 28 named tracts. Filter by city, sort by price or $/sqft, and click any home to see sale history. No account required to browse.</div>
+          <div class="hiw-step-tag"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> No login required</div>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">2</div>
+        <div>
+          <div class="hiw-step-title">Submit an offer</div>
+          <div class="hiw-step-body">Click any home — listed or not — and submit an offer. You'll get a confirmation, and McMullen Properties (DRE #02016832) will follow up personally within 24 hours. Your offer is treated confidentially.</div>
+          <div class="hiw-step-tag"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Direct response within 24 hours</div>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">3</div>
+        <div>
+          <div class="hiw-step-title">The deal gets worked</div>
+          <div class="hiw-step-body">If the home isn't listed, Tim reaches out to the owner through the community — whether through Eichler Market, neighborhood relationships, or direct contact. Off-market deals take longer but often produce better outcomes for both sides.</div>
+        </div>
+      </div>
+      <div class="hiw-step highlight">
+        <div class="hiw-step-num">4</div>
+        <div>
+          <div class="hiw-step-title">Flat 3% if it closes</div>
+          <div class="hiw-step-body">If the transaction closes, the commission is 3% — one side, one agent. That's it. If it doesn't close for any reason, you pay nothing. No retainer. No upfront fee. No risk.</div>
+          <div class="hiw-step-tag"><svg viewBox="0 0 24 24" width="12" height="12"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Flat 3% · No close, no fee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELLER / OWNER STEPS -->
+    <div class="hiw-steps" id="steps-seller" id="seller">
+      <div class="hiw-step">
+        <div class="hiw-step-num">1</div>
+        <div>
+          <div class="hiw-step-title">Add your home</div>
+          <div class="hiw-step-body">Your Eichler is already in the database if it's sold in the last decade. Claim it or add it from scratch — takes about 2 minutes. Set your beds/baths/sqft, upload a photo if you have one, and go live.</div>
+          <div class="hiw-step-tag"><svg viewBox="0 0 24 24" width="12" height="12"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Free to list</div>
+        </div>
+      </div>
+      <div class="hiw-step highlight">
+        <div class="hiw-step-num">2</div>
+        <div>
+          <div class="hiw-step-title">Set a Make Me Move price</div>
+          <div class="hiw-step-body">A Make Me Move price is simple: the number at which you'd say yes. It's private — only buyers who submit an offer see it when they're serious. You're not "listing" the home. You're signaling that the right price could get the conversation started. Change or remove it any time.</div>
+          <div class="hiw-step-tag">Private · Adjustable · No commitment</div>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">3</div>
+        <div>
+          <div class="hiw-step-title">Receive offers privately</div>
+          <div class="hiw-step-body">When a serious buyer submits an offer, Tim routes it directly to you with context — who they are, what they've looked at, and what comparable homes have sold for. You decide whether to engage. No obligation, no pressure, no open houses unless you want them.</div>
+        </div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-num">4</div>
+        <div>
+          <div class="hiw-step-title">The Eichler playbook, if you want it</div>
+          <div class="hiw-step-body">For homeowners who decide to list, Tim brings the full execution strategy: Compass Private Exclusive, community-first outreach (knocking Eichler doors across multiple tracts), targeted MLS timing, and the Eichler Social event format that packed 75 serious buyers into 1694 Clay Drive on opening day.</div>
+          <div class="hiw-step-tag"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> See the Clay Drive case study →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAKE ME MOVE EXPLAINER -->
+<section class="hiw-mms">
+  <div class="hiw-mms-inner">
+    <div>
+      <div class="hiw-mms-label">The Make Me Move Concept</div>
+      <h2 class="hiw-mms-h2">Your home is worth<br>what the right buyer<br>will pay for it.</h2>
+      <p class="hiw-mms-p">Most Eichler owners aren't actively selling. But many have a price — a number where they'd say yes, pack up, and move on. Make Me Move makes that number useful instead of hypothetical.</p>
+      <div class="hiw-mms-list">
+        <div class="hiw-mms-item">
+          <div class="hiw-mms-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="hiw-mms-item-text">Set it privately — only shown to serious offer submitters</div>
+        </div>
+        <div class="hiw-mms-item">
+          <div class="hiw-mms-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="hiw-mms-item-text">Update or remove it any time, no obligation</div>
+        </div>
+        <div class="hiw-mms-item">
+          <div class="hiw-mms-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="hiw-mms-item-text">Flat 3% commission only if a deal closes</div>
+        </div>
+        <div class="hiw-mms-item">
+          <div class="hiw-mms-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="hiw-mms-item-text">No listing, no open houses, no public exposure unless you want it</div>
+        </div>
+        <div class="hiw-mms-item">
+          <div class="hiw-mms-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="hiw-mms-item-text">Benchmarked against real $/sqft data from your exact tract</div>
+        </div>
+      </div>
+      <div style="margin-top:28px">
+        <a href="/" class="btn-p">Set my Make Me Move price →</a>
+      </div>
+    </div>
+    <div class="hiw-mms-card">
+      <div class="hiw-mms-card-label">Example · Green Gables, Palo Alto</div>
+      <div class="hiw-mms-price-row">
+        <div class="hiw-mms-price">$3,400,000</div>
+        <div class="hiw-mms-badge">Make Me Move</div>
+      </div>
+      <div class="hiw-mms-addr">783 Holly Oak Drive · 4BR · 3BA · 2,100 sf</div>
+      <div class="hiw-mms-stats">
+        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">$1,619</div><div class="hiw-mms-stat-l">Your $/sqft</div></div>
+        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">$1,580</div><div class="hiw-mms-stat-l">Tract avg $/sf</div></div>
+        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">$2.98M</div><div class="hiw-mms-stat-l">Tract median</div></div>
+        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">3%</div><div class="hiw-mms-stat-l">Fee if closes</div></div>
+      </div>
+      <div style="background:rgba(200,169,110,.08);border:1px solid rgba(200,169,110,.18);border-radius:8px;padding:12px;font-size:12px;color:rgba(200,169,110,.8);line-height:1.6">
+        <strong style="color:#c8a96e">Your price is above tract avg.</strong> Green Gables has sold at $1,580/sf historically. Your ask of $1,619/sf is achievable given current demand — especially for a move-in-ready 4BR.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEES -->
+<section class="hiw-fees">
+  <div class="hiw-section">
+    <div class="hiw-section-label">Pricing</div>
+    <h2 class="hiw-section-h2">Simple, aligned fees.</h2>
+    <p class="hiw-section-p">One commission. One agent. No split incentives, no dual agency, no surprise fees at closing.</p>
+    <div class="hiw-fees-grid">
+      <div class="hiw-fee-card">
+        <div class="hiw-fee-card-label">Buyers</div>
+        <div class="hiw-fee-card-price">Free</div>
+        <div class="hiw-fee-card-sub">to browse, submit offers, and search</div>
+        <div class="hiw-fee-list">
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Browse all 1,298 homes</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Submit offers on any home</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> View sale history and $/sqft data</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> No account required</div>
+        </div>
+      </div>
+      <div class="hiw-fee-card featured">
+        <div class="hiw-fee-card-label">If a deal closes</div>
+        <div class="hiw-fee-card-price">3%</div>
+        <div class="hiw-fee-card-sub">flat commission, one side only</div>
+        <div class="hiw-fee-list">
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Single-sided representation</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> No upfront retainer</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> No listing fee to add your home</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Full market prep if needed</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Eichler Social outreach strategy</div>
+        </div>
+      </div>
+      <div class="hiw-fee-card">
+        <div class="hiw-fee-card-label">Referrals</div>
+        <div class="hiw-fee-card-price">−1%</div>
+        <div class="hiw-fee-card-sub">off per referral, stackable to −3%</div>
+        <div class="hiw-fee-list">
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Refer a buyer or seller who closes</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Earn 100 points per referral</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> 100 pts = 1% off your next deal</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Stackable: max 3 referrals = 3% off</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="hiw-faq">
+  <div class="hiw-section">
+    <div class="hiw-section-label">FAQ</div>
+    <h2 class="hiw-section-h2">Common questions.</h2>
+    <div class="hiw-faq-list">
+      <div class="hiw-faq-item">
+        <div class="hiw-faq-q" onclick="toggleFaq(this)">
+          <span class="hiw-faq-q-text">What if the home I want isn't listed?</span>
+          <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="hiw-faq-a">That's the core use case. Submit an offer on any home in the database — including off-market homes. Tim will reach out to the owner through community channels. It takes longer than a standard listing deal (usually 2–6 weeks), but it produces off-market opportunities that don't exist anywhere else.</div>
+      </div>
+      <div class="hiw-faq-item">
+        <div class="hiw-faq-q" onclick="toggleFaq(this)">
+          <span class="hiw-faq-q-text">What's a Make Me Move price, exactly?</span>
+          <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="hiw-faq-a">It's the number at which you'd sell. Not a listing price — you're not listing the home, and there's no obligation. It's a private signal visible only to buyers who submit formal offers. Set it high. Change it any time. Remove it whenever you want. The only consequence of having one is that you might receive an offer you'd want to say yes to.</div>
+      </div>
+      <div class="hiw-faq-item">
+        <div class="hiw-faq-q" onclick="toggleFaq(this)">
+          <span class="hiw-faq-q-text">Why only Eichlers?</span>
+          <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="hiw-faq-a">Eichler buyers are a specific type of buyer — they want the flat roof, the post-and-beam, the atriums, the radiant heat. They aren't cross-shopping Cape Cods. Eichler Market works because it concentrates a niche, highly motivated buyer pool around a very specific inventory. That specialization is why 75 serious buyers showed up to one open house in Los Altos.</div>
+      </div>
+      <div class="hiw-faq-item">
+        <div class="hiw-faq-q" onclick="toggleFaq(this)">
+          <span class="hiw-faq-q-text">What's included in the 3% commission?</span>
+          <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="hiw-faq-a">Full representation on one side of the transaction. For sellers: pricing strategy, Compass Private Exclusive window, MLS timing, community outreach including door-knocking Eichler neighborhoods, the Eichler Social event format, photography, and full close coordination. For buyers: offer strategy, comparable sales analysis, negotiation, and close coordination. One agent, one fee, no dual agency.</div>
+      </div>
+      <div class="hiw-faq-item">
+        <div class="hiw-faq-q" onclick="toggleFaq(this)">
+          <span class="hiw-faq-q-text">Where does the sale history data come from?</span>
+          <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="hiw-faq-a">The 1,298 home database is compiled from MLS sale records across all Silicon Valley Eichler tracts, normalized and geocoded by tract. Every address, sale price, date, beds, baths, and square footage is sourced from recorded transactions. The data is updated periodically as new sales are recorded.</div>
+      </div>
+      <div class="hiw-faq-item">
+        <div class="hiw-faq-q" onclick="toggleFaq(this)">
+          <span class="hiw-faq-q-text">Who is McMullen Properties?</span>
+          <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="hiw-faq-a">McMullen Properties is a Compass agent (DRE #02016832) based in Silicon Valley who specializes exclusively in Eichler homes. He sold 1694 Clay Drive in Los Altos for $5.25M — $2,043/sqft, the highest price per square foot ever recorded for a 5-bedroom home in South Los Altos — in one day on market. He's built Eichler Market as a direct platform for buyers and sellers who want specialist-level execution without the traditional listing process.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div class="hiw-cta">
+  <h2>Ready to find your Eichler?</h2>
+  <p>Browse 1,298 homes across 28 Silicon Valley tracts. Submit an offer on any home, any time.</p>
+  <div class="hiw-cta-btns">
+    <a href="/" class="btn-dark">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Browse the map
+    </a>
+    <a href="/homes/1694-clay-drive" class="btn-light">See the Clay Drive story →</a>
+  </div>
+</div>
+
+<script>
+function switchTab(tab){
+  document.querySelectorAll('.hiw-tab').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.hiw-steps').forEach(function(s){s.classList.remove('on');});
+  document.getElementById('steps-'+tab).classList.add('on');
+  if(tab==='buyer'){document.querySelector('.hiw-tab').classList.add('on');}
+  else{document.getElementById('tab-seller').classList.add('on');}
+}
+function toggleFaq(btn){
+  var item=btn.closest('.hiw-faq-item');
+  item.classList.toggle('open');
+}
+</script>
+
+
+<!-- ── Footer How It Works ── -->
+<div class="footer-hiw">
+  <div class="footer-hiw-inner">
+    <div class="footer-hiw-eyebrow">How Eichler Market Works</div>
+    <div class="footer-hiw-steps">
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">1</div>
+        <div>
+          <div class="footer-hiw-title">Find any Eichler</div>
+          <div class="footer-hiw-body">Browse 1,768 tracked homes across 54 Silicon Valley tracts — or enter any address.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">2</div>
+        <div>
+          <div class="footer-hiw-title">Submit an offer</div>
+          <div class="footer-hiw-body">Name, email, offer amount. The platform generates a non-binding LOI. Takes 60 seconds.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">3</div>
+        <div>
+          <div class="footer-hiw-title">Offer review call</div>
+          <div class="footer-hiw-body">A short call within 24 hours to align on terms before the offer goes to the owner.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">4</div>
+        <div>
+          <div class="footer-hiw-title">Close on your terms</div>
+          <div class="footer-hiw-body">McMullen Properties facilitates through LOI, CAR contract, and escrow. Flat 3% platform fee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-hiw-fee">
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">3%</span><span class="footer-hiw-fee-l">Platform fee — always</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">1%</span><span class="footer-hiw-fee-l">To buyer's nominated agent, if any</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">0%</span><span class="footer-hiw-fee-l">MLS listing required</span></div>
+    </div>
+  </div>
+</div>
+<script src="/assets/cm-track.js" defer></script>
+</body>
+</html>

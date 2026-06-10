@@ -1,0 +1,36 @@
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+/communities/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+/assets/em-supabase.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+/assets/em-auth-nav.css
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+/assets/em.css
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+/assets/cm.css
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+
+/assets/em-props.json
+  Content-Type: application/json
+  Cache-Control: public, max-age=3600
+
+/*
+  X-Frame-Options: SAMEORIGIN
+
+/dashboard/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/auth/index.html
+  Cache-Control: no-cache, no-store, must-revalidate

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Eichler Mountain View · Eichler Market</title>
+<meta name="description" content="Eichler Mountain View — 70 Eichler homes in Mountain View. Submit an offer on any home. Median $1,850,000. Flat 3% platform fee.">
+<meta property="og:title" content="Eichler Mountain View — Eichler Market">
+<meta property="og:description" content="70 Eichler homes in Eichler Mountain View, Mountain View. Every home is for sale for the right price.">
+<meta property="og:image" content="https://cdn.prod.website-files.com/65a1ca4354f63bd7376b5027/69dfc101baabf5d962e33f4a_image%20-%202026-04-15T094520.936.jpg">
+<link rel="icon" href="/assets/em-favicon.svg">
+<link rel="stylesheet" href="/assets/em.css">
+<link rel="stylesheet" href="/assets/cm.css">
+<!-- Eichler Market Auth -->
+<link rel="stylesheet" href="/assets/em-auth-nav.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/em-supabase.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css">
+</head>
+<body>
+<div id="cm">
+<nav class="c-nav">
+  <a href="/" class="c-nav-brand">
+    <div class="c-nav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <span class="c-nav-logo">Eichler Market</span>
+  </a>
+  <span class="c-nav-sep"></span>
+  <span class="c-nav-crumb">Eichler Mountain View · Eichler Market</span>
+  <span class="c-nav-spacer"></span>
+  <button class="c-nav-cta" onclick="openOffer('')">Make an offer</button>
+  <span class="em-auth-nav" id="em-auth-nav"></span>
+</nav>
+
+<div class="c-hero">
+  <img class="c-hero-img" src="/assets/photos/969-eichler-drive.jpg" alt="Eichler Mountain View">
+  <div class="c-hero-grad"></div>
+  <div class="c-hero-body">
+    <div class="c-hero-inner">
+      <div>
+        <div class="c-eyebrow">Mountain View · Eichler Community</div>
+        <h1 class="c-h1 sf">Eichler Mountain View</h1>
+        <div class="c-stats">
+          <div class="c-stat"><div class="c-stat-v">70</div><div class="c-stat-l">Homes</div></div>
+          <div class="c-stat"><div class="c-stat-v">$1850K</div><div class="c-stat-l">Median</div></div>
+          <div class="c-stat"><div class="c-stat-v">$1,338/sf</div><div class="c-stat-l">Avg $/sf</div></div>
+        </div>
+      </div>
+      <div class="c-hero-cta">
+        <button class="b-p" onclick="cmOB()">Make an offer →</button>
+        <button class="b-s" onclick="cmOO()">List your home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="c-tabs">
+  <button class="c-tab on" onclick="goTo('c-buy')">Homes</button>
+  <button class="c-tab" onclick="goTo('c-facts')">About</button>
+  <button class="c-tab" onclick="goTo('c-sell')">Sell</button>
+  <button class="c-tab" onclick="goTo('c-calc')">Mortgage</button>
+  <button class="c-tab" onclick="goTo('c-contact')">Contact</button>
+</div>
+
+<div class="c-body">
+  <div>
+    <div id="c-buy">
+      <div class="c-list-hd">
+        <h2 class="c-list-title sf">Every Eichler is for sale<br>for the right price.</h2>
+        <p class="c-list-sub">Submit an offer on any home in Eichler Mountain View — listed or not. No listing required. Flat 3% platform fee if a deal closes.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+          <button class="b-p" onclick="cmOB()">Make an offer</button>
+          <button class="b-s" onclick="cmOO()">List your home</button>
+        </div>
+      </div>
+      <div id="mms-banner" class="mms-banner"></div>
+
+      <div class="c-fr">
+        <button class="c-ft on" id="ft-all" onclick="cmTab('all')">All <span class="c-ftc" id="fta-c">70</span></button>
+        <button class="c-ft" id="ft-3" onclick="cmTab('3')">3BR <span class="c-ftc" id="ft3-c">51</span></button>
+        <button class="c-ft" id="ft-4" onclick="cmTab('4')">4BR <span class="c-ftc" id="ft4-c">15</span></button>
+        <button class="c-ft" id="ft-5" onclick="cmTab('5')">5BR+ <span class="c-ftc" id="ft5-c">3</span></button>
+      </div>
+      <div class="c-sr">
+        <span class="c-sl">Sort</span>
+        <button class="c-sb on" id="sb-sold" onclick="cmSort('sold')">Price <span id="sa-sold" style="font-size:9px">↓</span></button>
+        <button class="c-sb" id="sb-sqft" onclick="cmSort('sqft')">Size <span id="sa-sqft" style="font-size:9px"></span></button>
+        <button class="c-sb" id="sb-date" onclick="cmSort('date')">Last Sold <span id="sa-date" style="font-size:9px"></span></button>
+      </div>
+      <div <script type="application/json" id="cm-props-data">[{"a":"969 Eichler Drive","bd":3,"ba":2,"sf":2595,"sp":3535000,"dt":"Jun 2025","lat":37.39552,"lng":-122.08416,"img":"/assets/photos/969-eichler-drive.jpg","ppsf":1362},{"a":"956 Trophy Drive","bd":3,"ba":2,"sf":1816,"sp":3500000,"dt":"Mar 2026","lat":37.392939,"lng":-122.083276,"img":"/assets/photos/956-trophy-drive.jpg","ppsf":1927},{"a":"1231 Eichler Court","bd":4,"ba":2,"sf":2205,"sp":3410000,"dt":"Jul 2021","lat":37.395502,"lng":-122.084508,"img":"/assets/photos/1231-eichler-court.jpg","ppsf":1546},{"a":"946 Eichler Drive","bd":4,"ba":2,"sf":1844,"sp":3275000,"dt":"Nov 2021","lat":37.394227,"lng":-122.084478,"img":"/assets/photos/946-eichler-drive.jpg","ppsf":1776},{"a":"965 Eichler Drive","bd":4,"ba":2,"sf":1912,"sp":3225000,"dt":"Apr 2021","lat":37.394976,"lng":-122.0839,"img":"/assets/photos/965-eichler-drive.jpg","ppsf":1687},{"a":"961 Eichler Drive","bd":4,"ba":2,"sf":2048,"sp":3200000,"dt":"Dec 2024","lat":37.394203,"lng":-122.085164,"img":"/assets/photos/961-eichler-drive.jpg","ppsf":1562},{"a":"925 Eichler Drive","bd":4,"ba":2,"sf":1912,"sp":3050000,"dt":"May 2022","lat":37.395296,"lng":-122.084881,"img":"/assets/photos/925-eichler-drive.jpg","ppsf":1595},{"a":"944 Trophy Drive","bd":4,"ba":2,"sf":2030,"sp":3000000,"dt":"May 2024","lat":37.393478,"lng":-122.083919,"img":"/assets/photos/944-trophy-drive.jpg","ppsf":1478},{"a":"1224 Miramonte Avenue","bd":3,"ba":2,"sf":1536,"sp":2888000,"dt":"Apr 2024","lat":37.391736,"lng":-122.083776,"img":"/assets/photos/1224-miramonte-avenue.jpg","ppsf":1880},{"a":"1221 Eichler Court","bd":4,"ba":2,"sf":2030,"sp":2828888,"dt":"Oct 2020","lat":37.394796,"lng":-122.083901,"img":"/assets/photos/1221-eichler-court.jpg","ppsf":1394},{"a":"960 Trophy Drive","bd":3,"ba":2,"sf":1592,"sp":2770000,"dt":"Aug 2021","lat":37.39238,"lng":-122.084279,"img":"/assets/photos/960-trophy-drive.jpg","ppsf":1740},{"a":"949 Eichler Drive","bd":4,"ba":2,"sf":1912,"sp":2688000,"dt":"Sep 2019","lat":37.394284,"lng":-122.084177,"img":"/assets/photos/949-eichler-drive.jpg","ppsf":1406},{"a":"2461 Benjamin Drive","bd":7,"ba":3,"sf":2462,"sp":2610000,"dt":"Nov 2021","lat":37.395653,"lng":-122.086379,"img":"/assets/photos/2461-benjamin-drive.jpg","ppsf":1060},{"a":"506 Emmons Drive","bd":3,"ba":2,"sf":1212,"sp":2600000,"dt":"Apr 2022","lat":37.396104,"lng":-122.086237,"img":"/assets/photos/506-emmons-drive.jpg","ppsf":2145},{"a":"524 Thompson Avenue","bd":4,"ba":3,"sf":1553,"sp":2523000,"dt":"Jul 2021","lat":37.39431,"lng":-122.084241,"img":"/assets/photos/524-thompson-avenue.jpg","ppsf":1625},{"a":"2440 Alvin Street","bd":4,"ba":2,"sf":1320,"sp":2500000,"dt":"Oct 2025","lat":37.393552,"lng":-122.085834,"img":"/assets/photos/2440-alvin-street.jpg","ppsf":1894},{"a":"2434 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":2455000,"dt":"Mar 2024","lat":37.394005,"lng":-122.085088,"img":"/assets/photos/2434-alvin-street.jpg","ppsf":2200},{"a":"2474 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":2435000,"dt":"Nov 2025","lat":37.393821,"lng":-122.085398,"img":"/assets/photos/2474-alvin-street.jpg","ppsf":2182},{"a":"1113 Clark Avenue","bd":3,"ba":1,"sf":974,"sp":2355000,"dt":"Aug 2023","lat":37.391255,"lng":-122.08288,"img":"/assets/photos/1113-clark-avenue.jpg","ppsf":2418},{"a":"537 Victory Avenue","bd":3,"ba":2,"sf":1116,"sp":2200000,"dt":"Nov 2021","lat":37.394846,"lng":-122.085541,"img":"/assets/photos/537-victory-avenue.jpg","ppsf":1971},{"a":"928 Trophy Drive","bd":4,"ba":2,"sf":2030,"sp":2200000,"dt":"Mar 2017","lat":37.393317,"lng":-122.083044,"img":"/assets/photos/928-trophy-drive.jpg","ppsf":1084},{"a":"2461 Thaddeus Drive","bd":3,"ba":2,"sf":1185,"sp":2180000,"dt":"Jul 2021","lat":37.392037,"lng":-122.083114,"img":"/assets/photos/2461-thaddeus-drive.jpg","ppsf":1840},{"a":"2527 Alvin Street","bd":3,"ba":2,"sf":1313,"sp":2100000,"dt":"Sep 2020","lat":37.393631,"lng":-122.086357,"img":"/assets/photos/2527-alvin-street.jpg","ppsf":1599},{"a":"510 Emmons Drive","bd":4,"ba":2,"sf":1416,"sp":2100000,"dt":"Oct 2017","lat":37.395732,"lng":-122.085198,"img":"/assets/photos/510-emmons-drive.jpg","ppsf":1483},{"a":"2525 Nedson Court","bd":3,"ba":2,"sf":1116,"sp":2080000,"dt":"May 2021","lat":37.394048,"lng":-122.08592,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2525+Nedson+Court,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1864},{"a":"2464 Elka Avenue","bd":3,"ba":3,"sf":1630,"sp":2070000,"dt":"Jul 2017","lat":37.394196,"lng":-122.086335,"img":"/assets/photos/2464-elka-avenue.jpg","ppsf":1270},{"a":"478 Quincy Drive","bd":3,"ba":2,"sf":1713,"sp":2050000,"dt":"Jun 2020","lat":37.392402,"lng":-122.082357,"img":"/assets/photos/478-quincy-drive.jpg","ppsf":1197},{"a":"2434 Benjamin Drive","bd":4,"ba":2,"sf":1887,"sp":2000000,"dt":"Jun 2020","lat":37.394489,"lng":-122.086734,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2434+Benjamin+Drive,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1060},{"a":"2451 Benjamin Drive","bd":3,"ba":3,"sf":1902,"sp":1998750,"dt":"Dec 2018","lat":37.394779,"lng":-122.085656,"img":"/assets/photos/2451-benjamin-drive.jpg","ppsf":1051},{"a":"2516 Mardell Way","bd":3,"ba":2,"sf":1477,"sp":1951000,"dt":"Jul 2017","lat":37.392992,"lng":-122.083897,"img":"/assets/photos/2516-mardell-way.jpg","ppsf":1321},{"a":"83 Paul Avenue","bd":3,"ba":2,"sf":1513,"sp":1940000,"dt":"Oct 2018","lat":37.391526,"lng":-122.08363,"img":"/assets/photos/83-paul-avenue.jpg","ppsf":1282},{"a":"254 Lassen Avenue","bd":3,"ba":2,"sf":1280,"sp":1875000,"dt":"Jun 2017","lat":37.393651,"lng":-122.085823,"img":"/assets/photos/254-lassen-avenue.jpg","ppsf":1465},{"a":"435 Victory Avenue","bd":3,"ba":2,"sf":1140,"sp":1861000,"dt":"Feb 2018","lat":37.394557,"lng":-122.085464,"img":"/assets/photos/435-victory-avenue.jpg","ppsf":1632},{"a":"447 Victory Avenue","bd":3,"ba":2,"sf":1140,"sp":1860000,"dt":"Mar 2020","lat":37.394435,"lng":-122.085118,"img":"/assets/photos/447-victory-avenue.jpg","ppsf":1632},{"a":"260 Lassen Avenue","bd":3,"ba":2,"sf":1280,"sp":1850000,"dt":"Apr 2017","lat":37.393537,"lng":-122.085837,"img":"/assets/photos/260-lassen-avenue.jpg","ppsf":1445},{"a":"265 Diablo Avenue","bd":3,"ba":2,"sf":1280,"sp":1830000,"dt":"Jun 2021","lat":37.391731,"lng":-122.082922,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=265+Diablo+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1430},{"a":"435 Dell Avenue","bd":3,"ba":2,"sf":1216,"sp":1800000,"dt":"Nov 2018","lat":37.393752,"lng":-122.083858,"img":"/assets/photos/435-dell-avenue.jpg","ppsf":1480},{"a":"364 N Rengstorff Avenue","bd":3,"ba":2,"sf":1340,"sp":1730000,"dt":"Jul 2021","lat":37.394001,"lng":-122.086721,"img":"/assets/photos/364-n-rengstorff-avenue.jpg","ppsf":1291},{"a":"284 N Rengstorff Avenue","bd":3,"ba":2,"sf":1104,"sp":1700000,"dt":"Apr 2021","lat":37.393209,"lng":-122.08576,"img":"/assets/photos/284-n-rengstorff-avenue.jpg","ppsf":1540},{"a":"206 Thompson Avenue","bd":3,"ba":2,"sf":1280,"sp":1700000,"dt":"Feb 2017","lat":37.394569,"lng":-122.085255,"img":"/assets/photos/206-thompson-avenue.jpg","ppsf":1328},{"a":"460 Dell Avenue","bd":4,"ba":2,"sf":1419,"sp":1679000,"dt":"Oct 2020","lat":37.392906,"lng":-122.083433,"img":"/assets/photos/460-dell-avenue.jpg","ppsf":1183},{"a":"2300 Jane","bd":3,"ba":2,"sf":1076,"sp":1660000,"dt":"Dec 2021","lat":37.394293,"lng":-122.086444,"img":"/assets/photos/2300-jane.jpg","ppsf":1543},{"a":"2524 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":1650000,"dt":"Oct 2019","lat":37.393745,"lng":-122.086159,"img":"/assets/photos/2524-alvin-street.jpg","ppsf":1478},{"a":"487 Victory Avenue","bd":3,"ba":3,"sf":1536,"sp":1650000,"dt":"Jun 2015","lat":37.393784,"lng":-122.085179,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=487+Victory+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1074},{"a":"515 Emmons Drive","bd":3,"ba":2,"sf":1550,"sp":1625000,"dt":"Oct 2016","lat":37.394719,"lng":-122.085195,"img":"/assets/photos/515-emmons-drive.jpg","ppsf":1048},{"a":"2443 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":1580000,"dt":"Jun 2016","lat":37.393511,"lng":-122.085173,"img":"/assets/photos/2443-alvin-street.jpg","ppsf":1416},{"a":"2357 Craig Court","bd":5,"ba":2,"sf":1580,"sp":1565000,"dt":"Feb 2016","lat":37.393587,"lng":-122.085405,"img":"/assets/photos/2357-craig-court.jpg","ppsf":991},{"a":"516 Thompson Avenue","bd":3,"ba":2,"sf":1116,"sp":1550000,"dt":"Jan 2016","lat":37.393518,"lng":-122.085525,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=516+Thompson+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1389},{"a":"2431 Benjamin Drive","bd":5,"ba":2,"sf":1632,"sp":1540000,"dt":"Jul 2016","lat":37.395315,"lng":-122.085721,"img":"/assets/photos/2431-benjamin-drive.jpg","ppsf":944},{"a":"355 Fay Way","bd":3,"ba":2,"sf":1104,"sp":1510000,"dt":"Mar 2015","lat":37.392389,"lng":-122.083384,"img":"/assets/photos/355-fay-way.jpg","ppsf":1368},{"a":"2459 Elka Avenue","bd":3,"ba":2,"sf":1216,"sp":1412000,"dt":"Nov 2014","lat":37.393731,"lng":-122.0859,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2459+Elka+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1161},{"a":"321 Anna Avenue","bd":3,"ba":2,"sf":1216,"sp":1400000,"dt":"Sep 2014","lat":37.392058,"lng":-122.083317,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=321+Anna+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1151},{"a":"2458 Alvin Street","bd":4,"ba":2,"sf":1375,"sp":1400000,"dt":"Jun 2014","lat":37.393623,"lng":-122.086352,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2458+Alvin+Street,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1018},{"a":"2431 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":1388000,"dt":"Jan 2015","lat":37.393192,"lng":-122.086586,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2431+Alvin+Street,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1244},{"a":"2538 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":1385500,"dt":"Aug 2015","lat":37.394579,"lng":-122.085201,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2538+Alvin+Street,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1241},{"a":"1892 Elsie Avenue","bd":2,"ba":1,"sf":1232,"sp":1329000,"dt":"Mar 2016","lat":37.391436,"lng":-122.083202,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=1892+Elsie+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1079},{"a":"2365 Craig Court","bd":3,"ba":2,"sf":1272,"sp":1300000,"dt":"Feb 2015","lat":37.394262,"lng":-122.086335,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2365+Craig+Court,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1022},{"a":"436 Burgoyne Street","bd":3,"ba":2,"sf":877,"sp":1200000,"dt":"Nov 2018","lat":37.3915,"lng":-122.082334,"img":"/assets/photos/436-burgoyne-street.jpg","ppsf":1368},{"a":"2321 Heather Court","bd":3,"ba":2,"sf":1104,"sp":1150000,"dt":"Jun 2014","lat":37.391768,"lng":-122.08358,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2321+Heather+Court,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":1042},{"a":"424 Dell Avenue","bd":3,"ba":2,"sf":1223,"sp":1125000,"dt":"Mar 2014","lat":37.393778,"lng":-122.083791,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=424+Dell+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":920},{"a":"534 Victory Avenue","bd":3,"ba":2,"sf":1116,"sp":1110000,"dt":"Nov 2013","lat":37.393838,"lng":-122.084898,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=534+Victory+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":995},{"a":"2502 Mardell Way","bd":3,"ba":2,"sf":1216,"sp":921000,"dt":"Dec 2012","lat":37.394062,"lng":-122.084843,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2502+Mardell+Way,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":757},{"a":"2400 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":875000,"dt":"Jul 2012","lat":37.393429,"lng":-122.086004,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2400+Alvin+Street,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":784},{"a":"2379 Jane Lane","bd":3,"ba":2,"sf":1104,"sp":856000,"dt":"Sep 2012","lat":37.393776,"lng":-122.086615,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2379+Jane+Lane,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":775},{"a":"2509 Nedson Court","bd":3,"ba":2,"sf":1536,"sp":854000,"dt":"Jul 2013","lat":37.393976,"lng":-122.086805,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2509+Nedson+Court,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":556},{"a":"2348 Jane Lane","bd":3,"ba":2,"sf":1392,"sp":795000,"dt":"Mar 2013","lat":37.393893,"lng":-122.086279,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2348+Jane+Lane,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":571},{"a":"2503 Alvin Street","bd":3,"ba":2,"sf":1116,"sp":780000,"dt":"Apr 2011","lat":37.394154,"lng":-122.0864,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2503+Alvin+Street,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":699},{"a":"2345 Adele Avenue","bd":3,"ba":2,"sf":1389,"sp":700000,"dt":"Aug 2012","lat":37.290577,"lng":-121.905949,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2345+Adele+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":504},{"a":"726 Telford Avenue","bd":3,"ba":2,"sf":1104,"sp":668888,"dt":"Feb 2013","lat":37.392422,"lng":-122.083038,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=726+Telford+Avenue,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":606},{"a":"2362 Laura Lane","bd":3,"ba":2,"sf":1104,"sp":635000,"dt":"Nov 2011","lat":37.392426,"lng":-122.083466,"img":"https://maps.googleapis.com/maps/api/streetview?size=400x250&location=2362+Laura+Lane,+Mountain+View,+CA&key=AIzaSyDgGLowiAHWJYDLI4yAmC1Rjgc-xBQpsSA","ppsf":575}]</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+      <div class="cm-map-outer">
+        <div id="cm-map"></div>
+        <div class="cm-pin-count" id="cm-pin-count">70 homes</div>
+      </div>
+      <div class="c-fr">
+        <button class="c-ft on" id="ft-all" onclick="setCmTab('all')">All <span class="c-ftc">70</span></button>
+        <button class="c-ft" id="ft-3" onclick="setCmTab('3')">3BR <span class="c-ftc">52</span></button>
+        <button class="c-ft" id="ft-4" onclick="setCmTab('4')">4BR <span class="c-ftc">15</span></button>
+        <button class="c-ft" id="ft-5" onclick="setCmTab('5')">5BR+ <span class="c-ftc">3</span></button>
+      </div>
+      <div class="c-sr">
+        <span class="c-sl">Sort</span>
+        <button class="c-sb on" id="sb-price" onclick="setCmSort('price')">Price ↓</button>
+        <button class="c-sb" id="sb-size" onclick="setCmSort('size')">Size</button>
+        <button class="c-sb" id="sb-ppsf" onclick="setCmSort('ppsf')">$/sf</button>
+      </div>
+      <div id="homes-list"></div>
+      id="cm-units"></div>
+    </div>
+
+    <div class="c-info" id="c-facts">
+      <div class="c-shd">About Eichler Mountain View</div>
+      <p class="c-desc">Part of the Monta Loma/Fairview Eichler corridor — Mountain View's main concentration of ~200 Eichler homes on Quincy Drive, Benjamin Drive, Thaddeus Drive, Dell Avenue, Emmons Drive, and surrounding streets. The combination of Eichler design pedigree and proximity to Google headquarters makes these among the most competitively bid homes in Silicon Valley.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+        <div style="display:flex;gap:5px;align-items:baseline;background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">70</span><span style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g)">Homes tracked</span></div>
+        <div style="display:flex;gap:5px;align-items:baseline;background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">$1,850,000</span><span style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g)">Median price</span></div>
+        <div style="display:flex;gap:5px;align-items:baseline;background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">$1,338/sf</span><span style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g)">Avg $/sqft</span></div>
+        <div style="display:flex;gap:5px;align-items:baseline;background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">Mountain View</span><span style="font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g)">City</span></div>
+      </div>
+      <div class="c-shd">Eichler Features</div>
+      <div class="c-ag" style="margin-bottom:28px">
+        <div class="c-am">🏠 Post &amp; Beam</div>
+        <div class="c-am">🪟 Floor-to-Ceiling Glass</div>
+        <div class="c-am">🌿 Indoor Atrium</div>
+        <div class="c-am">🔥 Radiant Heat</div>
+        <div class="c-am">🌅 Open Floorplan</div>
+        <div class="c-am">🏗 Flat/Low Roof</div>
+        <div class="c-am">☀️ Solar-Ready</div>
+        <div class="c-am">🌳 Japanese Garden Influence</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="c-side" id="c-contact">
+    <div class="tf-card" id="tf-facts">
+  <div class="tf-head"><span class="tf-head-label">Tract Facts</span></div>
+  <div class="tf-badges"><span class="tf-badge tf-badge--gold">⚡ Near Google HQ</span><span class="tf-badge">Monta Loma neighborhood</span></div>
+  <div class="tf-rows"><div class="tf-row"><div class="tf-rl">Year built</div><div class="tf-rv">1950s</div></div><div class="tf-row"><div class="tf-rl">Homes in tract</div><div class="tf-rv">Part of ~275 total Mountain View Eichlers</div></div><div class="tf-row"><div class="tf-rl">Architect(s)</div><div class="tf-rv">Anshen + Allen</div></div><div class="tf-row"><div class="tf-rl">Typical size</div><div class="tf-rv">~1,200–1,600 sf</div></div></div>
+  <div class="tf-employers"><div class="tf-emp-label">Nearby employers</div><div class="tf-emp-list"><span class="tf-emp-tag">Google HQ</span><span class="tf-emp-tag">LinkedIn</span><span class="tf-emp-tag">Microsoft</span><span class="tf-emp-tag">Intuit</span></div></div>
+</div>
+    <div class="c-widget">
+      <div class="c-wh">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(145,161,186,.5);margin-bottom:8px">Powered by</div>
+        <div class="sf" style="font-size:20px;font-weight:700;color:#fff;margin-bottom:2px">McMullen Properties</div>
+        <div style="font-size:12px;color:rgba(145,161,186,.5)">McMullen Properties · DRE #02016832</div>
+      </div>
+      <div class="c-wb">
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px">
+          <a href="tel:+14156919272" style="font-size:13px;font-weight:700;color:var(--n)">+1 (415) 691-9272</a>
+          <a href="mailto:tim@mcmullen.properties" style="font-size:13px;color:var(--g)">tim@mcmullen.properties</a>
+        </div>
+      </div>
+      <div class="c-wf">
+        <button onclick="cmOB()" style="width:100%;background:var(--n);color:#fff;border:none;padding:14px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;margin-bottom:8px;display:block;font-family:inherit;transition:opacity .15s">Make an Offer →</button>
+        <button onclick="cmOO()" style="width:100%;background:transparent;color:var(--n);border:1.5px solid var(--n);padding:12px;font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;display:block;font-family:inherit;transition:all .15s">List Your Home</button>
+      </div>
+    </div>
+    <div class="c-pbox" style="margin-top:12px">
+      <div style="padding:11px 16px;border-bottom:1px solid var(--b);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g)">Price Benchmarks</div>
+      <div class="c-prow"><span style="font-size:12px;color:var(--g)">Median 3BR</span><span class="sf" style="font-size:16px;font-weight:700;color:var(--n)">$1,700,000</span></div>
+      <div class="c-prow"><span style="font-size:12px;color:var(--g)">Median 4BR</span><span class="sf" style="font-size:16px;font-weight:700;color:var(--n)">$2,688,000</span></div>
+      <div class="c-prow" style="border-bottom:none"><span style="font-size:12px;color:var(--g)">Avg $/sqft</span><span class="sf" style="font-size:16px;font-weight:700;color:var(--n)">$1,338/sf</span></div>
+    </div>
+    <div style="background:rgba(200,169,110,.06);border:1px solid rgba(200,169,110,.2);padding:14px;margin-top:12px;border-radius:4px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a7840;margin-bottom:6px">★ Refer &amp; Earn</div>
+      <p style="font-size:12px;color:var(--g);line-height:1.6;margin-bottom:10px">Share Eichler Market with a buyer or seller. When they close, you earn 100 points = 1% off your next deal.</p>
+      <button onclick="window.location='/refer'" style="width:100%;background:#c8a96e;color:#1a1f2e;border:none;padding:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border-radius:4px">Get your referral link →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SELL + COMMISSION SECTIONS (reused from Condo Market style) -->
+<div id="cm-sell" style="background:#fff;border-top:3px solid #1a1f2e;padding:52px 24px">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#91a1ba;margin-bottom:18px">Homeowners at Eichler Mountain View</div>
+    <h2 class="sf" style="font-size:32px;font-weight:700;color:#1a1f2e;margin-bottom:14px;line-height:1.15">How much would you<br>sell your Eichler for?</h2>
+    <p style="font-size:14px;color:#6b7280;line-height:1.85;margin-bottom:28px;max-width:560px">Set a Make Me Move price — publicly signal you're open to the right offer. Adjust or remove it anytime. You're never bound to accept. If a sale closes, flat 3% fee.</p>
+    <button onclick="cmOO()" style="background:#1a1f2e;color:#fff;border:none;padding:14px 28px;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:8px">Name my price →</button>
+  </div>
+</div>
+
+<div style="background:#1a1f2e;padding:40px 24px">
+  <div style="max-width:1100px;margin:0 auto">
+    <h3 class="sf" style="font-size:28px;font-weight:700;color:#fff;margin-bottom:14px">One flat fee. Always 3%.</h3>
+    <p style="font-size:14px;color:rgba(145,161,186,.65);line-height:1.8;margin-bottom:28px;max-width:520px">Every Eichler Market transaction carries a flat 3% fee — vs. 5–6% traditional commissions. Refer a buyer or seller who closes on the platform and earn 100 points = 1% off your own next deal.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px">
+      <div style="background:rgba(200,169,110,.12);padding:24px;border-top:3px solid #c8a96e"><div class="sf" style="font-size:32px;font-weight:700;color:#c8a96e">1%</div><div style="font-size:14px;font-weight:700;color:#fff;margin:6px 0">Per referral</div><p style="font-size:12px;color:rgba(145,161,186,.55);line-height:1.6">Every time someone you refer closes a deal, you earn 100 points — redeemable as 1% off your own commission.</p></div>
+      <div style="background:rgba(255,255,255,.04);padding:24px;border-top:3px solid rgba(255,255,255,.4)"><div class="sf" style="font-size:32px;font-weight:700;color:rgba(255,255,255,.85)">2%</div><div style="font-size:14px;font-weight:700;color:#fff;margin:6px 0">Platform fee</div><p style="font-size:12px;color:rgba(145,161,186,.55);line-height:1.6">Covers Tim's full facilitation — LOI, C.A.R. contract, and close of escrow. Points reduce this at closing.</p></div>
+      <div style="background:rgba(255,255,255,.02);padding:24px;border-top:3px solid rgba(145,161,186,.2)"><div class="sf" style="font-size:32px;font-weight:700;color:rgba(255,255,255,.4)">3%</div><div style="font-size:14px;font-weight:700;color:rgba(255,255,255,.55);margin:6px 0">Total. Always.</div><p style="font-size:12px;color:rgba(145,161,186,.4);line-height:1.6">The total fee never changes — only the effective cost to you, reduced by your referral points.</p></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── Footer How It Works ── -->
+<div class="footer-hiw">
+  <div class="footer-hiw-inner">
+    <div class="footer-hiw-eyebrow">How Eichler Market Works</div>
+    <div class="footer-hiw-steps">
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">1</div>
+        <div>
+          <div class="footer-hiw-title">Find any Eichler</div>
+          <div class="footer-hiw-body">Browse 1,768 tracked homes across 54 Silicon Valley tracts — or enter any address.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">2</div>
+        <div>
+          <div class="footer-hiw-title">Submit an offer</div>
+          <div class="footer-hiw-body">Name, email, offer amount. The platform generates a non-binding LOI. Takes 60 seconds.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">3</div>
+        <div>
+          <div class="footer-hiw-title">Offer review call</div>
+          <div class="footer-hiw-body">A short call within 24 hours to align on terms before the offer goes to the owner.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">4</div>
+        <div>
+          <div class="footer-hiw-title">Close on your terms</div>
+          <div class="footer-hiw-body">McMullen Properties facilitates through LOI, CAR contract, and escrow. Flat 3% platform fee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-hiw-fee">
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">3%</span><span class="footer-hiw-fee-l">Platform fee — always</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">1%</span><span class="footer-hiw-fee-l">To buyer's nominated agent, if any</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">0%</span><span class="footer-hiw-fee-l">MLS listing required</span></div>
+    </div>
+  </div>
+</div>
+
+<footer style="background:#1a1f2e;padding:24px">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+      <div class="sf" style="color:#fff;font-size:15px;font-weight:700">Eichler Market</div>
+      <a href="/communities" style="font-size:12px;color:rgba(145,161,186,.4)">← All Communities</a>
+    </div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+      <a href="tel:+14156919272" style="font-size:12px;color:rgba(145,161,186,.4)">+1 415 691 9272</a>
+      <a href="mailto:tim@mcmullen.properties" style="font-size:12px;color:rgba(145,161,186,.4)">tim@mcmullen.properties</a>
+      <span style="font-size:11px;color:rgba(145,161,186,.2)">DRE #02016832</span>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALS (buy/sell) -->
+<div id="cm-bm" style="display:none"><div class="c-ov" onclick="if(event.target===this)cmC()"><div class="c-bx"><div class="c-mh"><span class="sf" style="font-size:16px;font-weight:600" id="cm-bt">Make an Offer</span><button style="background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;line-height:1" onclick="cmC()">✕</button></div><div class="c-mb"><div class="c-stps" id="cm-bstps"><div class="c-stp on"></div><div class="c-stp"></div><div class="c-stp"></div></div><div id="cm-b0"><p style="font-size:14px;color:var(--g);line-height:1.7;margin-bottom:18px">Submit an offer on any home at Eichler Mountain View.</p><div style="display:flex;flex-direction:column;gap:14px"><div><label class="c-lbl">Full Name</label><input class="c-inp" id="cm-bn" placeholder="First Last" oninput="cmUB()"></div><div><label class="c-lbl">Email</label><input class="c-inp" id="cm-be" type="email" placeholder="you@email.com" oninput="cmUB()"></div></div></div><div id="cm-b1" style="display:none"><p style="font-size:12px;color:var(--g);margin-bottom:12px">Select a home.</p><div style="border:1px solid var(--b);overflow-x:auto"><table class="c-t"><thead><tr><th>Address</th><th>Bed/Ba</th><th>Sqft</th><th>Last Sold</th></tr></thead><tbody id="cm-mt"></tbody></table></div><div id="cm-sn" style="display:none;margin-top:10px;padding:10px;background:#e8ecf3;font-size:12px;color:var(--n);font-weight:500"></div></div><div id="cm-b2" style="display:none"><p style="font-size:14px;color:var(--g);margin-bottom:14px">Confirm offer interest in <strong id="cm-cu"></strong>.</p><div style="background:var(--bg);border:1px solid var(--b);padding:16px;margin-bottom:14px"><div class="c-cg"><div><span class="c-ck">Name</span><span id="cm-cn" style="font-size:13px"></span></div><div><span class="c-ck">Email</span><span id="cm-cem" style="font-size:13px;word-break:break-all"></span></div><div><span class="c-ck">Home</span><span id="cm-cun" style="font-size:13px"></span></div><div><span class="c-ck">Last Sold</span><span id="cm-cp" style="font-size:13px"></span></div></div></div><p style="font-size:11px;color:var(--g)">McMullen Properties · DRE #02016832 will follow up confidentially.</p></div><div id="cm-b3" style="display:none;text-align:center;padding:20px 0"><div style="width:52px;height:52px;background:var(--n);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px;color:#fff">✓</div><h3 class="sf" style="font-size:20px;color:var(--n);margin-bottom:8px">Offer submitted.</h3><p style="font-size:14px;color:var(--g);max-width:260px;margin:0 auto 16px" id="cm-dm"></p></div></div><div class="c-mf" id="cm-bf"><button class="b-p" id="cm-bcta" onclick="cmBN()" disabled>Continue →</button><button class="b-g" onclick="cmC()">Cancel</button></div></div></div></div>
+<div id="cm-om" style="display:none"><div class="c-ov" onclick="if(event.target===this)cmC()"><div class="c-bx"><div class="c-mh"><span class="sf" style="font-size:16px;font-weight:600" id="cm-ot">List Your Eichler</span><button style="background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;line-height:1" onclick="cmC()">✕</button></div><div class="c-mb"><div class="c-stps" id="cm-ostps"><div class="c-stp on"></div><div class="c-stp"></div></div><div id="cm-o0"><p style="font-size:14px;color:var(--g);line-height:1.75;margin-bottom:18px">Own a home at Eichler Mountain View? Set a Make Me Move price — publicly signal you're open to the right offer. Adjust or remove anytime.</p><div style="display:flex;flex-direction:column;gap:14px"><div><label class="c-lbl">Your Name</label><input class="c-inp" id="cm-on" placeholder="First Last" oninput="cmUO()"></div><div><label class="c-lbl">Email</label><input class="c-inp" id="cm-oe" type="email" placeholder="you@email.com" oninput="cmUO()"></div><div><label class="c-lbl">Cell Phone</label><input class="c-inp" id="cm-oc" type="tel" placeholder="(415) 555-0100" oninput="cmUO()"></div></div></div><div id="cm-o1" style="display:none"><div style="display:flex;flex-direction:column;gap:14px"><div><label class="c-lbl">Your Home Address</label><select class="c-sel" id="cm-ou" onchange="cmOUC()"><option value="">Select your home...</option></select></div><div><label class="c-lbl">Your Selling Price</label><input class="c-inp" id="cm-op" placeholder="$2,500,000" oninput="cmOPI(this)"><p id="cm-ol" style="font-size:11px;color:var(--g);margin-top:5px;display:none"></p></div></div></div><div id="cm-o2" style="display:none;text-align:center;padding:20px 0"><div style="width:52px;height:52px;background:var(--n);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px;color:#fff">✓</div><h3 class="sf" style="font-size:20px;color:var(--n);margin-bottom:8px">Price is live.</h3><p style="font-size:14px;color:var(--g);max-width:260px;margin:0 auto 16px">Tim will notify you when a serious buyer submits an offer on your home.</p></div></div><div class="c-mf" id="cm-of"><button class="b-p" id="cm-octa" onclick="cmON()" disabled>Continue →</button><button class="b-g" onclick="cmC()">Cancel</button></div></div></div></div>
+<div id="cm-toast" style="position:fixed;bottom:24px;right:24px;background:#1a1f2e;color:#fff;padding:13px 20px;font-size:13px;font-weight:600;z-index:2000;box-shadow:0 8px 32px rgba(26,31,46,.3);display:none;border-left:3px solid #c8a96e"></div>
+
+<div class="cm-mobile-cta" id="cm-mobile-cta">
+  <button onclick="cmOB()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Make an offer
+  </button>
+</div>
+</div>
+
+<script>
+var EJ={svc:"service_733sibl",key:"rjIXPckMwcWAXnyPx",tB:"template_dqt85kb",tO:"template_vu9b3uo"};
+var MN={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+var S={tab:'all',sort:'sold',sd:-1,bs:0,os:0,modal:null,su:null,by:{n:'',e:''},ow:{n:'',e:'',u:'',p:''},mms:[],tt:null,lbi:0,mct:30};
+var $n=function(v){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(v);};
+var MC={"bed":3,"bench":"community","beds":{"3":{"bldgPPSF":1329,"bldgLabel":"Recent 3BR sale","sqft":2595,"nbrPPSF":1338},"4":{"bldgPPSF":1453,"bldgLabel":"Recent 4BR sale","sqft":2205,"nbrPPSF":1338}}};
+function q(id){return document.getElementById(id);}
+function dN(d){if(!d)return 0;var p=d.split(' ');return parseInt(p[1]||0)*12+(MN[p[0]]||0);}
+function goTo(id){var el=q(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function ejSend(t,p){fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EJ.svc,template_id:t,user_id:EJ.key,template_params:p})}).catch(function(){});}
+function toggleNav(){var btn=q('c-hamburger'),d=q('c-nav-drawer');if(!btn||!d)return;var o=d.classList.contains('open');d.classList.toggle('open',!o);btn.classList.toggle('open',!o);}
+
+function cmSort(k){if(S.sort===k){S.sd*=-1;}else{S.sort=k;S.sd=k==='date'?-1:-1;}['sold','sqft','date'].forEach(function(x){var e=q('sb-'+x),a=q('sa-'+x);if(e)e.classList.toggle('on',x===k);if(a)a.textContent=x===k?(S.sd===1?'↑':'↓'):'';}); cmRender();}
+function cmFiltered(){return UNITS.filter(function(u){return S.tab==='all'||(S.tab==='3'&&u.beds===3)||(S.tab==='4'&&u.beds===4)||(S.tab==='5'&&u.beds>=5);}).map(function(u){var m=S.mms.find(function(x){return x.unit===u.unit;});return Object.assign({},u,{mmsP:m?m.price:null});});}
+function cmSorted(a){var c=S.sort,d=S.sd;return[].concat(a).sort(function(a,b){var av=c==='date'?dN(a.date):a[c],bv=c==='date'?dN(b.date):b[c];return(av-bv)*d;});}
+function mkRow(u){var PHOTOS={"969-eichler-drive":"/assets/photos/969-eichler-drive.jpg","956-trophy-drive":"/assets/photos/956-trophy-drive.jpg","1231-eichler-court":"/assets/photos/1231-eichler-court.jpg","946-eichler-drive":"/assets/photos/946-eichler-drive.jpg","965-eichler-drive":"/assets/photos/965-eichler-drive.jpg","961-eichler-drive":"/assets/photos/961-eichler-drive.jpg","925-eichler-drive":"/assets/photos/925-eichler-drive.jpg","944-trophy-drive":"/assets/photos/944-trophy-drive.jpg","1224-miramonte-avenue":"/assets/photos/1224-miramonte-avenue.jpg","1221-eichler-court":"/assets/photos/1221-eichler-court.jpg","960-trophy-drive":"/assets/photos/960-trophy-drive.jpg","949-eichler-drive":"/assets/photos/949-eichler-drive.jpg","2461-benjamin-drive":"/assets/photos/2461-benjamin-drive.jpg","506-emmons-drive":"/assets/photos/506-emmons-drive.jpg","524-thompson-avenue":"/assets/photos/524-thompson-avenue.jpg","2440-alvin-street":"/assets/photos/2440-alvin-street.jpg","2434-alvin-street":"/assets/photos/2434-alvin-street.jpg","2474-alvin-street":"/assets/photos/2474-alvin-street.jpg","1113-clark-avenue":"/assets/photos/1113-clark-avenue.jpg","537-victory-avenue":"/assets/photos/537-victory-avenue.jpg","928-trophy-drive":"/assets/photos/928-trophy-drive.jpg","2461-thaddeus-drive":"/assets/photos/2461-thaddeus-drive.jpg","2527-alvin-street":"/assets/photos/2527-alvin-street.jpg","510-emmons-drive":"/assets/photos/510-emmons-drive.jpg","2464-elka-avenue":"/assets/photos/2464-elka-avenue.jpg","478-quincy-drive":"/assets/photos/478-quincy-drive.jpg","2451-benjamin-drive":"/assets/photos/2451-benjamin-drive.jpg","2516-mardell-way":"/assets/photos/2516-mardell-way.jpg","83-paul-avenue":"/assets/photos/83-paul-avenue.jpg","254-lassen-avenue":"/assets/photos/254-lassen-avenue.jpg","435-victory-avenue":"/assets/photos/435-victory-avenue.jpg","447-victory-avenue":"/assets/photos/447-victory-avenue.jpg","260-lassen-avenue":"/assets/photos/260-lassen-avenue.jpg","435-dell-avenue":"/assets/photos/435-dell-avenue.jpg","364-n-rengstorff-avenue":"/assets/photos/364-n-rengstorff-avenue.jpg","284-n-rengstorff-avenue":"/assets/photos/284-n-rengstorff-avenue.jpg","206-thompson-avenue":"/assets/photos/206-thompson-avenue.jpg","460-dell-avenue":"/assets/photos/460-dell-avenue.jpg","2300-jane":"/assets/photos/2300-jane.jpg","2524-alvin-street":"/assets/photos/2524-alvin-street.jpg","515-emmons-drive":"/assets/photos/515-emmons-drive.jpg","2443-alvin-street":"/assets/photos/2443-alvin-street.jpg","2357-craig-court":"/assets/photos/2357-craig-court.jpg","2431-benjamin-drive":"/assets/photos/2431-benjamin-drive.jpg","355-fay-way":"/assets/photos/355-fay-way.jpg","436-burgoyne-street":"/assets/photos/436-burgoyne-street.jpg"};var key=u.unit.toLowerCase().replace(/ /g,'-').replace(/,/g,'');var photo=PHOTOS[key]||'';var imgSrc=photo||'https://drupal-prod.visitcalifornia.com/sites/default/files/styles/opengraph_1200x630/public/vc_ca101_fiveamazingthings_palalto_alto1_videostill_1280x640.jpg.webp?itok=KQIyGvMU';var mmsP=u.mmsP;var badge=mmsP?'<span class="bgm">MMS</span>':'';var dispPrice=$n(mmsP||u.sold);var ppsf=(u.sold&&u.sqft)?'<span class=\"c-uf\">\u00b7 $'+Math.round(u.sold/u.sqft)+'/sf</span>':'';var h='<div class=\"c-u\" data-u=\"'+u.unit.toLowerCase().replace(/ /g,\'-\').replace(/,/g,\'\')+\'\" onclick=\"cmQ(this.dataset.u)\" style=\"gap:10px\">';h+='<div style=\"width:60px;height:45px;border-radius:6px;overflow:hidden;flex-shrink:0\"><img src=\"'+imgSrc+'\" alt=\"\" style=\"width:100%;height:100%;object-fit:cover;display:block\" loading=\"lazy\"></div>';h+='<div class="c-ul">';h+='<div class="c-ua">'+u.unit+' '+badge+'</div>';h+='<div class="c-us"><span>'+u.beds+'BR</span><span class="c-usep">|</span><span>'+u.baths+'BA</span><span class="c-usep">|</span><span>'+u.sqft.toLocaleString()+' sqft</span></div>';h+='<div class="c-upr"><span class="c-up">'+dispPrice+'</span><span class="c-ud">'+u.date+'</span>'+ppsf+'</div>';h+='</div>';h+='<div class=\"c-ur\"><button class=\"b-p c-offer-btn\" onclick=\"event.stopPropagation();cmQ(this.closest(\'[data-u]\').dataset.u)\" style=\"font-size:11px;padding:9px 14px\">Offer \u2192</button></div>';h+='</div>';return h;}
+function grpHeader(label,units){var sold=units.filter(function(u){return u.sold>0;});var prices=sold.map(function(u){return u.sold;}).sort(function(a,b){return a-b;});var med=prices.length?prices[Math.floor(prices.length/2)]:0;var sf=units.filter(function(u){return u.sold>0&&u.sqft>500;});var avg=sf.length?Math.round(sf.reduce(function(s,u){return s+u.sold/u.sqft;},0)/sf.length):0;return '<div class="c-grp">'+label+' · '+units.length+' homes<span class="c-grps">Median '+(med?$n(med):'—')+(avg?' · $'+avg+'/sf':'')+'</span></div>';}
+
+function cmRenderMT(){var h='';cmSorted(cmFiltered()).forEach(function(u){var sel=S.su&&S.su.unit===u.unit?'rs':'';h+='<tr class="'+sel+'" data-unit="'+u.unit+'" onclick="cmSelRow(this)"><td><strong>'+u.unit+'</strong></td><td>'+u.beds+'/'+u.baths+'</td><td>'+u.sqft.toLocaleString()+'</td><td>'+$n(u.sold)+'</td></tr>';});var mt=q('cm-mt');if(mt)mt.innerHTML=h;}
+function cmSelRow(row){var id=row.dataset.unit;S.su=UNITS.find(function(x){return x.unit===id;});cmRenderMT();var n=q('cm-sn');if(n&&S.su){n.style.display='';n.textContent='✓ '+S.su.unit;}var c=q('cm-bcta');if(c)c.disabled=false;}
+function cmQ(id){S.su=UNITS.find(function(x){return x.unit===id;});cmOB();}
+function cmOB(){S.modal='b';var bn=q('cm-bn'),be=q('cm-be');if(bn)bn.value=S.by.n||'';if(be)be.value=S.by.e||'';var bm=q('cm-bm');if(bm)bm.style.display='';if(S.su&&S.by.n&&S.by.e)cmBS(2);else cmBS(0);cmRenderMT();}
+function cmOO(){S.modal='o';S.ow={n:'',e:'',u:'',p:''};['cm-on','cm-oe','cm-ou','cm-op'].forEach(function(id){var e=q(id);if(e)e.value='';});var om=q('cm-om');if(om)om.style.display='';cmOS(0);}
+function cmC(){['cm-bm','cm-om'].forEach(function(id){var e=q(id);if(e)e.style.display='none';});S.modal=null;}
+function cmBS(n){S.bs=n;[0,1,2,3].forEach(function(i){var e=q('cm-b'+i);if(e)e.style.display=i===n?'':'none';});var stps=q('cm-bstps');if(stps)stps.querySelectorAll('.c-stp').forEach(function(s,i){s.className='c-stp'+(i<=n?' on':'');});var bt=q('cm-bt');if(bt)bt.textContent=n===3?'Offer Submitted':'Make an Offer';var f=q('cm-bf');if(!f)return;if(n===0)f.innerHTML='<button class="b-p" id="cm-bcta" onclick="cmBN()" disabled>Continue →</button><button class="b-g" onclick="cmC()">Cancel</button>';else if(n===1){f.innerHTML='<button class="b-p" id="cm-bcta" onclick="cmBN()" '+(S.su?'':'disabled')+'>Next →</button><button class="b-g" onclick="cmBS(0)">← Back</button>';cmRenderMT();var sn=q('cm-sn');if(sn){if(S.su){sn.style.display='';sn.textContent='✓ '+S.su.unit;}else sn.style.display='none';}}else if(n===2){f.innerHTML='<button class="b-p" onclick="cmSB()">Submit Offer</button><button class="b-g" onclick="cmBS(1)">← Change</button>';var u=S.su;if(u){var el;el=q('cm-cu');if(el)el.textContent=u.unit;el=q('cm-cn');if(el)el.textContent=S.by.n;el=q('cm-cem');if(el)el.textContent=S.by.e;el=q('cm-cun');if(el)el.textContent=u.unit;el=q('cm-cp');if(el)el.textContent=$n(u.sold)+' · '+u.date;}}else f.innerHTML='<button class="b-p" onclick="cmC()">Close</button>';}
+function cmBN(){if(S.bs===0){var n=q('cm-bn'),e=q('cm-be');S.by.n=n?n.value:'';S.by.e=e?e.value:'';cmBS(S.su?2:1);}else if(S.bs===1&&S.su)cmBS(2);}
+function cmUB(){var n=q('cm-bn'),e=q('cm-be'),c=q('cm-bcta');if(c)c.disabled=!(n&&n.value.trim()&&e&&e.value.trim());}
+function cmSB(){var u=S.su,b=S.by;if(!u){cmToast('Please select a home first.');return;}ejSend(EJ.tB,{to_email:'tim@mcmullen.properties',buyer_name:b.n,buyer_email:b.e,unit:u.unit,beds:u.beds,sqft:u.sqft,building:'Eichler Mountain View · Eichler Market'});var dm=q('cm-dm');if(dm)dm.textContent='Tim will follow up about '+u.unit+'.';cmBS(3);}
+function cmOS(n){S.os=n;[0,1,2].forEach(function(i){var e=q('cm-o'+i);if(e)e.style.display=i===n?'':'none';});var stps=q('cm-ostps');if(stps)stps.querySelectorAll('.c-stp').forEach(function(s,i){s.className='c-stp'+(i<=n?' on':'');});var ot=q('cm-ot');if(ot)ot.textContent=n===2?'Price Set':'List Your Eichler';var f=q('cm-of');if(!f)return;if(n===0)f.innerHTML='<button class="b-p" id="cm-octa" onclick="cmON()" disabled>Continue →</button><button class="b-g" onclick="cmC()">Cancel</button>';else if(n===1){f.innerHTML='<button class="b-p" id="cm-octa" onclick="cmSO()" disabled>Set My Price</button><button class="b-g" onclick="cmOS(0)">← Back</button>';var sel=q('cm-ou');if(sel&&sel.options.length<2)UNITS.forEach(function(u){var o=document.createElement('option');o.value=u.unit;o.textContent=u.unit+' — '+u.beds+'BR/'+u.baths+'BA · '+u.sqft.toLocaleString()+' sqft';sel.appendChild(o);});}else f.innerHTML='<button class="b-p" onclick="cmC()">Close</button>';}
+function cmON(){var n=q('cm-on'),e=q('cm-oe');S.ow.n=n?n.value:'';S.ow.e=e?e.value:'';cmOS(1);}
+function cmUO(){var c=q('cm-octa');if(!c)return;if(S.os===0){var n=q('cm-on'),e=q('cm-oe');c.disabled=!(n&&n.value.trim()&&e&&e.value.trim());}else if(S.os===1){var ou=q('cm-ou'),op=q('cm-op');c.disabled=!(ou&&ou.value&&op&&op.value.trim());}}
+function cmOUC(){var ou=q('cm-ou');if(!ou)return;S.ow.u=ou.value;var l=q('cm-ol');if(l){if(ou.value){var u=UNITS.find(function(x){return x.unit===ou.value;});l.style.display='';l.textContent='Last sale: '+$n(u.sold)+' · '+u.date;}else l.style.display='none';}cmUO();}
+function cmOPI(el){var r=el.value.replace(/[^0-9]/g,'');S.ow.p=r?'$'+parseInt(r).toLocaleString():'';el.value=S.ow.p;cmUO();}
+function cmSO(){var o=S.ow,price=parseInt(o.p.replace(/[^0-9]/g,''));S.mms=S.mms.filter(function(m){return m.unit!==o.u;});S.mms.push({unit:o.u,price:price});ejSend(EJ.tO,{to_email:'tim@mcmullen.properties',owner_name:o.n,owner_email:o.e,unit:o.u,price:o.p,building:'Eichler Mountain View · Eichler Market'});cmRender();cmToast('Make Me Move price is live!');cmOS(2);}
+function cmToast(msg){var t=q('cm-toast');if(!t)return;t.textContent=msg;t.style.display='';if(S.tt)clearTimeout(S.tt);S.tt=setTimeout(function(){t.style.display='none';},4000);}
+function mcPPSF(){var d=MC.beds[String(MC.bed)];return MC.bench==='community'?d.bldgPPSF:d.nbrPPSF;}
+function mcBed(b){MC.bed=b;var d=MC.beds[String(b)];[3,4].forEach(function(n){var el=q('mc-b'+n);if(el){el.style.background=n===b?'#1a1f2e':'#fff';el.style.color=n===b?'#fff':'#6b7280';}}); var sq=q('mc-sqft');if(sq)sq.value=d.sqft;var r1v=q('mc-r1-val');if(r1v)r1v.textContent='$'+d.bldgPPSF+'/sf';mcUpdate();}
+function mcUpdate(){}
+function cmInit(){
+  var qs=q('q-u');if(qs)UNITS.forEach(function(u){var o=document.createElement('option');o.value=u.unit;o.textContent=u.unit+' — '+u.beds+'BR · '+u.sqft.toLocaleString()+' sqft';qs.appendChild(o);});
+  cmRender();
+}
+cmInit();
+</script>
+<!-- B3 Offer Modal -->
+<div class="b3-bg" id="b3-bg">
+  <div class="b3-box">
+    <div class="b3-hd">
+      <div class="b3-hd-top"><div><div class="b3-hd-ey" id="b3-step-lbl">Step 1 of 3</div><div class="b3-hd-title" id="b3-title">Set your offer price</div></div><button class="b3-x" onclick="b3Close()">&#x2715;</button></div>
+      <div class="b3-prog"><div class="b3-pb" id="b3p0"></div><div class="b3-pb" id="b3p1"></div><div class="b3-pb" id="b3p2"></div></div>
+    </div>
+    <div class="b3-bd" id="b3s1">
+      <div class="b3-utag"><div class="b3-utag-nm" id="b3-addr"></div><div class="b3-utag-sub" id="b3-specs"></div></div>
+      <div class="b3-price-dsp"><div class="b3-price-ey">Your offer</div><div class="b3-price-big" id="b3-price">&#8212;</div><div class="b3-price-sf" id="b3-ppsf"></div><div class="b3-delta b3d-at" id="b3-delta">at market</div></div>
+      <input type="range" class="b3-slider" id="b3-sl" min="500000" max="3000000" step="5000" oninput="b3Slide(this.value)">
+      <div class="b3-markers"><div class="b3-marker" id="b3-lm"><div class="b3-ml" id="b3-lm-l">Last sold</div><div class="b3-mt"></div><div class="b3-mv" id="b3-lm-v"></div></div><div class="b3-marker b3-bm-mk" id="b3-bm"><div class="b3-ml" id="b3-bm-l">Neighborhood</div><div class="b3-mt"></div><div class="b3-mv" id="b3-bm-v"></div></div></div>
+      <div class="b3-bench-grid"><div class="b3-bench b3-sel"><div class="b3-bl">Last sold (this home)</div><div class="b3-bv" id="b3-c1v">&#8212;</div><div class="b3-bs" id="b3-c1s"></div></div><div class="b3-bench b3-sel"><div class="b3-bl" id="b3-c2l">Neighborhood &#8212; most recent</div><div class="b3-bv" id="b3-c2v">&#8212;</div><div class="b3-bs" id="b3-c2s"></div></div></div>
+      <button class="b3-btn" onclick="b3Go(2)">Confirm offer price &#8594;</button>
+    </div>
+    <div class="b3-bd" id="b3s2" style="display:none">
+      <div class="b3-offer-bar"><span class="b3-ob-lbl">Offer on <strong style="color:#fff" id="b3-ob-addr"></strong></span><span class="b3-ob-price" id="b3-ob-price">&#8212;</span></div>
+      <label class="b3-lbl" for="b3n">Full name</label><input class="b3-inp" id="b3n" placeholder="First Last" oninput="b3Val()">
+      <label class="b3-lbl" for="b3e">Email</label><input class="b3-inp" id="b3e" type="email" placeholder="you@email.com" oninput="b3Val()">
+      <label class="b3-lbl" for="b3c">Cell phone</label><input class="b3-inp" id="b3c" type="tel" placeholder="(415) 555-0100" oninput="b3Val()">
+      <label class="b3-lbl" style="margin-bottom:7px">Pre-approved for a mortgage?</label>
+      <div class="b3-tgl-row"><button class="b3-tgl" id="pa-y" onclick="b3PA(true)">Yes, pre-approved</button><button class="b3-tgl" id="pa-n" onclick="b3PA(false)">Not yet</button></div>
+      <div id="b3-cash-wrap" style="display:none"><label class="b3-lbl" style="margin-bottom:7px">Are you paying all cash?</label><div class="b3-tgl-row"><button class="b3-tgl" id="ac-y" onclick="b3AC(true)">Yes, all cash</button><button class="b3-tgl" id="ac-n" onclick="b3AC(false)">No, financing</button></div></div>
+      <label class="b3-lbl" style="margin-bottom:7px">Best way to reach you</label>
+      <div class="b3-tgl-row" style="margin-bottom:18px"><button class="b3-tgl" id="cp-text" onclick="b3CP('text')">Text</button><button class="b3-tgl" id="cp-call" onclick="b3CP('call')">Call</button><button class="b3-tgl" id="cp-email" onclick="b3CP('email')">Email</button></div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px"><button class="b3-btn" id="b3-submit" onclick="b3Submit()" disabled>Submit offer</button><button style="background:none;border:none;font-size:12px;color:#6b7280;cursor:pointer;text-decoration:underline;font-family:inherit" onclick="b3Go(1)">&#8592; Back</button></div>
+      <p style="font-size:11px;color:#6b7280">McMullen Properties · DRE #02016832 will follow up promptly. Not a purchase commitment.</p>
+    </div>
+    <div class="b3-bd" id="b3s3" style="display:none">
+      <div class="b3-thanks-wrap"><div class="b3-thanks-circle">&#10003;</div><div class="b3-thanks-title">Offer submitted.</div><div class="b3-thanks-sub">McMullen Properties will be in touch within 24 hours.</div><div style="background:#f7f8fa;border:1px solid #e8ebf0;padding:10px 14px;border-radius:9px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:12px;color:#6b7280">Offer on <strong style="color:#1a1f2e" id="b3-s3-addr"></strong></span><span style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#1a1f2e" id="b3-s3-price"></span></div><div class="b3-ns"><div class="b3-ns-row"><div class="b3-ns-num">1</div><div class="b3-ns-txt"><strong>Tim reviews your LOI</strong> and reaches out via <span id="b3-s3-cp"></span> within 24 hours.</div></div><div class="b3-ns-row"><div class="b3-ns-num">2</div><div class="b3-ns-txt"><strong>Offer call</strong> &#8212; short Zoom to align on terms before it goes to the owner.</div></div><div class="b3-ns-row"><div class="b3-ns-num">3</div><div class="b3-ns-txt"><strong>LOI signed via Glide</strong> &#8212; Tim sends the finalized LOI for your e-signature.</div></div></div><button class="b3-btn" onclick="b3Close()">Done</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VIP Waitlist Section ── -->
+<div class="vip-section" id="vip-waitlist">
+  <div class="vip-inner">
+    <div class="vip-notify-bar" id="vip-notif">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      A buyer just joined the waitlist for <strong style="color:#c8a96e;margin:0 3px">Eichler Mountain View</strong> — 5 members waiting
+    </div>
+    <div class="vip-badge"><span class="vip-badge-dot"></span><span class="vip-badge-txt">VIP Access · Eichler Mountain View</span></div>
+    <h2 class="vip-title">See off-market Eichlers<br>before anyone else does.</h2>
+    <p class="vip-sub">Join the private waitlist for Eichler Mountain View in Silicon Valley. You'll get first access to Make Me Move prices, coming-soon properties, and off-market opportunities — weeks before they ever hit the MLS.</p>
+    <div class="vip-benefits">
+      <div class="vip-ben"><div class="vip-ben-icon">🔑</div><div class="vip-ben-txt"><strong>Off-market before it lists.</strong> Get notified the moment a homeowner in Eichler Mountain View sets a Make Me Move price — before the general public can see it.</div></div>
+      <div class="vip-ben"><div class="vip-ben-icon">⚡</div><div class="vip-ben-txt"><strong>Coming-soon alerts.</strong> Be the first buyer Tim calls when a homeowner in Eichler Mountain View signals they're ready to sell. No bidding wars. No competition.</div></div>
+      <div class="vip-ben"><div class="vip-ben-icon">📊</div><div class="vip-ben-txt"><strong>Private market data.</strong> Monthly report on Eichler Mountain View sales, price-per-foot trends, and days-on-market — data most agents won't share until you're already under contract.</div></div>
+    </div>
+    <div id="vip-form">
+      <div class="vip-form-row">
+        <input class="vip-input" id="vip-name" placeholder="First name" autocomplete="given-name">
+        <input class="vip-input" id="vip-email" type="email" placeholder="Email address" autocomplete="email">
+        <button class="vip-btn" onclick="joinWaitlist()">Join waitlist →</button>
+      </div>
+      <p class="vip-disclaimer">Free, private, and zero spam. McMullen Properties · DRE #02016832 · McMullen Properties</p>
+    </div>
+    <div class="vip-thanks" id="vip-thanks">
+      <div class="vip-thanks-icon">✓</div>
+      <div class="vip-thanks-title">You're on the list.</div>
+      <div class="vip-thanks-sub">Tim will reach out directly when off-market opportunities open up in Eichler Mountain View. Check your email for confirmation.</div>
+    </div>
+  </div>
+  <div class="vip-social-proof">
+    <div class="vip-sp-avatars">
+      <div class="vip-sp-avatar">DH</div><div class="vip-sp-avatar">TF</div><div class="vip-sp-avatar">MK</div><div class="vip-sp-avatar">JL</div>
+    </div>
+    <div class="vip-sp-text"><strong>5 buyers</strong> on the Eichler Mountain View waitlist &nbsp;·&nbsp; 11 off-market opportunities opened this quarter</div>
+  </div>
+</div>
+
+<script src="/assets/cm-track.js" defer></script>
+</body>
+</html>

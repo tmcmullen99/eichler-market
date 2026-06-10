@@ -1,0 +1,10 @@
+/ /index.html 200
+/communities /index.html 200
+/community/* /community/:splat/index.html 200
+/homes/* /homes/:splat/index.html 200
+/how-it-works /how-it-works/index.html 200
+
+# Marketplace auth routes
+/auth/*       /auth/index.html 200
+/dashboard/*  /dashboard/index.html 200
+/r/*          /r/index.html 200

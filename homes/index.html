@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Eichler Property · Eichler Market</title>
+<link rel="icon" href="/assets/em-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/em-auth-nav.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/em-supabase.js" defer></script>
+<style>
+:root{--n:#1a1f2e;--g:#6b7280;--b:#e8ebf0;--bg:#f7f8fa;--warm:#c8a96e;--wb:rgba(200,169,110,.08);--gn:#16a34a;--rd:#dc2626}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height:1.5}
+#prop-loading{display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:12px}
+.spin{width:32px;height:32px;border:3px solid var(--b);border-top-color:var(--warm);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.prop-hero{position:relative;height:440px;overflow:hidden;background:var(--n)}
+.hero-img{width:100%;height:100%;object-fit:cover;display:block;opacity:.8}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,31,46,.95) 0%,rgba(26,31,46,.15) 55%,transparent 100%)}
+.hero-ct{position:absolute;bottom:0;left:0;right:0;padding:36px 48px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px}
+.hero-badge{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--warm);margin-bottom:8px}
+.hero-badge a{color:var(--warm);text-decoration:none}
+.hero-addr{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:5px}
+.hero-specs{font-size:14px;color:rgba(255,255,255,.55)}
+.hero-stats{display:flex;gap:28px;flex-shrink:0}
+.hs{text-align:right}
+.hs-v{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;line-height:1}
+.hs-l{font-size:10px;color:rgba(255,255,255,.45);margin-top:3px}
+.prop-body{max-width:1120px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:1fr 360px;gap:44px}
+.sec{margin-bottom:38px}
+.sec-hd{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.sec-hd::after{content:'';flex:1;height:1px;background:var(--b)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:32px}
+.stat-c{background:#fff;padding:18px 16px}
+.stat-l{font-size:10px;font-weight:600;color:var(--g);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.stat-v{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--n)}
+.stat-s{font-size:10px;color:var(--g);margin-top:2px}
+.hist-tbl{width:100%;border-collapse:collapse}
+.hist-tbl th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);text-align:left;padding:0 0 10px;border-bottom:1px solid var(--b)}
+.hist-tbl th:not(:first-child){text-align:right}
+.hist-tbl td{padding:13px 0;border-bottom:1px solid var(--b);font-size:13px}
+.hist-tbl td:not(:first-child){text-align:right;font-weight:600}
+.hist-tbl tr:last-child td{border-bottom:none}
+.hist-latest td{background:var(--wb)}
+.hist-latest td:first-child{padding-left:10px;border-radius:8px 0 0 8px}
+.hist-latest td:last-child{padding-right:10px;border-radius:0 8px 8px 0}
+.hp{font-family:'Playfair Display',serif;font-size:15px}
+.l-badge{display:inline-block;font-size:8px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--warm);color:var(--n);padding:2px 7px;border-radius:20px;vertical-align:middle;margin-left:6px}
+.mkt{background:var(--bg);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:32px}
+.mkt-hd{padding:13px 18px;background:var(--n);display:flex;justify-content:space-between;align-items:center}
+.mkt-hd-t{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,169,110,.8)}
+.mkt-hd-s{font-size:10px;color:rgba(145,161,186,.5)}
+.mkt-row{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--b)}
+.mkt-row:last-child{border-bottom:none}
+.mkt-rl{font-size:12px;color:var(--g)}
+.mkt-rv{display:flex;gap:20px;align-items:center}
+.mvb{text-align:right}
+.mvb-n{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--n)}
+.mvb-l{font-size:9px;color:var(--g);margin-top:1px}
+.delta{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.d-up{background:rgba(22,163,74,.1);color:var(--gn)}
+.d-dn{background:rgba(220,38,38,.1);color:var(--rd)}
+.d-eq{background:rgba(107,114,128,.1);color:var(--g)}
+.nbhd-card{background:var(--n);border-radius:14px;padding:22px 20px;margin-bottom:32px;color:#fff}
+.nc-ey{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,169,110,.7);margin-bottom:6px}
+.nc-nm{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:2px}
+.nc-ci{font-size:12px;color:rgba(255,255,255,.45);margin-bottom:14px}
+.nc-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;gap:8px}
+.nc-row:last-of-type{border-bottom:none}
+.nc-rl{color:rgba(145,161,186,.6);flex-shrink:0}
+.nc-rv{color:#fff;font-weight:600;text-align:right}
+.nc-badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.nc-badge{font-size:9px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(200,169,110,.15);color:var(--warm);border:1px solid rgba(200,169,110,.25)}
+.nc-about{font-size:12px;color:rgba(255,255,255,.6);line-height:1.65;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+.nc-link{display:inline-block;margin-top:14px;font-size:11px;font-weight:700;color:var(--warm);text-decoration:none}
+.hiw{background:var(--n);border-radius:16px;padding:30px 26px;margin-bottom:32px}
+.hiw-ey{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(200,169,110,.7);margin-bottom:7px}
+.hiw-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;margin-bottom:5px}
+.hiw-sub{font-size:13px;color:rgba(145,161,186,.65);margin-bottom:20px}
+.hiw-steps{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.hiw-step{display:flex;gap:13px;align-items:flex-start}
+.hiw-num{width:26px;height:26px;border-radius:50%;background:var(--warm);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--n);flex-shrink:0}
+.hiw-sb{padding-top:3px}
+.hiw-st{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.hiw-sd{font-size:11px;color:rgba(145,161,186,.6);line-height:1.5}
+.hiw-fee{background:rgba(255,255,255,.04);border-radius:10px;padding:14px 16px;margin-bottom:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center}
+.hiw-fp{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--warm)}
+.hiw-fl{font-size:10px;color:rgba(145,161,186,.6);margin-top:3px;line-height:1.4}
+.hiw-cta{width:100%;background:var(--warm);color:var(--n);border:none;padding:14px;border-radius:10px;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.hiw-cta:hover{opacity:.87}
+.prop-side{position:sticky;top:80px}
+.psc{background:#fff;border:1px solid var(--b);border-radius:16px;overflow:hidden;margin-bottom:14px}
+.psc-hd{padding:20px 20px 0}
+.psc-price{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--n);margin-bottom:2px}
+.psc-sub{font-size:11px;color:var(--g);margin-bottom:14px}
+.psc-div{height:1px;background:var(--b)}
+.psc-body{padding:14px 20px}
+.psc-row{display:flex;justify-content:space-between;font-size:12px;padding:7px 0;border-bottom:1px solid var(--b)}
+.psc-row:last-child{border-bottom:none}
+.psc-rl{color:var(--g)}
+.psc-rv{font-weight:700}
+.psc-foot{padding:0 20px 18px}
+.psc-offer{width:100%;background:var(--warm);color:var(--n);border:none;padding:14px;border-radius:10px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:9px;transition:opacity .15s}
+.psc-offer:hover{opacity:.87}
+.psc-call{width:100%;background:rgba(26,31,46,.06);color:var(--n);border:none;padding:11px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
+.psc-call:hover{background:rgba(26,31,46,.1)}
+.psc-agent{padding:14px 20px;background:var(--bg);border-top:1px solid var(--b)}
+.psc-al{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g);margin-bottom:7px}
+.psc-an{font-family:'Playfair Display',serif;font-size:16px;font-weight:700}
+.psc-ad{font-size:10px;color:var(--g);margin-bottom:8px}
+.psc-ap{font-size:13px;font-weight:700;text-decoration:none;color:var(--n);display:block}
+.psc-ae{font-size:11px;color:var(--g);text-decoration:none}
+.psc-mkt{background:var(--bg);border:1px solid var(--b);border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.psc-mkt-t{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:10px}
+.prop-nav{background:#fff;border-bottom:1px solid var(--b);padding:11px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:52px;z-index:100}
+.pn-back{font-size:12px;font-weight:600;color:var(--g);text-decoration:none;display:flex;align-items:center;gap:4px}
+.pn-back:hover{color:var(--n)}
+.pn-sep{color:var(--b)}
+.pn-tract{font-size:12px;font-weight:600;color:var(--n);text-decoration:none}
+.pn-tract:hover{color:var(--warm)}
+
+/* B3 OFFER MODAL */
+.b3-bg{display:none;position:fixed;inset:0;background:rgba(26,31,46,.65);z-index:9999;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.b3-bg.open{display:flex}
+.b3-box{background:#fff;width:100%;max-width:540px;max-height:94vh;overflow-y:auto;box-shadow:0 24px 64px rgba(26,31,46,.22);position:relative;border-radius:16px;overflow:hidden}
+.b3-hd{background:var(--n);padding:20px 22px 14px;position:sticky;top:0;z-index:10}
+.b3-hd-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.b3-hd-ey{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(145,161,186,.55);margin-bottom:3px}
+.b3-hd-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:#fff}
+.b3-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:22px;cursor:pointer;line-height:1;padding:2px 0 0 12px}
+.b3-prog{display:flex;gap:3px}
+.b3-pb{height:2px;flex:1;transition:background .25s}
+.b3-body{padding:22px}
+
+/* Step 1 – Price Slider */
+.b3-utag{background:var(--bg);border:1px solid var(--b);padding:10px 14px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-radius:10px}
+.b3-utag-nm{font-size:14px;font-weight:700;color:var(--n)}
+.b3-utag-sub{font-size:12px;color:var(--g);margin-top:1px}
+.b3-price-display{text-align:center;margin-bottom:26px}
+.b3-price-ey{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g);margin-bottom:8px}
+.b3-price-big{font-family:'Playfair Display',serif;font-size:50px;font-weight:700;color:var(--n);line-height:1}
+.b3-price-sf{font-size:14px;color:var(--g);margin-top:6px}
+.b3-delta{display:inline-block;padding:4px 14px;font-size:12px;font-weight:600;border-radius:2px;margin-top:8px;transition:all .2s}
+.d-above{background:#fff7ed;color:#b45309;border:1px solid #fed7aa}
+.d-at{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.d-below{background:#eff6ff;color:#1a5faa;border:1px solid #bfdbfe}
+.b3-slider{width:100%;height:5px;-webkit-appearance:none;appearance:none;outline:none;border-radius:2px;cursor:pointer;margin-bottom:6px}
+.b3-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--n);border:3px solid #fff;box-shadow:0 2px 8px rgba(26,31,46,.3);cursor:pointer}
+.b3-slider::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--n);border:3px solid #fff;box-shadow:0 2px 8px rgba(26,31,46,.3);cursor:pointer}
+.b3-markers{position:relative;height:44px;margin-bottom:20px}
+.b3-marker{position:absolute;transform:translateX(-50%);text-align:center}
+.b3-marker-l{font-size:10px;color:var(--g);white-space:nowrap}
+.b3-marker-tick{width:1.5px;height:8px;background:var(--g);margin:3px auto}
+.b3-marker-v{font-size:11px;font-weight:700;color:var(--n);white-space:nowrap}
+.b3-marker.bench-mk .b3-marker-l{color:var(--n);font-weight:700}
+.b3-marker.bench-mk .b3-marker-tick{background:var(--n);width:2px}
+.b3-bench-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+.b3-bench{border:1px solid var(--b);padding:13px;border-radius:10px}
+.b3-bench.sel{border:1.5px solid var(--n);background:var(--bg)}
+.b3-bench-l{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--g);margin-bottom:5px}
+.b3-bench-v{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--n)}
+.b3-bench-s{font-size:11px;color:var(--g);margin-top:3px}
+.b3-btn{width:100%;background:var(--n);color:#fff;border:none;padding:14px;border-radius:10px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-family:inherit;transition:background .15s}
+.b3-btn:hover{background:var(--warm);color:var(--n)}
+.b3-btn:disabled{opacity:.35;cursor:not-allowed;background:var(--n);color:#fff}
+
+/* Step 2 – Contact */
+.b3-offer-bar{background:var(--n);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:8px;border-radius:10px}
+.b3-offer-bar-lbl{font-size:13px;color:rgba(145,161,186,.7)}
+.b3-offer-bar-price{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:#fff}
+.b3-lbl{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:6px}
+.b3-inp{width:100%;padding:11px 13px;border:1.5px solid var(--b);border-radius:9px;font-size:14px;color:var(--n);font-family:inherit;margin-bottom:14px;outline:none;transition:border-color .15s}
+.b3-inp:focus{border-color:var(--n)}
+.b3-tgl-row{display:flex;gap:6px;margin-bottom:14px}
+.b3-tgl{flex:1;padding:11px 8px;font-size:12px;font-weight:600;border:1.5px solid var(--b);background:#fff;color:var(--g);cursor:pointer;font-family:inherit;transition:all .15s;border-radius:9px;text-align:center}
+.b3-tgl.on{background:var(--n);border-color:var(--n);color:#fff}
+.b3-tgl:hover:not(.on){border-color:var(--n);color:var(--n)}
+
+/* Step 3 – Thanks */
+.b3-thanks-icon{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.b3-thanks-circle{width:48px;height:48px;background:var(--n);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;color:#fff}
+.b3-thanks-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--n)}
+.b3-thanks-sub{font-size:13px;color:var(--g);margin-top:2px}
+.b3-next-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.b3-ns{display:flex;gap:12px;align-items:flex-start}
+.b3-ns-num{width:22px;height:22px;border-radius:50%;background:var(--n);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:700;color:#fff}
+.b3-ns-txt{font-size:13px;color:var(--n);line-height:1.6}
+
+@media(max-width:960px){.prop-body{grid-template-columns:1fr;gap:24px;padding:24px 16px 60px}.prop-hero{height:320px}.hero-ct{padding:20px 20px;flex-direction:column;align-items:flex-start;gap:12px}.hero-addr{font-size:26px}.hero-stats{gap:20px}.hs-v{font-size:20px}.stats-grid{grid-template-columns:repeat(2,1fr)}.prop-side{position:static}}
+@media(max-width:600px){.hero-stats{flex-wrap:wrap}.b3-bench-grid{grid-template-columns:1fr}.b3-tgl-row{flex-wrap:wrap}.b3-price-big{font-size:38px}}
+
+/* ── Footer How It Works ── */
+.footer-hiw{background:#0d1119;border-top:1px solid rgba(255,255,255,.07);padding:48px 0 40px;}
+.footer-hiw-inner{max-width:1200px;margin:0 auto;padding:0 64px;}
+.footer-hiw-eyebrow{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,169,110,.6);margin-bottom:24px;}
+.footer-hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:28px;}
+.footer-hiw-step{display:flex;gap:12px;align-items:flex-start;}
+.footer-hiw-num{width:24px;height:24px;border-radius:50%;background:rgba(200,169,110,.2);border:1px solid rgba(200,169,110,.4);color:var(--warm);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.footer-hiw-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.footer-hiw-body{font-size:11px;color:rgba(145,161,186,.5);line-height:1.65;}
+.footer-hiw-fee{display:flex;align-items:center;gap:16px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap;}
+.footer-hiw-fee-item{display:flex;align-items:baseline;gap:7px;}
+.footer-hiw-pct{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--warm);}
+.footer-hiw-fee-l{font-size:11px;color:rgba(145,161,186,.45);}
+.footer-hiw-fee-sep{color:rgba(145,161,186,.2);font-size:14px;}
+@media(max-width:860px){
+  .footer-hiw-steps{grid-template-columns:1fr 1fr;gap:20px;}
+  .footer-hiw-inner{padding:0 24px;}
+}
+@media(max-width:600px){
+  .footer-hiw-steps{grid-template-columns:1fr;}
+  .footer-hiw{padding:36px 0 28px;}
+  .footer-hiw-fee{gap:12px;}
+}
+
+</style>
+</head>
+<body>
+<div id="em-auth-nav"></div>
+<nav class="prop-nav" id="prop-nav" style="display:none">
+  <a href="/" class="pn-back">← Eichler Market</a>
+  <span class="pn-sep">|</span>
+  <a href="#" class="pn-tract" id="nav-tract-link">—</a>
+</nav>
+<div id="prop-loading"><div class="spin"></div><p style="font-size:13px;color:var(--g)">Loading property…</p></div>
+<div id="prop-error" style="display:none;text-align:center;padding:60px 24px">
+  <p style="font-size:18px;font-weight:700;margin-bottom:8px">Property not found</p>
+  <p style="font-size:13px;color:var(--g);margin-bottom:20px">The link may be invalid or the property has been removed.</p>
+  <a href="/" style="font-size:13px;font-weight:700;color:var(--warm)">← Browse Eichler Market</a>
+</div>
+<div id="prop-content" style="display:none"></div>
+
+<!-- B3 OFFER MODAL -->
+<div class="b3-bg" id="b3-bg">
+  <div class="b3-box">
+    <div class="b3-hd">
+      <div class="b3-hd-top">
+        <div>
+          <div class="b3-hd-ey" id="b3-step-lbl">Step 1 of 3</div>
+          <div class="b3-hd-title" id="b3-title">Set your offer price</div>
+        </div>
+        <button class="b3-close" onclick="b3Close()">✕</button>
+      </div>
+      <div class="b3-prog">
+        <div class="b3-pb" id="b3p0"></div>
+        <div class="b3-pb" id="b3p1"></div>
+        <div class="b3-pb" id="b3p2"></div>
+      </div>
+    </div>
+
+    <!-- Step 1: Price Slider -->
+    <div class="b3-body" id="b3s1">
+      <div class="b3-utag">
+        <div>
+          <div class="b3-utag-nm" id="b3-utag-nm"></div>
+          <div class="b3-utag-sub" id="b3-utag-sub"></div>
+        </div>
+      </div>
+      <div class="b3-price-display">
+        <div class="b3-price-ey">Your offer</div>
+        <div class="b3-price-big" id="b3-price">—</div>
+        <div class="b3-price-sf" id="b3-ppsf"></div>
+        <div class="b3-delta d-at" id="b3-delta">at market</div>
+      </div>
+      <input type="range" class="b3-slider" id="b3-sl" min="500000" max="2000000" step="5000" value="1000000" oninput="b3Slide(this.value)">
+      <div class="b3-markers" id="b3-markers">
+        <div class="b3-marker" id="b3-lm">
+          <div class="b3-marker-l" id="b3-lm-l">Last sold</div>
+          <div class="b3-marker-tick"></div>
+          <div class="b3-marker-v" id="b3-lm-v"></div>
+        </div>
+        <div class="b3-marker bench-mk" id="b3-bm">
+          <div class="b3-marker-l" id="b3-bm-l">Neighborhood</div>
+          <div class="b3-marker-tick"></div>
+          <div class="b3-marker-v" id="b3-bm-v"></div>
+        </div>
+      </div>
+      <div class="b3-bench-grid">
+        <div class="b3-bench sel" id="b3-c1">
+          <div class="b3-bench-l">Last sold (this home)</div>
+          <div class="b3-bench-v" id="b3-c1-v">—</div>
+          <div class="b3-bench-s" id="b3-c1-s"></div>
+        </div>
+        <div class="b3-bench sel" id="b3-c2">
+          <div class="b3-bench-l" id="b3-c2-l">Neighborhood — most recent</div>
+          <div class="b3-bench-v" id="b3-c2-v">—</div>
+          <div class="b3-bench-s" id="b3-c2-s"></div>
+        </div>
+      </div>
+      <button class="b3-btn" onclick="b3Go(2)">Confirm offer price →</button>
+    </div>
+
+    <!-- Step 2: Contact -->
+    <div class="b3-body" id="b3s2" style="display:none">
+      <div class="b3-offer-bar">
+        <span class="b3-offer-bar-lbl">Offer on <strong style="color:#fff" id="b3-s2-addr"></strong></span>
+        <span class="b3-offer-bar-price" id="b3-s2-price">—</span>
+      </div>
+      <label class="b3-lbl" for="b3n">Full name</label>
+      <input class="b3-inp" id="b3n" placeholder="First Last" oninput="b3Val()">
+      <label class="b3-lbl" for="b3e">Email</label>
+      <input class="b3-inp" id="b3e" type="email" placeholder="you@email.com" oninput="b3Val()">
+      <label class="b3-lbl" for="b3c">Cell phone</label>
+      <input class="b3-inp" id="b3c" type="tel" placeholder="(415) 555-0100" oninput="b3Val()">
+      <label class="b3-lbl" style="margin-bottom:8px">Pre-approved for a mortgage?</label>
+      <div class="b3-tgl-row" style="margin-bottom:14px">
+        <button class="b3-tgl" id="pa-y" onclick="b3PA(true)">Yes, pre-approved</button>
+        <button class="b3-tgl" id="pa-n" onclick="b3PA(false)">Not yet</button>
+      </div>
+      <div id="b3-cash-wrap" style="display:none">
+        <label class="b3-lbl" style="margin-bottom:8px">Are you paying all cash?</label>
+        <div class="b3-tgl-row" style="margin-bottom:14px">
+          <button class="b3-tgl" id="ac-y" onclick="b3AC(true)">Yes, all cash</button>
+          <button class="b3-tgl" id="ac-n" onclick="b3AC(false)">No, financing</button>
+        </div>
+      </div>
+      <label class="b3-lbl" style="margin-bottom:8px">Best way to reach you</label>
+      <div class="b3-tgl-row" style="margin-bottom:22px">
+        <button class="b3-tgl" id="cp-text" onclick="b3CP('text')">Text</button>
+        <button class="b3-tgl" id="cp-call" onclick="b3CP('call')">Call</button>
+        <button class="b3-tgl" id="cp-email" onclick="b3CP('email')">Email</button>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px">
+        <button class="b3-btn" id="b3-submit" onclick="b3Submit()" disabled>Submit offer</button>
+        <button style="background:none;border:none;font-size:12px;color:var(--g);cursor:pointer;text-decoration:underline;font-family:inherit" onclick="b3Go(1)">← Back</button>
+      </div>
+      <p style="font-size:11px;color:var(--g)">Tim McMullen DRE #02016832 will follow up promptly. Not a purchase commitment.</p>
+    </div>
+
+    <!-- Step 3: Thanks -->
+    <div class="b3-body" id="b3s3" style="display:none">
+      <div class="b3-thanks-icon">
+        <div class="b3-thanks-circle">✓</div>
+        <div>
+          <div class="b3-thanks-title">Offer submitted.</div>
+          <div class="b3-thanks-sub">Your LOI is being prepared for Tim's review.</div>
+        </div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--b);padding:12px 16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;border-radius:10px;flex-wrap:wrap;gap:8px">
+        <span style="font-size:13px;color:var(--g)">Offer on <strong style="color:var(--n)" id="b3-s3-addr"></strong></span>
+        <span style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--n)" id="b3-s3-price"></span>
+      </div>
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:12px">What happens next</div>
+      <div class="b3-next-steps">
+        <div class="b3-ns"><div class="b3-ns-num">1</div><div class="b3-ns-txt"><strong>Tim reviews your LOI</strong> and reaches out via <span id="b3-s3-cp"></span> within 24 hours.</div></div>
+        <div class="b3-ns"><div class="b3-ns-num">2</div><div class="b3-ns-txt"><strong>Offer call</strong> — a short Zoom to align on terms before anything goes to the owner.</div></div>
+        <div class="b3-ns"><div class="b3-ns-num">3</div><div class="b3-ns-txt"><strong>LOI signed via Glide</strong> — Tim sends you the finalized LOI for e-signature.</div></div>
+        <div class="b3-ns"><div class="b3-ns-num" style="background:var(--b);color:var(--g)">4</div><div class="b3-ns-txt" style="color:var(--g)">Tim delivers your offer to the owner — Accept, Negotiate, or Decline.</div></div>
+      </div>
+      <p style="font-size:11px;color:var(--g);margin-bottom:16px">Submitting is not a purchase commitment. Your LOI is non-binding until a C.A.R. Purchase Agreement is executed.</p>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <button class="b3-btn" onclick="b3Close()" style="max-width:160px">Done</button>
+        <a href="tel:+14156919272" style="font-size:13px;font-weight:700;color:var(--n);">(415) 691-9272</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Utilities ──────────────────────────────────────────────────────────────
+function fP(n){if(!n)return'—';if(n>=1e6)return'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';return'$'+Math.round(n/1000)+'K';}
+function addrSlug(a,c){return(a+' '+c).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+function pct(a,b){if(!a||!b)return null;return Math.round((a-b)/b*100);}
+function dC(v){return v>0?'d-up':v<0?'d-dn':'d-eq';}
+function dL(v){return v===null?'':(v>0?'▲ '+v+'%':'▼ '+Math.abs(v)+'%');}
+
+// ── State ──────────────────────────────────────────────────────────────────
+var _p=null;
+var B3={offer:0,lo:0,hi:0,pa:null,ac:null,cp:null,lastSold:0,bench:0};
+
+// ── Load ───────────────────────────────────────────────────────────────────
+var slug=(new URLSearchParams(window.location.search)).get('p');
+if(!slug){document.getElementById('prop-loading').style.display='none';document.getElementById('prop-error').style.display='block';}
+else{
+  fetch('/assets/em-props-full.json')
+    .then(function(r){return r.json();})
+    .then(function(d){
+      _p=d[slug];
+      if(!_p){document.getElementById('prop-loading').style.display='none';document.getElementById('prop-error').style.display='block';return;}
+      renderProp(_p);
+    }).catch(function(){document.getElementById('prop-loading').style.display='none';document.getElementById('prop-error').style.display='block';});
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function renderProp(p){
+  document.title=p.a+' · Eichler Market';
+  document.getElementById('nav-tract-link').textContent=p.t;
+  document.getElementById('nav-tract-link').href='/community/'+p.ts+'/';
+  document.getElementById('prop-nav').style.display='flex';
+
+  var img=p.img||'https://drupal-prod.visitcalifornia.com/sites/default/files/styles/opengraph_1200x630/public/vc_ca101_fiveamazingthings_palalto_alto1_videostill_1280x640.jpg.webp';
+  var sales=p.sales||[{sp:p.sp,dt:p.dt,ppsf:p.ppsf,sf:p.sf}];
+  var lat=sales[0];
+
+  // Tract vs global deltas
+  var tp=p.tract_avg_ppsf||0, gp=p.global_avg_ppsf||0;
+  var tm=p.tract_median||0, gm=p.global_median||0;
+  var tbd=(p.tract_medians_by_bd||{})[String(p.bd)]||0;
+  var gbd=(p.global_medians_by_bd||{})[String(p.bd)]||0;
+  var d1=pct(tp,gp),d2=pct(tm,gm),d3=pct(tbd,gbd);
+
+  // Sale history
+  var histRows=sales.map(function(s,i){
+    return '<tr'+(i===0?' class="hist-latest"':'')+'>'
+      +'<td>'+s.dt+(i===0?'<span class="l-badge">Latest</span>':'')+'</td>'
+      +'<td class="hp">'+fP(s.sp)+'</td>'
+      +'<td>'+s.sf.toLocaleString()+' sf</td>'
+      +'<td>$'+s.ppsf.toLocaleString()+'/sf</td>'
+      +'</tr>';
+  }).join('');
+
+  // Market rows
+  var mr='';
+  if(tp&&gp) mr+='<div class="mkt-row"><div class="mkt-rl">Avg $/sf</div><div class="mkt-rv"><div class="mvb"><div class="mvb-n">$'+tp.toLocaleString()+'/sf</div><div class="mvb-l">'+p.t+'</div></div><div class="mvb"><div class="mvb-n">$'+gp.toLocaleString()+'/sf</div><div class="mvb-l">All Eichlers</div></div>'+(d1!==null?'<span class="delta '+dC(d1)+'">'+dL(d1)+'</span>':'')+'</div></div>';
+  if(tm&&gm) mr+='<div class="mkt-row"><div class="mkt-rl">Median price</div><div class="mkt-rv"><div class="mvb"><div class="mvb-n">'+fP(tm)+'</div><div class="mvb-l">'+p.t+'</div></div><div class="mvb"><div class="mvb-n">'+fP(gm)+'</div><div class="mvb-l">All Eichlers</div></div>'+(d2!==null?'<span class="delta '+dC(d2)+'">'+dL(d2)+'</span>':'')+'</div></div>';
+  if(tbd&&gbd) mr+='<div class="mkt-row"><div class="mkt-rl">Median '+p.bd+'BR price</div><div class="mkt-rv"><div class="mvb"><div class="mvb-n">'+fP(tbd)+'</div><div class="mvb-l">'+p.t+'</div></div><div class="mvb"><div class="mvb-n">'+fP(gbd)+'</div><div class="mvb-l">All Eichlers</div></div>'+(d3!==null?'<span class="delta '+dC(d3)+'">'+dL(d3)+'</span>':'')+'</div></div>';
+  if(p.tract_count) mr+='<div class="mkt-row"><div class="mkt-rl">Sales tracked</div><div class="mkt-rv"><div class="mvb"><div class="mvb-n">'+p.tract_count+'</div><div class="mvb-l">'+p.t+'</div></div><div class="mvb"><div class="mvb-n">1,768</div><div class="mvb-l">All Eichlers</div></div></div></div>';
+
+  // Neighborhood card
+  var nc='';
+  if(p.tf_built) nc+='<div class="nc-row"><span class="nc-rl">Year built</span><span class="nc-rv">'+p.tf_built+'</span></div>';
+  if(p.tf_architect) nc+='<div class="nc-row"><span class="nc-rl">Architect</span><span class="nc-rv">'+p.tf_architect+'</span></div>';
+  if(p.tf_size) nc+='<div class="nc-row"><span class="nc-rl">Typical size</span><span class="nc-rv">'+p.tf_size+'</span></div>';
+  var nb=(p.tf_badges||[]).slice(0,3).map(function(b){return'<span class="nc-badge">'+b+'</span>';}).join('');
+  var ne=(p.tf_employers||[]).map(function(e){return'<span class="nc-badge" style="background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.12)">'+e+'</span>';}).join('');
+
+  // Sidebar market panel
+  var sideMkt=tp&&gp?'<div class="psc-mkt"><div class="psc-mkt-t">Market position</div>'
+    +'<div class="psc-row"><span class="psc-rl">'+p.t+' avg $/sf</span><span class="psc-rv">$'+tp.toLocaleString()+'/sf</span></div>'
+    +'<div class="psc-row"><span class="psc-rl">All Eichlers avg $/sf</span><span class="psc-rv">$'+gp.toLocaleString()+'/sf</span></div>'
+    +'<div class="psc-row" style="border:none"><span class="psc-rl">Tract premium</span><span class="psc-rv"><span class="delta '+dC(d1)+' " style="padding:2px 8px">'+dL(d1)+'</span></span></div>'
+    +'</div>':'';
+
+  document.getElementById('prop-content').innerHTML=''
+    +'<div class="prop-hero">'
+      +'<img class="hero-img" src="'+img+'" alt="'+p.a+'" onerror="this.src=\''+img+'\'">'
+      +'<div class="hero-ov"></div>'
+      +'<div class="hero-ct">'
+        +'<div>'
+          +'<div class="hero-badge"><a href="/community/'+p.ts+'/">'+p.t+'</a> · '+p.c+', CA</div>'
+          +'<div class="hero-addr">'+p.a+'</div>'
+          +'<div class="hero-specs">'+p.bd+' BR · '+p.ba+' BA · '+p.sf.toLocaleString()+' sf</div>'
+        +'</div>'
+        +'<div class="hero-stats">'
+          +'<div class="hs"><div class="hs-v">'+fP(lat.sp)+'</div><div class="hs-l">Last sold</div></div>'
+          +'<div class="hs"><div class="hs-v">$'+lat.ppsf.toLocaleString()+'</div><div class="hs-l">Per sq ft</div></div>'
+          +(tp&&gp?'<div class="hs"><div class="hs-v" style="color:'+(d1>0?'#4ade80':'rgba(255,255,255,.7)')+'">'+dL(d1)+'</div><div class="hs-l">vs all Eichlers</div></div>':'')
+        +'</div>'
+      +'</div>'
+    +'</div>'
+    +'<div class="prop-body">'
+      +'<div>'
+        // Stats
+        +'<div class="sec"><div class="sec-hd">Property details</div>'
+          +'<div class="stats-grid">'
+            +'<div class="stat-c"><div class="stat-l">Bedrooms</div><div class="stat-v">'+p.bd+'</div></div>'
+            +'<div class="stat-c"><div class="stat-l">Bathrooms</div><div class="stat-v">'+p.ba+'</div></div>'
+            +'<div class="stat-c"><div class="stat-l">Square feet</div><div class="stat-v">'+p.sf.toLocaleString()+'</div></div>'
+            +'<div class="stat-c"><div class="stat-l">Price / sq ft</div><div class="stat-v">$'+lat.ppsf.toLocaleString()+'</div><div class="stat-s">last sale</div></div>'
+          +'</div>'
+        +'</div>'
+        // Sale history
+        +'<div class="sec"><div class="sec-hd">Sale history</div>'
+          +'<table class="hist-tbl"><thead><tr><th>Date</th><th style="text-align:right">Price</th><th style="text-align:right">Size</th><th style="text-align:right">$/sf</th></tr></thead><tbody>'+histRows+'</tbody></table>'
+        +'</div>'
+        // Market comparison
+        +(mr?'<div class="sec"><div class="sec-hd">Market comparison</div>'
+          +'<div class="mkt"><div class="mkt-hd"><span class="mkt-hd-t">'+p.t+' vs. All Eichlers</span><span class="mkt-hd-s">'+p.tract_count+' tract sales · 1,768 total</span></div>'+mr+'</div>'
+        +'</div>':'')
+        // Neighborhood
+        +((nc||nb)?'<div class="sec"><div class="sec-hd">Neighborhood</div>'
+          +'<div class="nbhd-card"><div class="nc-ey">Eichler Tract</div><div class="nc-nm">'+p.t+'</div><div class="nc-ci">'+p.c+', California</div>'
+          +nc+(nb?'<div class="nc-badges">'+nb+'</div>':'')+(p.tf_about?'<div class="nc-about">'+p.tf_about+'</div>':'')
+          +(ne?'<div style="margin-top:12px"><div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(145,161,186,.5);margin-bottom:7px">Nearby employers</div><div class="nc-badges">'+ne+'</div></div>':'')
+          +'<a href="/community/'+p.ts+'/" class="nc-link">Browse '+p.t+' →</a></div>'
+        +'</div>':'')
+        // How It Works
+        +'<div class="sec"><div class="sec-hd">How it works</div>'
+          +'<div class="hiw"><div class="hiw-ey">Eichler Market · Offer Process</div>'
+            +'<div class="hiw-title">Every Eichler is for sale<br>for the right price.</div>'
+            +'<div class="hiw-sub">Submit an offer on any home — listed or not. No MLS listing required.</div>'
+            +'<div class="hiw-steps">'
+              +'<div class="hiw-step"><div class="hiw-num">1</div><div class="hiw-sb"><div class="hiw-st">Submit your offer</div><div class="hiw-sd">Name, email, and amount below. 60 seconds. No account needed.</div></div></div>'
+              +'<div class="hiw-step"><div class="hiw-num">2</div><div class="hiw-sb"><div class="hiw-st">Tim reaches the owner</div><div class="hiw-sd">Tim McMullen (DRE #02016832) contacts the homeowner confidentially within 24 hours.</div></div></div>'
+              +'<div class="hiw-step"><div class="hiw-num">3</div><div class="hiw-sb"><div class="hiw-st">Negotiate &amp; close</div><div class="hiw-sd">If the owner engages, Tim facilitates through LOI, CAR contract, and escrow. Flat 3%.</div></div></div>'
+              +'<div class="hiw-step"><div class="hiw-num">4</div><div class="hiw-sb"><div class="hiw-st">Refer &amp; earn</div><div class="hiw-sd">Refer a buyer or seller who closes — earn 100 pts. 100 pts = 1% off your next deal. Stackable to 3%.</div></div></div>'
+            +'</div>'
+            +'<div class="hiw-fee"><div><div class="hiw-fp">3%</div><div class="hiw-fl">Total — always</div></div><div><div class="hiw-fp">3%</div><div class="hiw-fl">Platform fee</div></div><div><div class="hiw-fp">1%</div><div class="hiw-fl">Buyer\'s agent if nominated</div></div></div>'
+            +'<button class="hiw-cta" onclick="openOffer()">Make an offer on '+p.a+' →</button>'
+          +'</div>'
+        +'</div>'
+      +'</div>'
+      // Sidebar
+      +'<div class="prop-side">'
+        +'<div class="psc">'
+          +'<div class="psc-hd"><div class="psc-price">'+fP(lat.sp)+'</div><div class="psc-sub">$'+lat.ppsf.toLocaleString()+'/sf · '+lat.dt+'</div></div>'
+          +'<div class="psc-div"></div>'
+          +'<div class="psc-body">'
+            +[['Beds',p.bd+' BR'],['Baths',p.ba+' BA'],['Size',p.sf.toLocaleString()+' sf'],['Last $/sf','$'+lat.ppsf.toLocaleString()+'/sf'],['Sold',lat.dt],['Tract',p.t],['City',p.c+', CA']].map(function(r){return'<div class="psc-row"><span class="psc-rl">'+r[0]+'</span><span class="psc-rv">'+r[1]+'</span></div>';}).join('')
+          +'</div>'
+          +'<div class="psc-foot">'
+            +'<button class="psc-offer" onclick="openOffer()">Make an offer →</button>'
+            +'<button class="psc-call" onclick="window.location.href=\'tel:+14156919272\'">Call Tim · (415) 691-9272</button>'
+          +'</div>'
+          +'<div class="psc-agent"><div class="psc-al">Your Eichler Expert</div><div class="psc-an">Tim McMullen</div><div class="psc-ad">McMullen Properties · DRE #02016832</div><a href="tel:+14156919272" class="psc-ap">+1 (415) 691-9272</a><a href="mailto:tim@mcmullen.properties" class="psc-ae">tim@mcmullen.properties</a></div>'
+        +'</div>'
+        +sideMkt
+      +'</div>'
+    +'</div>';
+
+  document.getElementById('prop-content').style.display='block';
+  document.getElementById('prop-loading').style.display='none';
+  window._propAddr=p.a; window._p=p;
+}
+
+// ── Open offer modal ───────────────────────────────────────────────────────
+function openOffer(){
+  var p=window._p;if(!p)return;
+  var sales=p.sales||[{sp:p.sp,dt:p.dt,ppsf:p.ppsf,sf:p.sf}];
+  var lat=sales[0];
+  // Benchmark = tract_recent_ppsf (most recent $/sf sale in neighborhood)
+  var benchPpsf=p.tract_recent_ppsf||p.tract_avg_ppsf||lat.ppsf;
+  var benchSp=Math.round(benchPpsf*p.sf);
+  var lastSold=lat.sp;
+  // Slider init = SF × tract_recent_ppsf
+  var initPrice=benchSp;
+  var lo=Math.round(Math.min(lastSold,benchSp)*0.80/5000)*5000;
+  var hi=Math.round(Math.max(lastSold,benchSp)*1.28/5000)*5000;
+  B3={offer:initPrice,lo:lo,hi:hi,pa:null,ac:null,cp:null,lastSold:lastSold,bench:benchSp};
+
+  // Populate step 1
+  document.getElementById('b3-utag-nm').textContent=p.a;
+  document.getElementById('b3-utag-sub').textContent=p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf · '+p.c+', CA';
+
+  // Benchmark cards
+  document.getElementById('b3-c1-v').textContent=fP(lastSold);
+  document.getElementById('b3-c1-s').textContent='$'+lat.ppsf.toLocaleString()+'/sf · '+lat.dt;
+  var c2lbl=p.t+(p.tract_recent_addr?' — '+p.tract_recent_addr:'— most recent sale');
+  document.getElementById('b3-c2-l').textContent=(p.tract_recent_addr?p.t+' — '+p.tract_recent_addr.split(' ').slice(0,2).join(' '):p.t+' — most recent');
+  document.getElementById('b3-c2-v').textContent=fP(benchSp);
+  document.getElementById('b3-c2-s').textContent='$'+benchPpsf.toLocaleString()+'/sf · '+(p.tract_recent_addr||'')+(p.tract_recent_dt?' · '+p.tract_recent_dt:'');
+
+  // Slider
+  var sl=document.getElementById('b3-sl');
+  sl.min=lo;sl.max=hi;sl.value=initPrice;
+  updSliderTrack(sl);
+
+  // Markers
+  function mPct(v){return Math.max(2,Math.min(94,(v-lo)/(hi-lo)*100)).toFixed(1);}
+  document.getElementById('b3-lm').style.left=mPct(lastSold)+'%';
+  document.getElementById('b3-bm').style.left=mPct(benchSp)+'%';
+  document.getElementById('b3-lm-l').textContent='Last sold · '+lat.dt;
+  document.getElementById('b3-lm-v').textContent=fP(lastSold);
+  document.getElementById('b3-bm-l').textContent=(p.tract_recent_dt||'Neighborhood');
+  document.getElementById('b3-bm-v').textContent=fP(benchSp);
+
+  b3Slide(initPrice);
+  b3Go(1);
+  document.getElementById('b3-bg').classList.add('open');
+}
+
+function updSliderTrack(sl){
+  var pct=((sl.value-sl.min)/(sl.max-sl.min)*100).toFixed(1);
+  sl.style.background='linear-gradient(to right,var(--n) 0%,var(--n) '+pct+'%,var(--b) '+pct+'%,var(--b) 100%)';
+}
+
+function b3Slide(v){
+  B3.offer=parseInt(v);
+  var sl=document.getElementById('b3-sl');
+  if(sl){sl.value=v;updSliderTrack(sl);}
+  var p=window._p||{};var sf=p.sf||1500;
+  var ppsf=Math.round(v/sf);
+  var diff=(v-B3.lastSold)/B3.lastSold*100;
+  var sign=diff>0?'+':'';
+  var pe=document.getElementById('b3-price'),pse=document.getElementById('b3-ppsf'),de=document.getElementById('b3-delta');
+  if(pe)pe.textContent=fP(parseInt(v));
+  if(pse)pse.textContent='$'+ppsf.toLocaleString()+'/sf';
+  if(de){
+    de.textContent=Math.abs(diff)<2?'At market benchmark':sign+diff.toFixed(1)+'% vs. last sold';
+    de.className='b3-delta '+(diff>2?'d-above':diff<-2?'d-below':'d-at');
+  }
+}
+
+function b3Go(n){
+  ['b3s1','b3s2','b3s3'].forEach(function(id,i){
+    var el=document.getElementById(id);if(el)el.style.display=(i+1===n)?'block':'none';
+  });
+  var labels=['Step 1 of 3','Step 2 of 3','Done'];
+  var titles=['Set your offer price','Your details','Offer submitted'];
+  document.getElementById('b3-step-lbl').textContent=labels[n-1]||'';
+  document.getElementById('b3-title').textContent=titles[n-1]||'';
+  ['b3p0','b3p1','b3p2'].forEach(function(id,i){
+    var el=document.getElementById(id);if(!el)return;
+    el.style.background=i<n?'rgba(255,255,255,.6)':i===n-1?'#fff':'rgba(255,255,255,.18)';
+  });
+  if(n===2){
+    var p=window._p||{};
+    document.getElementById('b3-s2-addr').textContent=p.a||'';
+    document.getElementById('b3-s2-price').textContent=fP(B3.offer);
+    b3Val();
+  }
+}
+
+function b3PA(v){B3.pa=v;b3Tgl('pa-y',v===true);b3Tgl('pa-n',v===false);document.getElementById('b3-cash-wrap').style.display=v?'none':'block';if(v)B3.ac=null;b3Val();}
+function b3AC(v){B3.ac=v;b3Tgl('ac-y',v===true);b3Tgl('ac-n',v===false);b3Val();}
+function b3CP(v){B3.cp=v;['text','call','email'].forEach(function(k){b3Tgl('cp-'+k,k===v);});b3Val();}
+function b3Tgl(id,on){var e=document.getElementById(id);if(e)e.className='b3-tgl'+(on?' on':'');}
+function b3Val(){
+  var n=document.getElementById('b3n'),em=document.getElementById('b3e'),c=document.getElementById('b3c');
+  var ok=n&&n.value.trim()&&em&&em.value.trim()&&c&&c.value.trim()&&B3.pa!==null&&(B3.pa||B3.ac!==null)&&B3.cp;
+  var btn=document.getElementById('b3-submit');if(btn)btn.disabled=!ok;
+}
+function b3Close(){document.getElementById('b3-bg').classList.remove('open');}
+document.getElementById('b3-bg').addEventListener('click',function(e){if(e.target===this)b3Close();});
+
+function b3Submit(){
+  var n=document.getElementById('b3n').value,em=document.getElementById('b3e').value,c=document.getElementById('b3c').value;
+  var p=window._p||{};
+  fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:'service_733sibl',template_id:'template_dqt85kb',user_id:'rjIXPckMwcWAXnyPx',template_params:{to_name:'Tim',from_name:n,from_email:em,phone:c,offer_amount:fP(B3.offer)+' ($'+(Math.round(B3.offer/(p.sf||1)).toLocaleString())+'/sf)',preapproved:B3.pa?'Yes':'No',allcash:B3.pa?'N/A':B3.ac?'Yes':'No',contact_pref:B3.cp||'',property:p.a+' · '+p.c+' CA',subject:'New Offer: '+p.a}})}).catch(function(){});
+  document.getElementById('b3-s3-addr').textContent=p.a||'';
+  document.getElementById('b3-s3-price').textContent=fP(B3.offer);
+  document.getElementById('b3-s3-cp').textContent={text:'text message',call:'call',email:'email'}[B3.cp]||'message';
+  b3Go(3);
+}
+</script>
+
+
+<!-- ── Footer How It Works ── -->
+<div class="footer-hiw">
+  <div class="footer-hiw-inner">
+    <div class="footer-hiw-eyebrow">How Eichler Market Works</div>
+    <div class="footer-hiw-steps">
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">1</div>
+        <div>
+          <div class="footer-hiw-title">Find any Eichler</div>
+          <div class="footer-hiw-body">Browse 1,768 tracked homes across 54 Silicon Valley tracts — or enter any address.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">2</div>
+        <div>
+          <div class="footer-hiw-title">Submit an offer</div>
+          <div class="footer-hiw-body">Name, email, offer amount. The platform generates a non-binding LOI. Takes 60 seconds.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">3</div>
+        <div>
+          <div class="footer-hiw-title">Offer review call</div>
+          <div class="footer-hiw-body">A short call within 24 hours to align on terms before the offer goes to the owner.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">4</div>
+        <div>
+          <div class="footer-hiw-title">Close on your terms</div>
+          <div class="footer-hiw-body">McMullen Properties facilitates through LOI, CAR contract, and escrow. Flat 3% platform fee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-hiw-fee">
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">3%</span><span class="footer-hiw-fee-l">Platform fee — always</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">1%</span><span class="footer-hiw-fee-l">To buyer's nominated agent, if any</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">0%</span><span class="footer-hiw-fee-l">MLS listing required</span></div>
+    </div>
+  </div>
+</div>
+<script src="/assets/cm-track.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Make Me Move · Eichler Market</title>
+<meta name="description" content="Set a Make Me Move price on your Eichler home. Publicly signal you're open to the right offer — no listing, no commitment, no open houses.">
+<link rel="icon" href="/assets/em-favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/em-auth-nav.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="/assets/em-supabase.js" defer></script>
+<style>
+:root{--n:#1a1f2e;--g:#6b7280;--b:#e8ebf0;--bg:#f7f8fa;--warm:#c8a96e;--wb:rgba(200,169,110,.08)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height:1.5}
+
+.mms-hero{background:var(--n);padding:80px 24px 72px}
+.mms-hero-inner{max-width:900px;margin:0 auto;text-align:center}
+.mms-hero-ey{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(145,161,186,.5);margin-bottom:16px}
+.mms-hero-title{font-family:'Playfair Display',serif;font-size:clamp(42px,6vw,72px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:20px;letter-spacing:-.02em}
+.mms-hero-title em{font-style:italic;color:var(--warm)}
+.mms-hero-sub{font-size:18px;color:rgba(145,161,186,.7);line-height:1.7;max-width:540px;margin:0 auto 36px}
+.mms-hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-warm{background:var(--warm);color:var(--n);border:none;padding:16px 32px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:4px;transition:opacity .15s}
+.btn-warm:hover{opacity:.87}
+.btn-ghost{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1.5px solid rgba(255,255,255,.2);padding:15px 28px;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:4px;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-ghost:hover{background:rgba(255,255,255,.14);color:#fff}
+
+.mms-numbers{background:#fff;border-bottom:1px solid var(--b);padding:40px 24px}
+.mms-nums-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:14px;overflow:hidden}
+.mms-num{background:#fff;padding:28px 24px;text-align:center}
+.mms-num-v{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:var(--n);line-height:1}
+.mms-num-l{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-top:8px}
+
+.mms-hiw{padding:72px 24px;background:var(--bg);border-top:1px solid var(--b)}
+.mms-hiw-inner{max-width:900px;margin:0 auto}
+.sec-ey{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--g);margin-bottom:10px}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--n);margin-bottom:12px;line-height:1.2}
+.sec-sub{font-size:15px;color:var(--g);line-height:1.75;margin-bottom:44px;max-width:560px}
+.hiw-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--b);border:1px solid var(--b);border-radius:14px;overflow:hidden}
+.hiw-step{background:#fff;padding:28px 24px}
+.hiw-num-circle{width:32px;height:32px;border-radius:50%;background:var(--n);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;margin-bottom:16px}
+.hiw-step-title{font-size:16px;font-weight:700;color:var(--n);margin-bottom:8px}
+.hiw-step-desc{font-size:13px;color:var(--g);line-height:1.7}
+
+.mms-loi{padding:72px 24px;background:#fff;border-top:1px solid var(--b)}
+.mms-loi-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:56px;align-items:start}
+.loi-timeline{display:flex;flex-direction:column;gap:0}
+.loi-step{display:grid;grid-template-columns:48px 1fr;gap:0;align-items:stretch}
+.loi-num-wrap{display:flex;flex-direction:column;align-items:center}
+.loi-circle{width:36px;height:36px;background:var(--n);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;color:#fff;z-index:1}
+.loi-circle.future{background:#fff;border:2px solid var(--b)}
+.loi-circle.future span{color:var(--g)}
+.loi-line{width:2px;flex:1;background:var(--b);margin:4px 0}
+.loi-body{padding:0 0 28px 20px}
+.loi-step-hd{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.loi-step-title{font-size:15px;font-weight:700;color:var(--n)}
+.loi-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--bg);border:1px solid var(--b);color:var(--g);padding:2px 9px;border-radius:4px}
+.loi-step-desc{font-size:14px;color:var(--g);line-height:1.75;max-width:520px}
+.loi-outcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.loi-outcome{border:1.5px solid var(--b);padding:14px;border-radius:8px}
+.loi-outcome.accept{border-color:var(--n);background:var(--bg)}
+.loi-outcome-t{font-size:13px;font-weight:700;color:var(--n);margin-bottom:4px}
+.loi-outcome-d{font-size:11px;color:var(--g);line-height:1.6}
+.loi-note{margin-top:16px;background:var(--bg);border:1px solid var(--b);padding:14px 18px;border-radius:10px;display:flex;gap:12px;align-items:flex-start}
+.loi-note-title{font-size:13px;font-weight:700;color:var(--n);margin-bottom:3px}
+.loi-note-txt{font-size:12px;color:var(--g);line-height:1.7}
+
+.loi-cta-panel{background:var(--n);border-radius:14px;padding:28px;position:sticky;top:80px}
+.loi-cta-ey{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(145,161,186,.5);margin-bottom:8px}
+.loi-cta-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.2}
+.loi-cta-sub{font-size:13px;color:rgba(145,161,186,.6);margin-bottom:22px;line-height:1.6}
+.loi-cta-pts{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.loi-cta-pt{display:flex;gap:10px;align-items:flex-start}
+.loi-cta-pt-icon{width:18px;height:18px;background:rgba(200,169,110,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;color:var(--warm);font-weight:800;margin-top:2px}
+.loi-cta-pt-txt{font-size:12px;color:rgba(145,161,186,.75);line-height:1.55}
+.loi-cta-btn{width:100%;background:var(--warm);color:var(--n);border:none;padding:15px;border-radius:10px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:10px;transition:opacity .15s}
+.loi-cta-btn:hover{opacity:.87}
+.loi-cta-link{display:block;text-align:center;font-size:12px;color:rgba(145,161,186,.5);text-decoration:none;padding-top:4px}
+.loi-cta-link:hover{color:rgba(145,161,186,.9)}
+
+.mms-fee{padding:72px 24px;background:var(--n)}
+.mms-fee-inner{max-width:900px;margin:0 auto}
+.fee-header{margin-bottom:44px}
+.fee-header .sec-ey{color:rgba(145,161,186,.4)}
+.fee-header .sec-title{color:#fff}
+.fee-header .sec-sub{color:rgba(145,161,186,.6)}
+.fee-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,.06);border-radius:14px;overflow:hidden;margin-bottom:20px}
+.fee-card{padding:26px 20px;border-top:3px solid transparent}
+.fee-card:nth-child(1){border-top-color:rgba(145,161,186,.5)}
+.fee-card:nth-child(2){border-top-color:rgba(255,255,255,.2)}
+.fee-card:nth-child(3){border-top-color:rgba(145,161,186,.15)}
+.fee-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(145,161,186,.4);margin-bottom:8px}
+.fee-pct{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:#fff;line-height:1;margin-bottom:6px}
+.fee-card:nth-child(3) .fee-pct{color:rgba(255,255,255,.35);text-decoration:line-through}
+.fee-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:8px}
+.fee-card:nth-child(3) .fee-title{color:rgba(255,255,255,.4)}
+.fee-desc{font-size:12px;color:rgba(145,161,186,.55);line-height:1.7}
+.fee-always{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:16px 22px;border-radius:10px;display:flex;align-items:center;gap:20px}
+.fee-always-pct{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:rgba(145,161,186,.8);flex-shrink:0}
+.fee-always-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px}
+.fee-always-sub{font-size:12px;color:rgba(145,161,186,.5);line-height:1.65}
+
+.mms-testi{padding:72px 24px;background:var(--bg);border-top:1px solid var(--b)}
+.mms-testi-inner{max-width:900px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:36px}
+.testi-card{background:#fff;border:1px solid var(--b);padding:26px;border-radius:12px}
+.testi-q{font-size:36px;color:var(--b);font-family:'Playfair Display',serif;line-height:1;margin-bottom:10px}
+.testi-txt{font-size:15px;color:var(--n);line-height:1.75;margin-bottom:14px}
+.testi-by{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)}
+.testi-cta{background:var(--n);border-radius:12px;padding:28px;grid-column:span 2;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.testi-cta-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px}
+.testi-cta-sub{font-size:13px;color:rgba(145,161,186,.65)}
+.testi-cta-btns{display:flex;gap:10px;flex-direction:column;flex-shrink:0}
+
+.mms-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;padding:16px}
+.mms-modal-bg.open{display:flex}
+.mms-modal{background:#fff;border-radius:16px;padding:32px 28px;width:100%;max-width:500px;position:relative;max-height:90vh;overflow-y:auto}
+.mms-modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--g)}
+.mms-modal h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.mms-modal-sub{font-size:13px;color:var(--g);margin-bottom:22px;line-height:1.6}
+.mf-label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:6px}
+.mf-input{width:100%;padding:11px 13px;border:1.5px solid var(--b);border-radius:9px;font-size:14px;color:var(--n);font-family:inherit;margin-bottom:14px;outline:none;transition:border-color .15s}
+.mf-input:focus{border-color:var(--n)}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mf-select{width:100%;padding:11px 13px;border:1.5px solid var(--b);border-radius:9px;font-size:14px;color:var(--n);font-family:inherit;margin-bottom:14px;outline:none;background:#fff;-webkit-appearance:none;cursor:pointer}
+.mf-submit{width:100%;background:var(--n);color:#fff;border:none;padding:15px;border-radius:10px;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-top:4px;transition:background .15s}
+.mf-submit:hover{background:var(--warm);color:var(--n)}
+.mf-thanks{text-align:center;padding:24px 0}
+.mf-thanks-icon{font-size:44px;margin-bottom:12px}
+.mf-thanks-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px}
+.mf-thanks-txt{font-size:13px;color:var(--g);line-height:1.65;max-width:320px;margin:0 auto}
+.mf-thanks-link{display:inline-block;margin-top:16px;font-size:13px;font-weight:700;color:var(--warm);text-decoration:none}
+
+@media(max-width:860px){
+  .mms-loi-inner{grid-template-columns:1fr}
+  .loi-cta-panel{position:static}
+  .hiw-steps{grid-template-columns:1fr}
+  .fee-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .testi-cta{grid-column:auto;grid-template-columns:1fr}
+  .mms-nums-inner{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .mms-hero{padding:56px 20px 48px}
+  .loi-outcome-grid{grid-template-columns:1fr}
+  .mf-row{grid-template-columns:1fr}
+  .mms-hero-ctas{flex-direction:column;align-items:center}
+}
+
+/* ── Refer & Earn Section ── */
+.mms-refer{background:#1a1f2e;padding:80px 0;}
+.mms-refer-inner{max-width:1100px;margin:0 auto;padding:0 48px;}
+.refer-split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.refer-left{}
+.refer-how{display:flex;flex-direction:column;gap:16px;margin-top:28px;}
+.refer-step{display:flex;gap:14px;align-items:flex-start;}
+.refer-step-num{width:26px;height:26px;border-radius:50%;background:var(--warm);color:#1a1f2e;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.refer-step-text{font-size:14px;line-height:1.7;color:rgba(145,161,186,.75);}
+.refer-step-text strong{color:#fff;font-weight:700;}
+.refer-right{}
+.refer-cards{display:flex;flex-direction:column;gap:12px;}
+.refer-point-card{background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.25);border-radius:16px;padding:28px 24px;text-align:center;}
+.rpc-big{font-family:'Playfair Display',serif;font-size:64px;font-weight:700;color:var(--warm);line-height:1;}
+.rpc-label{font-size:12px;color:rgba(145,161,186,.6);margin-top:8px;line-height:1.5;}
+.refer-calc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px 24px;}
+.rc-title{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(145,161,186,.5);margin-bottom:14px;}
+.rc-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.rc-row:last-of-type{border-bottom:none;}
+.rc-pts{font-size:14px;font-weight:700;color:#fff;width:72px;}
+.rc-eq{font-size:12px;color:rgba(145,161,186,.4);flex-shrink:0;}
+.rc-save{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--warm);}
+.rc-max{background:rgba(200,169,110,.08);border-radius:8px;padding:8px 10px;margin:4px 0;}
+.rc-max-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--warm);color:#1a1f2e;padding:2px 7px;border-radius:100px;margin-left:6px;vertical-align:middle;}
+.rc-note{font-size:11px;color:rgba(145,161,186,.45);line-height:1.6;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);}
+.refer-rule-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px 24px;}
+.rrc-title{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(145,161,186,.5);margin-bottom:14px;}
+.rrc-row{display:flex;gap:10px;align-items:flex-start;padding:5px 0;font-size:13px;color:rgba(145,161,186,.65);}
+.rrc-icon{color:var(--warm);font-size:12px;flex-shrink:0;margin-top:1px;}
+@media(max-width:860px){
+  .refer-split{grid-template-columns:1fr;gap:40px;}
+  .mms-refer-inner{padding:0 24px;}
+  .mms-refer{padding:60px 0;}
+}
+@media(max-width:600px){
+  .rpc-big{font-size:48px;}
+  .mms-refer{padding:48px 0;}
+  .mms-refer-inner{padding:0 20px;}
+}
+
+
+/* ── Footer How It Works ── */
+.footer-hiw{background:#0d1119;border-top:1px solid rgba(255,255,255,.07);padding:48px 0 40px;}
+.footer-hiw-inner{max-width:1200px;margin:0 auto;padding:0 64px;}
+.footer-hiw-eyebrow{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,169,110,.6);margin-bottom:24px;}
+.footer-hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:28px;}
+.footer-hiw-step{display:flex;gap:12px;align-items:flex-start;}
+.footer-hiw-num{width:24px;height:24px;border-radius:50%;background:rgba(200,169,110,.2);border:1px solid rgba(200,169,110,.4);color:var(--warm);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.footer-hiw-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;}
+.footer-hiw-body{font-size:11px;color:rgba(145,161,186,.5);line-height:1.65;}
+.footer-hiw-fee{display:flex;align-items:center;gap:16px;padding-top:20px;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap;}
+.footer-hiw-fee-item{display:flex;align-items:baseline;gap:7px;}
+.footer-hiw-pct{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--warm);}
+.footer-hiw-fee-l{font-size:11px;color:rgba(145,161,186,.45);}
+.footer-hiw-fee-sep{color:rgba(145,161,186,.2);font-size:14px;}
+@media(max-width:860px){
+  .footer-hiw-steps{grid-template-columns:1fr 1fr;gap:20px;}
+  .footer-hiw-inner{padding:0 24px;}
+}
+@media(max-width:600px){
+  .footer-hiw-steps{grid-template-columns:1fr;}
+  .footer-hiw{padding:36px 0 28px;}
+  .footer-hiw-fee{gap:12px;}
+}
+
+</style>
+</head>
+<body>
+<div id="em-auth-nav"></div>
+
+<section class="mms-hero">
+  <div class="mms-hero-inner">
+    <div class="mms-hero-ey">Eichler Market · Make Me Move</div>
+    <h1 class="mms-hero-title">Name the price<br>you'd <em>actually</em> sell for.</h1>
+    <p class="mms-hero-sub">Set a public Make Me Move price on your Eichler. Signal you're open to the right offer — without a listing, lockbox, or open house.</p>
+    <div class="mms-hero-ctas">
+      <button class="btn-warm" onclick="openMmsModal()">Set my price →</button>
+      <a href="/" class="btn-ghost">Browse Eichler homes</a>
+    </div>
+  </div>
+</section>
+
+<div class="mms-numbers">
+  <div class="mms-nums-inner">
+    <div class="mms-num"><div class="mms-num-v">3%</div><div class="mms-num-l">Flat fee — always</div></div>
+    <div class="mms-num"><div class="mms-num-v">1,768</div><div class="mms-num-l">Eichler homes tracked</div></div>
+    <div class="mms-num"><div class="mms-num-v">$0</div><div class="mms-num-l">To list. No obligation.</div></div>
+  </div>
+</div>
+
+<section class="mms-hiw">
+  <div class="mms-hiw-inner">
+    <div class="sec-ey">For homeowners</div>
+    <h2 class="sec-title">How Make Me Move works</h2>
+    <p class="sec-sub">Your home is always for sale — for the right price. Make Me Move lets you put a number on that without committing to anything.</p>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-num-circle">1</div>
+        <div class="hiw-step-title">Set your price</div>
+        <div class="hiw-step-desc">Enter the price you'd accept. Buyers see your number — not your name or contact details. Raise it, lower it, or remove it anytime. Never a commitment to sell.</div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num-circle">2</div>
+        <div class="hiw-step-title">Buyers find you</div>
+        <div class="hiw-step-desc">Your home appears in the Make Me Move section of your neighborhood's community page. Buyers browsing Eichler Market see your price alongside recent sales data for context.</div>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num-circle">3</div>
+        <div class="hiw-step-title">Handled end-to-end</div>
+        <div class="hiw-step-desc">When a buyer submits an offer, McMullen Properties (DRE #02016832) reviews it, schedules an offer call, and presents it to you — shielding your identity until there's mutual interest.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mms-loi">
+  <div class="mms-loi-inner">
+    <div>
+      <div class="sec-ey">The offer process</div>
+      <h2 class="sec-title">From offer to close.</h2>
+      <p class="sec-sub" style="margin-bottom:36px">Every offer follows the same 5-step process — transparent, documented, protected under California law.</p>
+      <div class="loi-timeline">
+        <div class="loi-step">
+          <div class="loi-num-wrap"><div class="loi-circle"><span>1</span></div><div class="loi-line"></div></div>
+          <div class="loi-body">
+            <div class="loi-step-hd"><div class="loi-step-title">Offer submitted — LOI drafted</div><div class="loi-tag">Immediate</div></div>
+            <div class="loi-step-desc">The buyer's offer details are formatted into a non-binding Letter of Intent addressed to the home's owner of record per county tax records.</div>
+          </div>
+        </div>
+        <div class="loi-step">
+          <div class="loi-num-wrap"><div class="loi-circle"><span>2</span></div><div class="loi-line"></div></div>
+          <div class="loi-body">
+            <div class="loi-step-hd"><div class="loi-step-title">Offer review call</div><div class="loi-tag">Within 24 hrs</div></div>
+            <div class="loi-step-desc">A short call to review the offer terms with the buyer, align on price and conditions, and answer any questions — before anything moves forward.</div>
+          </div>
+        </div>
+        <div class="loi-step">
+          <div class="loi-num-wrap"><div class="loi-circle"><span>3</span></div><div class="loi-line"></div></div>
+          <div class="loi-body">
+            <div class="loi-step-hd"><div class="loi-step-title">LOI signed via Glide</div><div class="loi-tag">After call</div></div>
+            <div class="loi-step-desc">The finalized LOI is sent to the buyer for e-signature via Glide — authorizing McMullen Properties to formally present the offer to you on the buyer's behalf.</div>
+          </div>
+        </div>
+        <div class="loi-step">
+          <div class="loi-num-wrap"><div class="loi-circle"><span>4</span></div><div class="loi-line"></div></div>
+          <div class="loi-body">
+            <div class="loi-step-hd"><div class="loi-step-title">Offer delivered to you</div><div class="loi-tag">After signing</div></div>
+            <div class="loi-step-desc">The signed LOI is presented directly to you. You see the offer price, terms, and financing — but not the buyer's contact information. McMullen Properties manages the dialogue until there's mutual interest.</div>
+          </div>
+        </div>
+        <div class="loi-step">
+          <div class="loi-num-wrap"><div class="loi-circle future"><span>5</span></div></div>
+          <div class="loi-body">
+            <div class="loi-step-title" style="margin-bottom:12px">You respond — on your terms</div>
+            <div class="loi-outcome-grid">
+              <div class="loi-outcome accept"><div class="loi-outcome-t">✓ Accept</div><div class="loi-outcome-d">A C.A.R. Purchase Agreement is prepared and escrow opens.</div></div>
+              <div class="loi-outcome"><div class="loi-outcome-t">↔ Negotiate</div><div class="loi-outcome-d">McMullen Properties facilitates the counter. You choose to accept, counter again, or decline.</div></div>
+              <div class="loi-outcome"><div class="loi-outcome-t" style="color:var(--g)">✕ Decline</div><div class="loi-outcome-d">The buyer is notified through McMullen Properties. You remain private throughout.</div></div>
+            </div>
+            <div class="loi-note">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--g)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:2px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <div><div class="loi-note-title">About the LOI</div><div class="loi-note-txt">The Letter of Intent is non-binding — it formalizes intent, not obligation. All binding agreements use standard C.A.R. forms executed by McMullen Properties, DRE #02016832, a licensed California real estate agent.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="loi-cta-panel">
+        <div class="loi-cta-ey">For homeowners</div>
+        <div class="loi-cta-title">Ready to name your price?</div>
+        <div class="loi-cta-sub">Takes 60 seconds. No obligation. Remove or adjust your price anytime.</div>
+        <div class="loi-cta-pts">
+          <div class="loi-cta-pt"><div class="loi-cta-pt-icon">✓</div><div class="loi-cta-pt-txt">Buyers see your price, not your name</div></div>
+          <div class="loi-cta-pt"><div class="loi-cta-pt-icon">✓</div><div class="loi-cta-pt-txt">No listing, open houses, or lockbox</div></div>
+          <div class="loi-cta-pt"><div class="loi-cta-pt-icon">✓</div><div class="loi-cta-pt-txt">Adjust or remove your price anytime</div></div>
+          <div class="loi-cta-pt"><div class="loi-cta-pt-icon">✓</div><div class="loi-cta-pt-txt">Flat 3% if a deal closes — vs. 5–6% traditional</div></div>
+        </div>
+        <button class="loi-cta-btn" onclick="openMmsModal()">Set my price →</button>
+        <a href="/dashboard/" class="loi-cta-link">Manage existing listing →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mms-fee">
+  <div class="mms-fee-inner">
+    <div class="fee-header">
+      <div class="sec-ey">Pricing</div>
+      <h2 class="sec-title">One flat fee. Always 3%.</h2>
+      <p class="sec-sub">Replaces traditional 5–6% commissions entirely. The split changes if a buyer nominates an agent — the total never does.</p>
+    </div>
+    <div class="fee-grid">
+      <div class="fee-card">
+        <div class="fee-label">Always</div>
+        <div class="fee-pct">3%</div>
+        <div class="fee-title">Platform fee</div>
+        <div class="fee-desc">Covers full facilitation by McMullen Properties — LOI, CAR purchase contract, and close of escrow.</div>
+      </div>
+      <div class="fee-card">
+        <div class="fee-label">If buyer nominates an agent</div>
+        <div class="fee-pct">1%</div>
+        <div class="fee-title">Buyer's agent commission</div>
+        <div class="fee-desc">1% of the platform fee is allocated to the buyer's nominated agent. Your total cost as seller stays 3% — never added on top.</div>
+      </div>
+      <div class="fee-card">
+        <div class="fee-label">Traditional commission</div>
+        <div class="fee-pct">5–6%</div>
+        <div class="fee-title">What you're replacing</div>
+        <div class="fee-desc">Combined seller + buyer agent commissions. Eichler Market cuts that in half, minimum.</div>
+      </div>
+    </div>
+    <div class="fee-always">
+      <div class="fee-always-pct">3%</div>
+      <div>
+        <div class="fee-always-title">The fee is always 3%. The split just changes.</div>
+        <div class="fee-always-sub">The platform fee is always 3%. If the buyer nominates an agent, 1% of that 3% is paid to their agent. The seller always pays exactly 3%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Refer & Earn Section -->
+<section class="mms-refer">
+  <div class="mms-refer-inner">
+    <div class="refer-split">
+      <div class="refer-left">
+        <div class="sec-ey" style="color:var(--warm)">Refer &amp; Earn</div>
+        <h2 class="sec-title" style="color:#fff">Share the platform.<br>Earn off your next deal.</h2>
+        <p class="sec-sub" style="color:rgba(145,161,186,.7)">Every time someone you refer uses Eichler Market to transact, you earn 100 points. Points reduce the platform fee on your next purchase or sale — stackable up to a full 3% savings.</p>
+        <div class="refer-how">
+          <div class="refer-step"><div class="refer-step-num">1</div><div class="refer-step-text"><strong>Share your referral link</strong> — a unique URL tied to your email. Send it to anyone considering buying or selling an Eichler.</div></div>
+          <div class="refer-step"><div class="refer-step-num">2</div><div class="refer-step-text"><strong>They transact on the platform</strong> — your contact signs in, submits an offer or lists a Make Me Move price, and a deal closes through Eichler Market.</div></div>
+          <div class="refer-step"><div class="refer-step-num">3</div><div class="refer-step-text"><strong>You earn 100 points</strong> — deposited automatically when the transaction closes. Each referral who transacts = 100 points.</div></div>
+          <div class="refer-step"><div class="refer-step-num">4</div><div class="refer-step-text"><strong>Redeem on your next deal</strong> — 100 points = 1% off the platform fee when you next buy or sell through Eichler Market. Stack multiple referrals for deeper savings.</div></div>
+        </div>
+        <button class="mms-cta-btn" onclick="getReferLink()" style="margin-top:28px">Get my referral link →</button>
+      </div>
+      <div class="refer-right">
+        <div class="refer-cards">
+          <div class="refer-point-card">
+            <div class="rpc-big">100</div>
+            <div class="rpc-label">Points per referral<br>who transacts</div>
+          </div>
+          <div class="refer-calc">
+            <div class="rc-title">Points → Savings</div>
+            <div class="rc-row"><span class="rc-pts">100 pts</span><span class="rc-eq">=</span><span class="rc-save">1% off</span></div>
+            <div class="rc-row"><span class="rc-pts">200 pts</span><span class="rc-eq">=</span><span class="rc-save">2% off</span></div>
+            <div class="rc-row rc-max"><span class="rc-pts">300 pts</span><span class="rc-eq">=</span><span class="rc-save">3% off <span class="rc-max-tag">max</span></span></div>
+            <div class="rc-note">Platform fee on a $3M sale = $90,000. With 300 pts, you pay $0 in platform fees.</div>
+          </div>
+          <div class="refer-rule-card">
+            <div class="rrc-title">How it works</div>
+            <div class="rrc-row"><span class="rrc-icon">✓</span><span>One referral link per user</span></div>
+            <div class="rrc-row"><span class="rrc-icon">✓</span><span>Points credited at close, not at sign-up</span></div>
+            <div class="rrc-row"><span class="rrc-icon">✓</span><span>No limit on referrals you can make</span></div>
+            <div class="rrc-row"><span class="rrc-icon">✓</span><span>Points never expire</span></div>
+            <div class="rrc-row"><span class="rrc-icon">✓</span><span>Savings applied before close — never retroactively</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mms-testi">
+  <div class="mms-testi-inner">
+    <div class="sec-ey">What owners say</div>
+    <h2 class="sec-title">Sold on your terms.</h2>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-q">"</div>
+        <div class="testi-txt">I set the price I would sell for, and received an offer at that exact price two months later. Didn't have to move out or do a thing.</div>
+        <div class="testi-by">Heather &amp; Jason · Sellers</div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-q">"</div>
+        <div class="testi-txt">We submitted an offer on a home that was never on the market and bought it without any competition. Awesome concept.</div>
+        <div class="testi-by">Emily · Buyer</div>
+      </div>
+      <div class="testi-cta">
+        <div>
+          <div class="testi-cta-title">Every Eichler is for sale for the right price.</div>
+          <div class="testi-cta-sub">Set a Make Me Move price in 60 seconds, or submit an offer on any home in any neighborhood.</div>
+        </div>
+        <div class="testi-cta-btns">
+          <button class="btn-warm" onclick="openMmsModal()">Set my price →</button>
+          <a href="/" class="btn-ghost" style="justify-content:center">Browse homes</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="mms-modal-bg" id="mms-modal-bg">
+  <div class="mms-modal">
+    <button class="mms-modal-close" onclick="closeMmsModal()">✕</button>
+    <div id="mms-form-wrap">
+      <h3>Set your Make Me Move price</h3>
+      <p class="mms-modal-sub">You're never obligated to accept. Adjust or remove your price anytime from your dashboard.</p>
+      <label class="mf-label" for="mf-addr">Property address *</label>
+      <input class="mf-input" id="mf-addr" placeholder="1694 Clay Drive">
+      <div class="mf-row">
+        <div>
+          <label class="mf-label" for="mf-city">City *</label>
+          <select class="mf-select" id="mf-city">
+            <option value="">Select city…</option>
+            <option>Palo Alto</option><option>Sunnyvale</option><option>San Jose</option>
+            <option>Mountain View</option><option>Cupertino</option><option>Santa Clara</option>
+            <option>Los Altos</option><option>Saratoga</option><option>Campbell</option>
+            <option>San Mateo</option><option>Burlingame</option><option>Foster City</option>
+            <option>Redwood City</option><option>Menlo Park</option><option>Atherton</option>
+            <option>Portola Valley</option><option>San Bruno</option><option>San Carlos</option>
+            <option>Woodside</option><option>Millbrae</option><option>Belmont</option>
+            <option>Hillsborough</option><option>East Palo Alto</option><option>El Granada</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="mf-label" for="mf-comm">Neighborhood / tract</label>
+          <input class="mf-input" id="mf-comm" placeholder="e.g. Green Gables">
+        </div>
+      </div>
+      <div class="mf-row">
+        <div><label class="mf-label" for="mf-beds">Beds</label><input class="mf-input" id="mf-beds" type="number" placeholder="4"></div>
+        <div><label class="mf-label" for="mf-baths">Baths</label><input class="mf-input" id="mf-baths" type="number" placeholder="2" step="0.5"></div>
+      </div>
+      <div class="mf-row">
+        <div><label class="mf-label" for="mf-sqft">Sq ft</label><input class="mf-input" id="mf-sqft" type="number" placeholder="1800"></div>
+        <div><label class="mf-label" for="mf-price">Your price *</label><input class="mf-input" id="mf-price" placeholder="$2,500,000" oninput="fmtMfP(this)"></div>
+      </div>
+      <label class="mf-label" for="mf-notes">Notes (optional)</label>
+      <input class="mf-input" id="mf-notes" placeholder="e.g. Solar panels, updated kitchen, detached ADU">
+      <button class="mf-submit" id="mf-btn" onclick="submitMms()">Set my price →</button>
+      <p style="font-size:11px;color:var(--g);margin-top:10px;text-align:center">Requires a free account. <a href="/auth/?next=/make-me-move/" style="color:var(--warm);font-weight:700">Sign in or create account →</a></p>
+    </div>
+    <div class="mf-thanks" id="mf-thanks" style="display:none">
+      <div class="mf-thanks-icon">✓</div>
+      <div class="mf-thanks-title">Your price is live.</div>
+      <div class="mf-thanks-txt">McMullen Properties will notify you the moment a qualified buyer submits an offer on your home. You'll receive a confirmation email shortly.</div>
+      <a href="/dashboard/" class="mf-thanks-link">View in dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function openMmsModal(){
+  document.getElementById('mf-thanks').style.display='none';
+  document.getElementById('mms-form-wrap').style.display='block';
+  document.getElementById('mms-modal-bg').classList.add('open');
+}
+function closeMmsModal(){document.getElementById('mms-modal-bg').classList.remove('open');}
+document.getElementById('mms-modal-bg').addEventListener('click',function(e){if(e.target===this)closeMmsModal();});
+
+function fmtMfP(inp){
+  var n=parseInt(inp.value.replace(/\D/g,''));
+  if(!isNaN(n)&&n>0)inp.value='$'+n.toLocaleString();
+}
+
+async function submitMms(){
+  var addr=document.getElementById('mf-addr').value.trim();
+  var city=document.getElementById('mf-city').value;
+  var comm=document.getElementById('mf-comm').value.trim();
+  var beds=parseInt(document.getElementById('mf-beds').value)||null;
+  var baths=parseFloat(document.getElementById('mf-baths').value)||null;
+  var sqft=parseInt(document.getElementById('mf-sqft').value)||null;
+  var price=parseInt(document.getElementById('mf-price').value.replace(/\D/g,''))||0;
+  var notes=document.getElementById('mf-notes').value.trim();
+
+  if(!addr||!city||!price){alert('Address, city, and price are required.');return;}
+
+  // Auth check — wait for EM to load
+  var attempts=0;
+  while(typeof EM==='undefined'&&attempts<10){await new Promise(r=>setTimeout(r,200));attempts++;}
+
+  if(typeof EM==='undefined'||!EM.isAuth){
+    window.location.href='/auth/?next='+encodeURIComponent(window.location.href);
+    return;
+  }
+
+  var btn=document.getElementById('mf-btn');
+  btn.disabled=true;btn.textContent='Saving…';
+
+  try{
+    await EM.setMakeMyMove({address:addr,city,community:comm,beds,baths,sqft,price,notes});
+    document.getElementById('mms-form-wrap').style.display='none';
+    document.getElementById('mf-thanks').style.display='block';
+  }catch(e){
+    alert(e.message||'Failed to save. Please ensure you are signed in and try again.');
+    btn.disabled=false;btn.textContent='Set my price →';
+  }
+}
+</script>
+
+
+<!-- ── Footer How It Works ── -->
+<div class="footer-hiw">
+  <div class="footer-hiw-inner">
+    <div class="footer-hiw-eyebrow">How Eichler Market Works</div>
+    <div class="footer-hiw-steps">
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">1</div>
+        <div>
+          <div class="footer-hiw-title">Find any Eichler</div>
+          <div class="footer-hiw-body">Browse 1,768 tracked homes across 54 Silicon Valley tracts — or enter any address.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">2</div>
+        <div>
+          <div class="footer-hiw-title">Submit an offer</div>
+          <div class="footer-hiw-body">Name, email, offer amount. The platform generates a non-binding LOI. Takes 60 seconds.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">3</div>
+        <div>
+          <div class="footer-hiw-title">Offer review call</div>
+          <div class="footer-hiw-body">A short call within 24 hours to align on terms before the offer goes to the owner.</div>
+        </div>
+      </div>
+      <div class="footer-hiw-step">
+        <div class="footer-hiw-num">4</div>
+        <div>
+          <div class="footer-hiw-title">Close on your terms</div>
+          <div class="footer-hiw-body">McMullen Properties facilitates through LOI, CAR contract, and escrow. Flat 3% platform fee.</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-hiw-fee">
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">3%</span><span class="footer-hiw-fee-l">Platform fee — always</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">1%</span><span class="footer-hiw-fee-l">To buyer's nominated agent, if any</span></div>
+      <div class="footer-hiw-fee-sep">·</div>
+      <div class="footer-hiw-fee-item"><span class="footer-hiw-pct">0%</span><span class="footer-hiw-fee-l">MLS listing required</span></div>
+    </div>
+  </div>
+</div>
+<script src="/assets/cm-track.js" defer></script>
+</body>
+</html>
