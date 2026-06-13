@@ -541,9 +541,9 @@ a{text-decoration:none;color:inherit}
       <div class="c-prow" style="border-bottom:none"><span style="font-size:12px;color:var(--g)">Avg $/sqft</span><span style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--n)">$889/sf</span></div>
     </div>
     <div style="background:rgba(200,169,110,.06);border:1px solid rgba(200,169,110,.18);padding:14px;border-radius:10px">
-      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a7840;margin-bottom:5px">★ Refer &amp; Earn</div>
-      <p style="font-size:12px;color:var(--g);line-height:1.6;margin-bottom:10px">Share Eichler Market. Referral closes = 100 pts = 1% off your next deal. Stackable to 3%.</p>
-      <button onclick="getReferLink()" style="width:100%;background:var(--warm);color:var(--n);border:none;padding:9px;font-size:11px;font-weight:700;cursor:pointer;border-radius:6px;font-family:inherit">Get your referral link →</button>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a7840;margin-bottom:5px">★ The Impossible Offer</div>
+      <p style="font-size:12px;color:var(--g);line-height:1.6;margin-bottom:10px">Set a Make Me Move price and claim a $10,000 account credit toward your next deal with McMullen Properties. No points. No tiers. Flat.</p>
+      <button onclick="location.href='/make-me-move/'" style="width:100%;background:var(--warm);color:var(--n);border:none;padding:9px;font-size:11px;font-weight:700;cursor:pointer;border-radius:6px;font-family:inherit">Claim your $10K →</button>
     </div>
   </div>
 </div>
@@ -674,7 +674,7 @@ var MED_PPSF=889;
 function goTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 function ejSend(t,p){fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EJ.svc,template_id:t,user_id:EJ.key,template_params:p})}).catch(function(){});}
 function toast(msg){var t=document.getElementById('cm-toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(function(){t.style.display='none';},4000);}
-function getReferLink(){var code=localStorage.getItem('em_refer_code');if(!code){code='EM'+Math.random().toString(36).substr(2,6).toUpperCase();localStorage.setItem('em_refer_code',code);}var url='https://eichlermarket.com/r/'+code;if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){toast('Link copied: '+url);});else toast('Your link: '+url);}
+
 
 function selectHome(el){document.querySelectorAll('.c-u.sel').forEach(function(e){e.classList.remove('sel');});el.classList.add('sel');openOffer(el.dataset.addr);}
 

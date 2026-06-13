@@ -2,69 +2,37 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Joining Eichler Market…</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome — Eichler Market</title>
+<meta name="robots" content="noindex">
 <link rel="icon" href="/assets/em-favicon.svg">
 <style>
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: #0e1220; color: #e8eaf0;
-    font-family: 'system-ui', sans-serif;
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: 20px; text-align: center;
-    padding: 24px;
-  }
-  .icon {
-    width: 64px; height: 64px;
-    background: rgba(200,169,110,0.12);
-    border: 1.5px solid rgba(200,169,110,0.3);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    animation: pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:.7;transform:scale(1)} 50%{opacity:1;transform:scale(1.05)} }
-  h1 { font-size: 22px; color: #fff; }
-  p  { font-size: 14px; color: #8892aa; max-width: 320px; line-height: 1.65; }
-  .ref-badge {
-    background: rgba(200,169,110,0.1);
-    border: 1px solid rgba(200,169,110,0.25);
-    color: #c8a96e; font-size: 12px; font-weight: 700;
-    letter-spacing: .08em; text-transform: uppercase;
-    padding: 5px 14px; border-radius: 100px;
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,'Times New Roman',serif;background:#0e1118;color:#e8e3d8;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.icon{margin-bottom:20px}
+h1{font-size:32px;font-weight:500;color:#fff;margin-bottom:14px}
+p{font-size:15px;color:rgba(232,227,216,.65);max-width:440px;line-height:1.7;font-weight:300}
+.badge{display:inline-block;background:rgba(200,169,110,0.08);border:1px solid rgba(200,169,110,0.25);color:#c8a96e;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;font-family:'JetBrains Mono',monospace}
 </style>
 </head>
 <body>
 <div class="icon">
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
 </div>
-<span class="ref-badge" id="code-badge">Referral link</span>
+<span class="badge">Eichler Market</span>
 <h1>Welcome to Eichler Market</h1>
-<p>You've been invited. Create your free account to browse 1,298 Eichler homes, submit offers, and set your own Make Me Move price.</p>
-
+<p>Create your free account to browse every Eichler in Silicon Valley, submit offers on any home — listed or not — and set your own Make Me Move price to claim a $10,000 credit toward your next deal.</p>
 <script>
 (function() {
-  // Extract code from path: /r/[CODE]
-  var path = window.location.pathname; // e.g. /r/EMABCDEF
+  // Preserve campaign attribution (utm-style ref for mailer/marketing tracking only — not user referral credit)
+  var path = window.location.pathname;
   var parts = path.split('/').filter(Boolean);
   var code = parts[parts.length - 1];
-
-  // Also check query string: /r/?code=EMABCDEF
-  if (!code || code === 'r') {
-    code = new URLSearchParams(window.location.search).get('code') || '';
-  }
-
+  if (!code || code === 'r') code = new URLSearchParams(window.location.search).get('code') || '';
   if (code && code !== 'r') {
-    // Store in localStorage — em-supabase.js reads this on signup
-    localStorage.setItem('em_referred_by', code);
-    document.getElementById('code-badge').textContent = 'Ref: ' + code;
+    try { localStorage.setItem('em_campaign_ref', code); } catch(e){}
   }
-
-  // Redirect to signup after 1.4s
-  setTimeout(function() {
-    window.location.href = '/auth/?tab=signup';
-  }, 1400);
+  setTimeout(function(){ window.location.href = '/auth/?tab=signup'; }, 1400);
 })();
 </script>
 <script src="/assets/cm-track.js" defer></script>

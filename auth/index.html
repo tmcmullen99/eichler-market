@@ -304,16 +304,10 @@ body::before {
   <form class="auth-form" id="form-signup" onsubmit="doSignUp(event)">
     <div>
       <div class="auth-heading">Join Eichler Market.</div>
-      <div class="auth-sub">List your home, submit offers, and earn referral credits.</div>
+      <div class="auth-sub">List your home, submit offers, and set your Make Me Move price.</div>
     </div>
 
     <div class="auth-msg" id="signup-msg"></div>
-
-    <!-- Referral notice (shown if coming from /r/ link) -->
-    <div class="refer-notice" id="refer-notice">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="9 11 12 14 22 4"/></svg>
-      <span>You were referred — your sponsor will earn points when you close a deal.</span>
-    </div>
 
     <div class="field-row">
       <div class="field">
@@ -400,17 +394,11 @@ function clearMsg(id) {
   el.textContent = '';
 }
 
-// ── Check for referral code in localStorage ──────────────────────────
+// ── Tab handling ──────────────────────────────────────────────────────
 (function() {
   const params = new URLSearchParams(window.location.search);
   const tab = params.get('tab');
   if (tab === 'signup') showTab('signup');
-
-  const code = localStorage.getItem('em_referred_by');
-  if (code) {
-    document.getElementById('refer-notice').classList.add('show');
-    showTab('signup');
-  }
 })();
 
 // ── Redirect if already logged in ────────────────────────────────────
@@ -462,10 +450,9 @@ async function doSignUp(e) {
   const phone = document.getElementById('su-phone').value.trim();
   const pw    = document.getElementById('su-pw').value;
   const fullName = [fname, lname].filter(Boolean).join(' ');
-  const referredBy = localStorage.getItem('em_referred_by');
 
   try {
-    const { user, session } = await EM.signUp(email, pw, fullName, phone, referredBy);
+    const { user, session } = await EM.signUp(email, pw, fullName, phone);
     if (!session) {
       // Email confirmation required
       setMsg('signup-msg', 'ok',

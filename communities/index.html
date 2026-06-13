@@ -372,7 +372,7 @@ a{text-decoration:none;color:inherit}
 /* ── CM TOAST ── */
 #cm-toast{display:none;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--n);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;white-space:nowrap;}
 
-/* ── REFER & EARN ── */
+/* ── THE IMPOSSIBLE OFFER ── */
 .refer-section{background:var(--n);padding:60px 0;}
 .refer-inner{max-width:900px;margin:0 auto;padding:0 48px;display:flex;align-items:center;gap:48px;flex-wrap:wrap;}
 .refer-text{flex:1;min-width:260px;}
@@ -1006,20 +1006,20 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
 </section>
 
 
-<!-- REFER & EARN -->
+<!-- THE IMPOSSIBLE OFFER -->
 <div class="refer-section">
   <div class="refer-inner">
     <div class="refer-text">
-      <div class="refer-eyebrow">Eichler Market · Refer &amp; Earn</div>
-      <h2>Share. Earn points. Save on your next deal.</h2>
-      <p>Refer a buyer or seller who closes on the platform — earn 100 points. 100 points = 1% off commission on your next deal or sale. Stackable to 3%.</p>
+      <div class="refer-eyebrow">Eichler Market · The Impossible Offer</div>
+      <h2>List with Tim. Get $10,000 toward your next move.</h2>
+      <p>Set a Make Me Move price and receive a $10,000 account credit — applied toward buyer's agent commission or closing costs on your next deal with McMullen Properties. No points. No tiers. Flat.</p>
     </div>
     <div class="refer-stats">
-      <div class="rp"><div class="rp-v">100</div><div class="rp-l">Points per referral</div></div>
-      <div class="rp"><div class="rp-v">1%</div><div class="rp-l">Off per 100 pts</div></div>
-      <div class="rp"><div class="rp-v">3%</div><div class="rp-l">Max savings</div></div>
+      <div class="rp"><div class="rp-v">$10K</div><div class="rp-l">Account credit</div></div>
+      <div class="rp"><div class="rp-v">3%</div><div class="rp-l">Flat commission</div></div>
+      <div class="rp"><div class="rp-v">$0</div><div class="rp-l">Up front</div></div>
     </div>
-    <button class="refer-btn" onclick="getReferLink()">Get your referral link →</button>
+    <button class="refer-btn" onclick="location.href='/make-me-move/'">Claim your $10K →</button>
   </div>
 </div>
 
@@ -1427,13 +1427,7 @@ function scrollToMap(){
   if(ms)ms.scrollIntoView({behavior:'smooth'});
   setTimeout(function(){map.invalidateSize();},600);
 }
-function getReferLink(){
-  var code=localStorage.getItem('em_refer_code');
-  if(!code){code='EM'+Math.random().toString(36).substr(2,6).toUpperCase();localStorage.setItem('em_refer_code',code);}
-  var url='https://eichlermarket.com/r/'+code;
-  if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){toast('Copied: '+url);});
-  else toast('Your link: '+url);
-}
+
 function toast(msg){
   var t=document.getElementById('cm-toast');if(!t)return;
   t.textContent=msg;t.style.display='block';

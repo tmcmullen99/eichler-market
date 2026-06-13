@@ -18,7 +18,6 @@ const EJ = {
   t_buyer_confirm:  'template_0ooql52',   // existing — buyer confirmation
   t_offer_to_owner: 'template_offer_to_owner',  // NEW — notify homeowner
   t_welcome:        'template_welcome',          // NEW — welcome email
-  t_referral_notif: 'template_referral_notif',   // NEW — referral signed up
 };
 
 // ── Init ──────────────────────────────────────────────────────────────────
@@ -64,7 +63,7 @@ window.EM = (function () {
     }
   }
 
-  async function signUp(email, password, fullName, phone, referredBy) {
+  async function signUp(email, password, fullName, phone) {
     const sb = getSB();
     const { data, error } = await sb.auth.signUp({
       email,
@@ -79,21 +78,10 @@ window.EM = (function () {
         .update({ full_name: fullName, phone: phone || null })
         .eq('id', data.user.id);
 
-      // Register referral if code present
-      const code = referredBy || localStorage.getItem('em_referred_by');
-      if (code) {
-        await sb.rpc('register_referral', {
-          p_code: code,
-          p_new_user_id: data.user.id
-        });
-        localStorage.removeItem('em_referred_by');
-      }
-
       // Welcome email
       _ejSend(EJ.t_welcome, {
         to_email:   email,
         user_name:  fullName || email.split('@')[0],
-        refer_link: 'https://eichlermarket.com/r/' + (await _getReferCode(data.user.id)),
       });
     }
     return data;
@@ -111,11 +99,6 @@ window.EM = (function () {
     _user = null;
     _profile = null;
     _updateNav();
-  }
-
-  async function _getReferCode(userId) {
-    const { data } = await getSB().from('profiles').select('referral_code').eq('id', userId).single();
-    return data?.referral_code || '';
   }
 
   // ── Profile ─────────────────────────────────────────────────────────────
@@ -158,28 +141,31 @@ window.EM = (function () {
     if (!_user) return null;
     const sb = getSB();
 
-    // Upsert: one row per address per user in make_me_move table
-    const existing = await sb.from('make_me_move')
+    // Upsert: one listing per address per user
+    const existing = await sb.from('listings')
       .select('id')
       .eq('user_id', _user.id)
-      .eq('unit_address', opts.address)
+      .eq('address', opts.address)
       .maybeSingle();
 
     let result;
     if (existing.data?.id) {
-      result = await sb.from('make_me_move')
-        .update({ target_price: opts.price, notes: opts.notes || null })
+      result = await sb.from('listings')
+        .update({ price: opts.price, status: 'active', notes: opts.notes || null, updated_at: new Date().toISOString() })
         .eq('id', existing.data.id)
         .select().single();
     } else {
-      result = await sb.from('make_me_move')
+      result = await sb.from('listings')
         .insert({
-          user_id:      _user.id,
-          unit_address: opts.address,
-          building_slug: opts.community || 'eichler-direct',
-          target_price: opts.price,
-          is_active:    false,   // pending Tim's approval
-          notes:        opts.notes || null,
+          user_id:   _user.id,
+          address:   opts.address,
+          city:      opts.city || '',
+          community: opts.community || null,
+          beds:      opts.beds || null,
+          baths:     opts.baths || null,
+          sqft:      opts.sqft || null,
+          price:     opts.price,
+          notes:     opts.notes || null,
         })
         .select().single();
     }
@@ -190,8 +176,6 @@ window.EM = (function () {
     const ppsf = opts.sqft ? Math.round(opts.price / opts.sqft) : null;
     const fmtP = '$' + Number(opts.price).toLocaleString();
     const fmtPpsf = ppsf ? '$' + ppsf.toLocaleString() + '/sf' : '';
-
-    // Tim notification — pending review
     _ejSend(EJ.t_mms_to_tim, {
       to_email:'tim@mcmullen.properties', to_name:'Tim',
       owner_name: (_profile && _profile.full_name) || _user.email,
@@ -200,15 +184,14 @@ window.EM = (function () {
       community: opts.community || '', beds: opts.beds || '',
       baths: opts.baths || '', sqft: opts.sqft || '',
       price: fmtP, ppsf: fmtPpsf, notes: opts.notes || '',
-      subject: '⏳ PENDING REVIEW: ' + opts.address + ' — ' + fmtP,
+      subject: 'New Make Me Move: ' + opts.address + ' — ' + fmtP,
     });
-    // Owner confirmation — under review
-    _ejSend(EJ.t_buyer_confirm, {
+    _ejSend(EJ.t_welcome, {
       to_email: _user.email,
       to_name: (_profile && _profile.full_name) || 'Homeowner',
-      buyer_name: (_profile && _profile.full_name) || 'Homeowner',
-      address: opts.address,
-      subject: 'Your Make Me Move price is under review — ' + opts.address,
+      address: opts.address, city: opts.city || '',
+      price: fmtP, ppsf: fmtPpsf,
+      subject: 'Your Make Me Move price is live — ' + opts.address,
     });
     return listing;
   }
@@ -257,12 +240,12 @@ window.EM = (function () {
 
   async function getMyListings() {
     if (!_user) return [];
-    // Return both active and pending listings
     const { data } = await getSB()
-      .from('make_me_move')
+      .from('listings')
       .select('*')
       .eq('user_id', _user.id)
-      .order('set_at', { ascending: false });
+      .neq('status', 'removed')
+      .order('created_at', { ascending: false });
     return data || [];
   }
 
@@ -287,8 +270,6 @@ window.EM = (function () {
       .eq('status', 'active')
       .maybeSingle();
 
-    const referredBy = localStorage.getItem('em_referred_by') || null;
-
     const { data, error } = await sb.rpc('submit_offer', {
       p_buyer_name:     buyerName,
       p_buyer_email:    buyerEmail,
@@ -297,7 +278,6 @@ window.EM = (function () {
       p_listing_id:     listing?.id || null,
       p_target_user_id: listing?.user_id || null,
       p_message:        message || null,
-      p_referred_by:    referredBy,
     });
     if (error) throw error;
 
@@ -337,28 +317,6 @@ window.EM = (function () {
       .update({ status: 'viewed' })
       .eq('id', offerId)
       .eq('target_user_id', _user.id);
-  }
-
-  // ── Referrals ────────────────────────────────────────────────────────────
-
-  async function getMyReferrals() {
-    if (!_user) return [];
-    const { data } = await getSB()
-      .from('referrals')
-      .select('*')
-      .eq('referrer_id', _user.id)
-      .order('created_at', { ascending: false });
-    return data || [];
-  }
-
-  function getReferLink() {
-    const code = _profile?.referral_code || localStorage.getItem('em_refer_code');
-    return code ? 'https://eichlermarket.com/r/' + code : null;
-  }
-
-  function trackVisit(code) {
-    // Called by /r/[code] page before redirect
-    if (code) localStorage.setItem('em_referred_by', code);
   }
 
   // ── Notifications ────────────────────────────────────────────────────────
@@ -432,9 +390,6 @@ window.EM = (function () {
             <span class="em-nav-avatar">${initials}</span>
             <span class="em-nav-name">${_profile.full_name || _profile.email.split('@')[0]}</span>
           </a>
-          <span class="em-nav-pts" title="${_profile.points} points">
-            ★ ${_profile.points} pts
-          </span>
           <a href="/dashboard/#notifications" class="em-nav-bell" id="em-notif-btn" title="Notifications">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             <span class="em-nav-badge" id="em-notif-badge" style="display:none">0</span>
@@ -558,11 +513,6 @@ window.EM = (function () {
     submitOffer,
     getMyOffers,
     markOfferViewed,
-
-    // Referrals
-    getMyReferrals,
-    getReferLink,
-    trackVisit,
 
     // Notifications
     getNotifications,
