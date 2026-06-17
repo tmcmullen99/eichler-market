@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Active Eichler Listings · Silicon Valley · Eichler Market</title>
-<meta name="description" content="Browse active Eichler homes for sale in Silicon Valley — Palo Alto, Sunnyvale, San Jose, Mountain View, Cupertino, Los Altos, and Santa Clara County. Live MLS data updated every 15 minutes.">
+<meta name="description" content="Browse active Eichler homes for sale in Silicon Valley — Palo Alto, Sunnyvale, San Jose, Mountain View, Cupertino, Los Altos, and Santa Clara County. Live MLS data, refreshed twice daily.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -202,7 +202,7 @@ a{text-decoration:none;color:inherit}
     <span class="hero-eyebrow-text">Silicon Valley · Active MLS Listings</span>
   </div>
   <h1 class="hero-h1">Active Eichler<br>Homes <em>For Sale</em></h1>
-  <p class="hero-sub">Live listings filtered to Style = Eichler directly from MLSListings — Santa Clara &amp; San Mateo County. Updated every 15 minutes.</p>
+  <p class="hero-sub">Live listings filtered to Style = Eichler directly from MLSListings — Santa Clara &amp; San Mateo County. Refreshed twice daily.</p>
   <div class="hero-stats">
     <div class="hero-stat">
       <div class="hero-stat-v" id="listing-count">— <span class="live-dot"></span></div>
@@ -213,8 +213,8 @@ a{text-decoration:none;color:inherit}
       <div class="hero-stat-l">Named Tracts</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-v">15 min</div>
-      <div class="hero-stat-l">Data Refresh</div>
+      <div class="hero-stat-v">2&times;</div>
+      <div class="hero-stat-l">Daily Refresh</div>
     </div>
   </div>
 </section>
@@ -251,7 +251,7 @@ a{text-decoration:none;color:inherit}
     </div>
     <div class="listings-source">
       <span class="live-badge"><span class="live-badge-dot"></span>LIVE DATA</span>
-      <span>MLSListings · updated every 15 min</span>
+      <span>MLSListings · refreshed twice daily</span>
     </div>
   </div>
 
@@ -380,137 +380,75 @@ a{text-decoration:none;color:inherit}
 <script>
 var EJ = {svc:'service_733sibl', key:'rjIXPckMwcWAXnyPx', tB:'template_dqt85kb'};
 
-// ── WORKER ENDPOINT ──────────────────────────────────────────────────────
-// Once the Cloudflare Worker is deployed, replace this URL with:
-// https://eichler-listings.tim-d10.workers.dev/listings
-var WORKER_URL = 'https://eichlerlistings.tim-d10.workers.dev/listings';
-
-// ── REALSCOUT BASE URL ────────────────────────────────────────────────────
-// Update with your RealScout subdomain once confirmed
-var REALSCOUT_BASE = 'https://timmmcmullen.realscout.com';
-
-// ── DATE ────────────────────────────────────────────────────────────────
+// ── DATA SOURCE: public view via EMListings helper ───────────────────────
 document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
 
-// ── FORMAT HELPERS ────────────────────────────────────────────────────────
 function fmtPrice(n) {
-  if (!n) return '—';
+  if (!n) return '\u2014';
   if (n >= 1000000) return '$' + (n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 3).replace(/\.?0+$/, '') + 'M';
   return '$' + n.toLocaleString();
 }
-function fmtDate(str) {
-  if (!str) return '';
-  var d = new Date(str);
-  return d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
-}
-
-// ── RENDER CARD ────────────────────────────────────────────────────────────
-function renderCard(listing) {
-  var photo = listing.photos && listing.photos[0] ? listing.photos[0] : '';
-  var photoHtml = photo
-    ? '<img src="' + photo + '" alt="' + listing.address + '" loading="lazy" onerror="this.parentNode.innerHTML=placeholderSvg()">'
-    : placeholderSvg();
-
-  var metaParts = [];
-  if (listing.beds)  metaParts.push('<span class="listing-meta-item"><strong>' + listing.beds + '</strong> bd</span>');
-  if (listing.baths) metaParts.push('<span class="listing-meta-item"><strong>' + listing.baths + '</strong> ba</span>');
-  if (listing.sqft)  metaParts.push('<span class="listing-meta-item"><strong>' + listing.sqft.toLocaleString() + '</strong> sf</span>');
-  if (listing.ppsf)  metaParts.push('<span class="listing-meta-item" style="color:#91a1ba">$' + listing.ppsf.toLocaleString() + '/sf</span>');
-
-  var domBadge = listing.dom !== null && listing.dom !== undefined
-    ? '<span class="listing-dom">' + listing.dom + ' DOM</span>'
-    : '';
-
-  var tract = listing.tract ? '<div class="listing-tract">' + listing.tract + '</div>' : '';
-
-  // Link to RealScout listing page (or fallback to realscout search)
-  var href = listing.realscoutUrl || (REALSCOUT_BASE + '/homesearch?listingId=' + listing.mlsId);
-
-  return '<a class="listing-card" href="' + href + '" target="_blank" rel="noopener">'
-    + '<div class="listing-img">'
-      + photoHtml
-      + '<span class="listing-status">Active</span>'
-      + domBadge
-    + '</div>'
-    + '<div class="listing-body">'
-      + tract
-      + '<div class="listing-price">' + fmtPrice(listing.price) + '</div>'
-      + '<div class="listing-addr">' + listing.address + '</div>'
-      + '<div class="listing-city">' + listing.city + '</div>'
-      + '<div class="listing-meta">' + metaParts.join('') + '</div>'
-      + (listing.mlsNumber ? '<div class="listing-mls">MLS# ' + listing.mlsNumber + '</div>' : '')
-    + '</div>'
-  + '</a>';
-}
-
 function placeholderSvg() {
   return '<svg class="listing-img-placeholder" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#91a1ba" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
 }
 
-// ── FETCH LISTINGS FROM WORKER ─────────────────────────────────────────────
+function renderCard(r) {
+  var L = window.EMListings;
+  var photoHtml = r.photo_url
+    ? '<img src="' + L.esc(r.photo_url) + '" alt="' + L.esc(r.address) + '" loading="lazy" onerror="this.parentNode.innerHTML=placeholderSvg()">'
+    : placeholderSvg();
+
+  var meta = [];
+  if (r.beds)  meta.push('<span class="listing-meta-item"><strong>' + r.beds + '</strong> bd</span>');
+  if (r.baths) meta.push('<span class="listing-meta-item"><strong>' + r.baths + '</strong> ba</span>');
+  if (r.sqft)  meta.push('<span class="listing-meta-item"><strong>' + Number(r.sqft).toLocaleString() + '</strong> sf</span>');
+
+  // Community tract label — only linked if a real page exists (guard prevents 404s)
+  var chref = L.communityHref(r.community_slug);
+  var tract = r.community_name
+    ? (chref
+        ? '<a class="listing-tract" href="' + chref + '" style="text-decoration:none">' + L.esc(r.community_name) + '</a>'
+        : '<div class="listing-tract">' + L.esc(r.community_name) + '</div>')
+    : '';
+
+  var href = '/listing/' + encodeURIComponent(r.mls_number) + '/';
+
+  return '<a class="listing-card" href="' + href + '">'
+    + '<div class="listing-img">' + photoHtml
+      + '<span class="listing-status">Active</span></div>'
+    + '<div class="listing-body">'
+      + tract
+      + '<div class="listing-price">' + fmtPrice(r.price) + '</div>'
+      + '<div class="listing-addr">' + L.esc(r.address) + '</div>'
+      + '<div class="listing-city">' + L.esc([r.city, r.zip].filter(Boolean).join(', ')) + '</div>'
+      + '<div class="listing-meta">' + meta.join('') + '</div>'
+      + (r.mls_number ? '<div class="listing-mls">MLS# ' + L.esc(r.mls_number) + '</div>' : '')
+    + '</div></a>';
+}
+
 function loadListings() {
-  fetch(WORKER_URL)
-    .then(function(r) { return r.json(); })
-    .then(function(listings) {
+  function ready(fn){ if(window.EMListings) fn(); else setTimeout(function(){ready(fn);},80); }
+  ready(function(){
+    window.EMListings.activeListings().then(function(listings){
       var grid = document.getElementById('listings-grid');
       var loading = document.getElementById('listings-loading');
-      
-      if (!Array.isArray(listings) || listings.length === 0) {
-        if (loading) loading.remove();
-        grid.innerHTML = '<div class="listing-empty">No active Eichler listings found at this time. Check back soon.</div>';
-        return;
-      }
-
-      // Update count in hero
+      if (loading) loading.remove();
       var countEl = document.getElementById('listing-count');
       if (countEl) countEl.firstChild.textContent = listings.length + ' ';
-
-      // Update last-updated
-      var luEl = document.getElementById('last-updated');
-      if (luEl) luEl.textContent = new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-
-      // Render cards
-      var html = listings.map(renderCard).join('');
+      if (!Array.isArray(listings) || !listings.length) {
+        grid.innerHTML = '<div class="listing-empty">No active Eichler listings right now. Check back soon.</div>';
+        return;
+      }
+      grid.innerHTML = listings.map(renderCard).join('');
+    }).catch(function(err){
+      console.error('[Active Listings] load failed:', err);
+      var grid = document.getElementById('listings-grid');
+      var loading = document.getElementById('listings-loading');
       if (loading) loading.remove();
-      grid.innerHTML = html;
-    })
-    .catch(function(err) {
-      console.error('[Active Listings] Failed to load from Worker:', err);
-      // Fall through to show static placeholder cards
-      showStaticFallback();
+      grid.innerHTML = '<div class="listing-empty">Listings are temporarily unavailable. Please try again shortly.</div>';
     });
+  });
 }
-
-// ── STATIC FALLBACK (shown while Worker credentials are being set up) ────────
-function showStaticFallback() {
-  var grid = document.getElementById('listings-grid');
-  var loading = document.getElementById('listings-loading');
-  if (loading) loading.remove();
-
-  // Static representative listings — replace with live feed once Worker is deployed
-  var staticListings = [
-    {address:'1586 Lexington Avenue',city:'San Mateo',price:4498000,beds:3,baths:2,sqft:2190,dom:4,realscoutUrl:'',mlsNumber:''},
-    {address:'897 Newell Road',city:'Palo Alto',price:3798000,beds:3,baths:2,sqft:1755,dom:7,realscoutUrl:'',mlsNumber:''},
-    {address:'1914 Channing Avenue',city:'Palo Alto',price:3380000,beds:3,baths:2,sqft:1660,dom:12,realscoutUrl:'',mlsNumber:''},
-    {address:'721 Stendhal Lane',city:'Cupertino',price:2999888,beds:4,baths:3,sqft:2218,dom:3,realscoutUrl:'',mlsNumber:''},
-    {address:'1656 Edmonton Avenue',city:'Sunnyvale',price:2999000,beds:4,baths:2,sqft:1890,dom:8,realscoutUrl:'',mlsNumber:''},
-    {address:'3745 Louis Road',city:'Palo Alto',price:2950000,beds:3,baths:2,sqft:1700,dom:15,realscoutUrl:'',mlsNumber:''},
-    {address:'1104 Terra Bella Avenue',city:'Mountain View',price:2875000,beds:3,baths:2,sqft:1580,dom:6,realscoutUrl:'',mlsNumber:''},
-    {address:'1042 Morse Avenue',city:'Sunnyvale',price:2750000,beds:3,baths:2,sqft:1495,dom:22,realscoutUrl:'',mlsNumber:''},
-    {address:'475 Barroilhet Avenue',city:'San Mateo',price:2698000,beds:4,baths:2,sqft:1840,dom:11,realscoutUrl:'',mlsNumber:''},
-    {address:'2291 Kenilworth Avenue',city:'San Jose',price:1895000,beds:3,baths:2,sqft:1280,dom:18,realscoutUrl:'',mlsNumber:''},
-    {address:'1240 Glenbrook Drive',city:'Foster City',price:1798000,beds:3,baths:2,sqft:1350,dom:9,realscoutUrl:'',mlsNumber:''},
-    {address:'1580 Bluefield Avenue',city:'San Jose',price:1650000,beds:3,baths:1,sqft:1180,dom:24,realscoutUrl:'',mlsNumber:''},
-  ].map(function(l){ return Object.assign({photos:[],tract:'',ppsf:l.sqft?Math.round(l.price/l.sqft):null,mlsId:'',mlsNumber:''},l); });
-
-  // Update count
-  var countEl = document.getElementById('listing-count');
-  if (countEl) countEl.firstChild.textContent = staticListings.length + ' ';
-
-  grid.innerHTML = staticListings.map(renderCard).join('');
-}
-
-// ── INIT ──────────────────────────────────────────────────────────────────
 loadListings();
 
 // ── ALERT FORM ────────────────────────────────────────────────────────────
@@ -584,6 +522,7 @@ function sendAlert(email, btn) {
     </div>
   </div>
 </div>
+<script src="/assets/em-listings.js" defer></script>
 <script src="/assets/cm-track.js" defer></script>
 </body>
 </html>
