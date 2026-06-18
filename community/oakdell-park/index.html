@@ -85,16 +85,47 @@ a{text-decoration:none;color:inherit}
 .c-sb{height:26px;padding:0 11px;background:transparent;border:1px solid var(--b);border-radius:100px;font-size:11px;font-weight:600;color:var(--g);cursor:pointer;font-family:inherit;transition:all .15s}
 .c-sb.on{background:var(--n);border-color:var(--n);color:#fff}
 /* Home row */
-.c-u{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--b);cursor:pointer;transition:background .12s;position:relative}
+.c-u{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--b);transition:background .12s;position:relative}
 .c-u:hover{background:rgba(200,169,110,.04);margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:6px}
-.c-u-img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--b)}
+.c-u-img{width:72px;height:54px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--b);display:block}
 .c-u-body{flex:1;min-width:0}
 .c-u-addr{font-size:13px;font-weight:600;color:var(--n);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-u-meta{font-size:10px;color:var(--g);margin-top:1px}
 .c-u-price{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--n);flex-shrink:0;text-align:right}
 .c-u-date{display:block;font-size:9px;color:var(--g);font-family:'DM Sans',sans-serif;font-weight:400}
-.c-u-offer{opacity:0;position:absolute;right:0;background:var(--n);color:#fff;border:none;padding:6px 12px;border-radius:100px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.c-u-acts{display:flex;align-items:center;gap:12px;margin-top:5px}
+.c-u-link{font-size:10px;font-weight:700;letter-spacing:.02em;color:var(--warm);text-decoration:none;white-space:nowrap}
+.c-u-link:hover{text-decoration:underline}
+.c-u-offer{background:none;border:none;padding:0;color:var(--n);font-size:10px;font-weight:700;letter-spacing:.02em;cursor:pointer;font-family:inherit;opacity:.55;transition:opacity .15s;white-space:nowrap}
 .c-u:hover .c-u-offer{opacity:1}
+/* ── By the numbers (dossier) ─────────────────────────────────── */
+.cm-dossier{margin:28px 0 8px}
+.cm-dossier-hd{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:4px}
+.cm-dossier-h2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--n);margin-bottom:18px;line-height:1.15}
+.cm-dossier-h2 em{font-style:italic;color:var(--warm)}
+.cm-num-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:12px;overflow:hidden}
+.cm-num{background:var(--w);padding:16px 16px 15px}
+.cm-num-v{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--n);line-height:1}
+.cm-num-l{font-size:11px;font-weight:600;color:var(--n);margin-top:7px}
+.cm-num-s{font-size:10px;color:var(--g);margin-top:2px;line-height:1.35}
+.cm-num-cmp{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.cm-cmp-chip{background:var(--bg);border:1px solid var(--b);border-radius:100px;padding:7px 14px;font-size:11px;color:var(--n)}
+.cm-cmp-chip b{font-weight:700}
+.cm-cmp-up{color:#1c7a4a}.cm-cmp-dn{color:#b4453a}
+@media(max-width:560px){.cm-num-grid{grid-template-columns:repeat(2,1fr)}.cm-num-v{font-size:19px}}
+/* ── Compare band ─────────────────────────────────────────────── */
+.cm-compare{margin:30px 0 8px}
+.cm-cmp-bars{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.cm-bar-row{display:flex;align-items:center;gap:12px;text-decoration:none;padding:10px 14px;border:1px solid var(--b);border-radius:10px;background:var(--w);transition:border-color .15s,background .15s}
+.cm-bar-row:hover{border-color:var(--warm);background:rgba(200,169,110,.04)}
+.cm-bar-row.is-self{background:var(--n);border-color:var(--n)}
+.cm-bar-name{flex:1;min-width:0}
+.cm-bar-t{font-size:13px;font-weight:700;color:var(--n);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cm-bar-s{font-size:10px;color:var(--g);margin-top:1px}
+.cm-bar-v{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--n);flex-shrink:0}
+.is-self .cm-bar-t,.is-self .cm-bar-v{color:#fff}
+.is-self .cm-bar-s{color:rgba(255,255,255,.5)}
+.cm-bar-self-tag{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warm);margin-left:8px}
 /* Group header */
 .c-grp{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g);padding:14px 0 6px;border-top:1px solid var(--b);margin-top:6px;display:flex;align-items:baseline;gap:8px}
 .c-grps{font-family:'Playfair Display',serif;font-size:12px;color:var(--warm);font-weight:400;text-transform:none;letter-spacing:0}
@@ -456,7 +487,7 @@ a{text-decoration:none;color:inherit}
 [{"a":"1611 Oakdell Drive","bd":3,"ba":2,"sf":1610,"sp":4200000,"dt":"Mar 2025","lat":37.437651,"lng":-122.189216,"img":"/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg","ppsf":2609,"c":"Menlo Park"},{"a":"1794 Oakdell Drive","bd":4,"ba":2,"sf":2668,"sp":3788000,"dt":"Mar 2019","lat":37.435087,"lng":-122.191922,"img":"/assets/photos/sm/1794-oakdell-drive-menlo-park.jpg","ppsf":1420,"c":"Menlo Park"},{"a":"565 Olive Street","bd":5,"ba":3,"sf":2790,"sp":3335000,"dt":"Jun 2020","lat":37.437447,"lng":-122.188776,"img":"/assets/photos/sm/565-olive-street-menlo-park.jpg","ppsf":1195,"c":"Menlo Park"},{"a":"1631 Magnolia Court","bd":4,"ba":2,"sf":1660,"sp":3300000,"dt":"Jun 2017","lat":37.437142,"lng":-122.189095,"img":"/assets/photos/sm/1631-magnolia-court-menlo-park.jpg","ppsf":1988,"c":"Menlo Park"}]
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>setTimeout(function(){if(typeof initCmMap==="function"&&typeof L!=="undefined")initCmMap();},50);</script>
+<script>setTimeout(function(){if(typeof initCmMap==="function"&&typeof L!=="undefined")initCmMap();if(typeof renderDossier==="function")renderDossier();if(typeof renderCompare==="function")renderCompare();},50);</script>
 
       <div class="cm-map-outer">
         <div id="cm-map"></div>
@@ -464,6 +495,9 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div id="mms-banner" class="mms-banner"></div>
+
+      <!-- By the numbers (Arden-grade, computed from sales) -->
+      <div class="cm-dossier" id="cm-dossier"></div>
 
       <div class="c-fr">
         <button class="c-ft on" id="ft-all" onclick="setCmTab('all')">All <span class="c-ftc">4</span></button>
@@ -511,6 +545,9 @@ a{text-decoration:none;color:inherit}
         <div class="c-am">Mid-Century Architecture</div>
       </div>
     </div>
+
+    <!-- Compare band: how this tract ranks -->
+    <div class="cm-compare" id="cm-compare"></div>
   </div>
 
   <div class="c-side" id="c-contact">
@@ -681,6 +718,17 @@ function selectHome(el){document.querySelectorAll('.c-u.sel').forEach(function(e
 
 // ── Community Map ─────────────────────────────────────────────────────────────
 function addrSlug(addr,city){return (addr+' '+city).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+function realtorUrl(addr,city){
+  // City-only Realtor.com detail-search URL. Abbreviates common street suffixes, hyphenates, no ZIP.
+  var s=(addr||'').trim()
+    .replace(/\bStreet\b/gi,'St').replace(/\bDrive\b/gi,'Dr').replace(/\bAvenue\b/gi,'Ave')
+    .replace(/\bCourt\b/gi,'Ct').replace(/\bRoad\b/gi,'Rd').replace(/\bLane\b/gi,'Ln')
+    .replace(/\bPlace\b/gi,'Pl').replace(/\bBoulevard\b/gi,'Blvd').replace(/\bWay\b/gi,'Way')
+    .replace(/\bTerrace\b/gi,'Ter').replace(/\bCircle\b/gi,'Cir').replace(/\bParkway\b/gi,'Pkwy');
+  var street=s.replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
+  var c=(city||'').replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
+  return 'https://www.realtor.com/realestateandhomes-detail/'+street+'_'+c+'_CA';
+}
 var CM_PROPS = JSON.parse(document.getElementById('cm-props-data').textContent);
 var cmMap = null, cmMapInitialized = false;
 var cmMarkers = [], cmActiveM = null, cmClusterGroup = null;
@@ -751,7 +799,7 @@ function renderCmMap(){
           +'<div class="cm-popup-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf</div>'
           +'<div class="cm-popup-price">'+cmFmtP(p.sp)+'</div>'
           +'<div class="cm-popup-ppsf">'+p.dt+'  ·  $'+p.ppsf.toLocaleString()+'/sf</div>'
-          +'<a href="/homes/?p='+addrSlug(p.a,p.c)+'" style="display:block;text-align:center;font-size:11px;font-weight:700;color:var(--n);padding:7px;border:1px solid var(--b);border-radius:6px;text-decoration:none;margin-bottom:6px">View details →</a>'
+          +'<a href="'+realtorUrl(p.a,p.c)+'" target="_blank" rel="noopener nofollow" style="display:block;text-align:center;font-size:11px;font-weight:700;color:var(--n);padding:7px;border:1px solid var(--b);border-radius:6px;text-decoration:none;margin-bottom:6px">Photos &amp; sale history ↗</a>'
           +'<button class="cm-popup-btn" onclick="openOffer(\''+p.a.replace(/'/g,'').replace(/"/g,'')+'\')">'
           +'Make an offer →</button></div>')).openPopup();
     });
@@ -802,11 +850,15 @@ function renderCmList(data){
   if(!sorted.length){el.innerHTML='<div style="padding:20px;color:var(--g);font-size:13px">No homes in this filter.</div>';return;}
   el.innerHTML=sorted.map(function(p){
     var imgH=p.img?'<img src="'+p.img+'" alt="" class="c-u-img" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="c-u-img" style="background:var(--b)"></div>';
-    return '<div class="c-u" onclick="window.location.href=\'/homes/?p='+addrSlug(p.a,p.c)+'\'"'+p.a.replace(/'/g,'').replace(/"/g,'')+'\')" style="cursor:pointer">'
-      +imgH
+    var ru=realtorUrl(p.a,p.c);
+    var safeAddr=p.a.replace(/'/g,'').replace(/"/g,'');
+    return '<div class="c-u" style="cursor:default">'
+      +'<a href="'+ru+'" target="_blank" rel="noopener nofollow" style="text-decoration:none;flex-shrink:0" title="Photos &amp; sale history on Realtor.com">'+imgH+'</a>'
       +'<div class="c-u-body">'
         +'<div class="c-u-addr">'+p.a+'</div>'
         +'<div class="c-u-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf · $'+p.ppsf.toLocaleString()+'/sf</div>'
+        +'<div class="c-u-acts"><a href="'+ru+'" target="_blank" rel="noopener nofollow" class="c-u-link">Photos &amp; history ↗</a>'
+        +'<button class="c-u-offer" onclick="openOffer(\''+safeAddr+'\')">Make an offer →</button></div>'
       +'</div>'
       +'<div style="text-align:right;flex-shrink:0">'
         +'<div class="c-u-price">'+cmFmtP(p.sp)+'</div>'
@@ -816,8 +868,66 @@ function renderCmList(data){
   }).join('');
 }
 
-// Init map when tab is activated or on load
-
+// ── By the numbers + Compare (Arden-grade, computed from CM_PROPS) ──────────
+var ALL_EICHLER_PPSF=1177; // platform-wide median $/sf benchmark
+// Sibling tracts for the Compare band (name, slug, median $/sf, median price, sales n). This tract included + flagged self.
+var CM_COMPARE=[
+  {name:"Stanford Gardens",slug:"stanford-gardens",ppsf:1829,price:4050000,n:4},
+  {name:"Oakdell Park",slug:"oakdell-park",ppsf:1704,price:3561500,n:4,self:true},
+  {name:"Menlo Oaks",slug:"menlo-oaks",ppsf:1484,price:3427500,n:4},
+  {name:"Menlo Park Eichlers",slug:"menlo-park-eichlers",ppsf:849,price:1308000,n:7}
+];
+var CM_COMPARE_TITLE="Menlo Park";
+function _median(arr){if(!arr.length)return 0;var s=arr.slice().sort(function(a,b){return a-b;});var m=Math.floor(s.length/2);return s.length%2?s[m]:Math.round((s[m-1]+s[m])/2);}
+function cmFmtFull(n){if(!n)return'—';return'$'+Math.round(n).toLocaleString();}
+function renderDossier(){
+  var el=document.getElementById('cm-dossier');if(!el)return;
+  var d=CM_PROPS;if(!d.length){el.style.display='none';return;}
+  var ppsfArr=d.map(function(p){return p.ppsf;}).filter(Boolean);
+  var spArr=d.map(function(p){return p.sp;}).filter(Boolean);
+  var medPpsf=_median(ppsfArr),medPrice=_median(spArr);
+  // Parse "Mon YYYY" dates; sold in last 12 / 24 mo; latest sale
+  function parseDt(s){var m=(s||'').match(/([A-Za-z]{3})\s+(\d{4})/);if(!m)return null;var mo={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11}[m[1]];return new Date(+m[2],mo||0,1);}
+  var now=new Date(),y12=new Date(now.getFullYear()-1,now.getMonth(),1),y24=new Date(now.getFullYear()-2,now.getMonth(),1);
+  var dated=d.map(function(p){return {p:p,d:parseDt(p.dt)};}).filter(function(x){return x.d;});
+  var sold12=dated.filter(function(x){return x.d>=y12;}).length;
+  var sold24=dated.filter(function(x){return x.d>=y24;}).length;
+  dated.sort(function(a,b){return b.d-a.d;});
+  var last=dated.length?dated[0].p:d[0];
+  var yrs=d.map(function(p){return (p.dt||'').slice(-4);}).filter(Boolean).sort();
+  var yrRange=yrs.length?(yrs[0]===yrs[yrs.length-1]?yrs[0]:yrs[0]+'–'+yrs[yrs.length-1]):'—';
+  var soldLabel=sold12>0?sold12:sold24, soldWindow=sold12>0?'last 12 months':'last 24 months';
+  var diff=Math.round((medPpsf/ALL_EICHLER_PPSF-1)*100);
+  var diffCls=diff>=0?'cm-cmp-up':'cm-cmp-dn',diffSign=diff>=0?'+':'';
+  var tractName=(document.title.split('·')[0]||'').replace(/Eichler Homes/i,'').trim()||'This tract';
+  el.innerHTML=
+    '<div class="cm-dossier-hd">The Tract, by the numbers</div>'
+    +'<h2 class="cm-dossier-h2">'+tractName+' <em>sales data</em></h2>'
+    +'<div class="cm-num-grid">'
+      +'<div class="cm-num"><div class="cm-num-v">$'+medPpsf.toLocaleString()+'</div><div class="cm-num-l">Median $/sf</div><div class="cm-num-s">Across '+d.length+' recorded sales</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+cmFmtP(medPrice)+'</div><div class="cm-num-l">Median sale price</div><div class="cm-num-s">All recorded closings</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+soldLabel+'</div><div class="cm-num-l">Recent sales</div><div class="cm-num-s">Closed, '+soldWindow+'</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+cmFmtP(last.sp)+'</div><div class="cm-num-l">Last sale</div><div class="cm-num-s">'+last.a+' · '+last.dt+'</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+d.length+'</div><div class="cm-num-l">Homes tracked</div><div class="cm-num-s">Sales in our records</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+yrRange+'</div><div class="cm-num-l">Sale years</div><div class="cm-num-s">Earliest–latest on record</div></div>'
+    +'</div>'
+    +'<div class="cm-num-cmp"><div class="cm-cmp-chip">vs. all Eichler median ($'+ALL_EICHLER_PPSF.toLocaleString()+'/sf) <b class="'+diffCls+'">'+diffSign+diff+'%</b></div></div>';
+}
+function renderCompare(){
+  var el=document.getElementById('cm-compare');if(!el||!CM_COMPARE.length)return;
+  var ranked=CM_COMPARE.slice().sort(function(a,b){return b.ppsf-a.ppsf;});
+  el.innerHTML=
+    '<div class="cm-dossier-hd">How it compares</div>'
+    +'<h2 class="cm-dossier-h2">'+CM_COMPARE_TITLE+' tracts, by <em>$/sf</em></h2>'
+    +'<p style="font-size:13px;color:var(--g);line-height:1.6;margin-bottom:4px">Median price per square foot across nearby Eichler tracts — recorded sales. This tract is highlighted.</p>'
+    +'<div class="cm-cmp-bars">'+ranked.map(function(t){
+      var inner='<div class="cm-bar-name"><div class="cm-bar-t">'+t.name+(t.self?'<span class="cm-bar-self-tag">This tract</span>':'')+'</div>'
+        +'<div class="cm-bar-s">'+t.n+' sales · median '+cmFmtP(t.price)+'</div></div>'
+        +'<div class="cm-bar-v">$'+t.ppsf.toLocaleString()+'<span style="font-size:10px;font-weight:400;color:inherit;opacity:.6"> /sf</span></div>';
+      if(t.self)return '<div class="cm-bar-row is-self">'+inner+'</div>';
+      return '<a class="cm-bar-row" href="/community/'+t.slug+'/">'+inner+'</a>';
+    }).join('')+'</div>';
+}
 
 
 // ── Make Me Move loader ─────────────────────────────────────────────────────
