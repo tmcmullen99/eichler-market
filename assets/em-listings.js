@@ -126,6 +126,8 @@
 
   window.EMListings = {
     activeListings: function () { return api('v_eichler_active_listings?select=*'); },
+    // Gallery view: same fields plus photos[] (re-hosted ordered gallery) and photo_count
+    activeGallery: function () { return api('v_eichler_listing_gallery?select=*'); },
     activeCount: function () {
       return fetch(SB_URL + '/rest/v1/v_eichler_active_listings?select=mls_number', {
         headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, Prefer: 'count=exact', Range: '0-0' }

@@ -102,12 +102,20 @@ function money(n) {
   return '$' + Number(n).toLocaleString();
 }
 
-function shell(inner, title, desc) {
+function shell(inner, title, desc, ogImage) {
+  const og = ogImage || "https://eichlermarket.com/assets/og-share.png";
   return `<!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:image" content="${esc(og)}">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="${esc(og)}">
 <link rel="icon" href="/assets/em-favicon.svg">
+<link rel="apple-touch-icon" href="/assets/em-favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -124,8 +132,18 @@ a{color:inherit}
 .wrap{max-width:1080px;margin:0 auto;padding:32px 24px 80px}
 .crumb{font-size:13px;color:var(--g);margin-bottom:22px}
 .crumb a{color:var(--warm);text-decoration:none}
-.hero-img{width:100%;aspect-ratio:16/9;border-radius:16px;background:#eceef2 center/cover;margin-bottom:28px}
 .hero-img-none{width:100%;aspect-ratio:16/9;border-radius:16px;background:var(--n);display:flex;align-items:center;justify-content:center;color:#3a4256;margin-bottom:28px}
+.gal{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#e8ebf0;margin-bottom:14px}
+.gal-track{display:flex;height:100%;transition:transform .32s ease;will-change:transform}
+.gal-slide{min-width:100%;height:100%}
+.gal-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-btn{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.2);font-size:20px;color:#1a1f2e}
+.gal-btn.prev{left:14px}.gal-btn.next{right:14px}
+.gal-count{position:absolute;bottom:14px;right:14px;background:rgba(26,31,46,.8);color:#fff;font-size:12px;font-weight:600;padding:4px 10px;border-radius:7px;z-index:2}
+.thumbs{display:flex;gap:8px;overflow-x:auto;margin-bottom:28px;padding-bottom:4px}
+.thumb{flex:0 0 auto;width:84px;height:62px;border-radius:8px;overflow:hidden;cursor:pointer;opacity:.55;border:2px solid transparent;transition:opacity .15s,border-color .15s}
+.thumb.on{opacity:1;border-color:var(--warm)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:8px}
 .price{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,44px);font-weight:500}
 .status{display:inline-block;background:#16a34a;color:#fff;font-size:11px;font-weight:700;padding:5px 11px;border-radius:6px;letter-spacing:.06em;text-transform:uppercase;margin-top:10px}
@@ -159,6 +177,26 @@ footer a{color:var(--warm);text-decoration:none}
 </nav>
 ${inner}
 <footer>Eichler Market · McMullen Properties · DRE #02016832 · Operating under Real Broker, DRE #02228473 · <a href="/">eichlermarket.com</a></footer>
+<script>
+(function(){
+  var gal=document.getElementById('gal'); if(!gal) return;
+  var track=gal.querySelector('.gal-track'), slides=track.children.length, idx=0;
+  var idxLabel=document.getElementById('galIdx');
+  var thumbs=Array.prototype.slice.call(document.querySelectorAll('#thumbs .thumb'));
+  function go(n){
+    idx=(n+slides)%slides;
+    track.style.transform='translateX(-'+(idx*100)+'%)';
+    if(idxLabel) idxLabel.textContent=idx+1;
+    thumbs.forEach(function(t,j){ t.classList.toggle('on', j===idx); });
+    var on=thumbs[idx]; if(on && on.scrollIntoView) on.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+  }
+  var prev=gal.querySelector('.gal-btn.prev'), next=gal.querySelector('.gal-btn.next');
+  if(prev) prev.addEventListener('click',function(){go(idx-1);});
+  if(next) next.addEventListener('click',function(){go(idx+1);});
+  thumbs.forEach(function(t){ t.addEventListener('click',function(){ go(parseInt(t.getAttribute('data-i'),10)); }); });
+  document.addEventListener('keydown',function(e){ if(e.key==='ArrowLeft')go(idx-1); else if(e.key==='ArrowRight')go(idx+1); });
+})();
+</script>
 </body></html>`;
 }
 
@@ -185,7 +223,7 @@ export async function onRequest(context) {
   // Fetch the one listing by MLS number
   let rows = [];
   try {
-    const url = `${SB_URL}/rest/v1/v_eichler_active_listings?mls_number=eq.${encodeURIComponent(mls)}&select=*&limit=1`;
+    const url = `${SB_URL}/rest/v1/v_eichler_listing_gallery?mls_number=eq.${encodeURIComponent(mls)}&select=*&limit=1`;
     const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY } });
     if (r.ok) rows = await r.json();
   } catch (e) {
@@ -202,9 +240,23 @@ export async function onRequest(context) {
     ? `<a href="${chref}" style="color:var(--warm);text-decoration:none">${esc(p.community_name)}</a>`
     : (p.community_name ? esc(p.community_name) : '\u2014');
 
-  const photo = p.photo_url
-    ? `<div class="hero-img" style="background-image:url('${esc(p.photo_url)}')"></div>`
-    : `<div class="hero-img-none">No photo available</div>`;
+  const photos = Array.isArray(p.photos) && p.photos.length ? p.photos : (p.photo_url ? [p.photo_url] : []);
+  let photo;
+  if (!photos.length) {
+    photo = `<div class="hero-img-none">No photo available</div>`;
+  } else if (photos.length === 1) {
+    photo = `<div class="gal"><div class="gal-track"><div class="gal-slide"><img src="${esc(photos[0])}" alt="${esc(p.address)}"></div></div></div>`;
+  } else {
+    const slides = photos.map((u) => `<div class="gal-slide"><img src="${esc(u)}" alt="${esc(p.address)}" loading="lazy"></div>`).join("");
+    const thumbs = photos.map((u, j) => `<div class="thumb${j === 0 ? " on" : ""}" data-i="${j}"><img src="${esc(u)}" loading="lazy" alt=""></div>`).join("");
+    photo = `<div class="gal" id="gal">
+        <div class="gal-track">${slides}</div>
+        <button class="gal-btn prev" type="button" aria-label="Previous">‹</button>
+        <button class="gal-btn next" type="button" aria-label="Next">›</button>
+        <div class="gal-count"><span id="galIdx">1</span> / ${photos.length}</div>
+      </div>
+      <div class="thumbs" id="thumbs">${thumbs}</div>`;
+  }
 
   const specCell = (v, l) => v ? `<div class="spec"><div class="spec-v">${esc(v)}</div><div class="spec-l">${esc(l)}</div></div>` : '';
   const specs = [
@@ -263,7 +315,7 @@ export async function onRequest(context) {
 </div>`;
 
   return new Response(
-    shell(inner, `${p.address} · ${money(p.price)} · Eichler Market`, `${p.address} in ${p.city} — ${money(p.price)}. ${[p.beds && p.beds+' bed', p.baths && p.baths+' bath', p.sqft && Number(p.sqft).toLocaleString()+' sq ft'].filter(Boolean).join(', ')}. Active Eichler listing.`),
+    shell(inner, `${p.address} · ${money(p.price)} · Eichler Market`, `${p.address} in ${p.city} — ${money(p.price)}. ${[p.beds && p.beds+' bed', p.baths && p.baths+' bath', p.sqft && Number(p.sqft).toLocaleString()+' sq ft'].filter(Boolean).join(', ')}. Active Eichler listing.`, (photos && photos.length ? photos[0] : undefined)),
     { headers: { 'Content-Type': 'text/html;charset=UTF-8', 'Cache-Control': 'public, max-age=300' } }
   );
 }
