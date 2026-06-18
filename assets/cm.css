@@ -15,8 +15,8 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 .c-hamburger{display:none}
 .c-nav-drawer{display:none!important}
 
-.c-hero{position:relative;height:100svh;min-height:480px;overflow:hidden;background:var(--n)}
-.c-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;will-change:transform}
+.c-hero{position:relative;height:340px;min-height:340px;overflow:hidden;background:linear-gradient(145deg,#1a1f2e 0%,#0e1118 100%)}
+.c-hero-img{display:none}
 .c-hero-grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,31,46,.12) 0%,rgba(26,31,46,.04) 28%,rgba(26,31,46,.48) 58%,rgba(26,31,46,.94) 100%)}
 .c-hero-body{position:absolute;bottom:0;left:0;right:0;padding:28px 20px calc(28px + var(--safe-b))}
 .c-hero-inner{display:flex;flex-direction:column;gap:18px}
@@ -176,7 +176,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 
 @media(max-width:640px){
   .c-nav{padding:0 14px}
-  .c-hero{height:100svh}
+  .c-hero{height:340px;min-height:340px}
   .c-hero-body{padding:24px 18px calc(24px + var(--safe-b))}
   .c-h1{font-size:clamp(26px,9vw,42px)}
   .c-gallery-bar{padding:8px 14px 6px}
@@ -201,7 +201,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 
 @media(min-width:641px) and (max-width:860px){
   .c-body{padding:0 24px}
-  .c-hero{height:80svh;min-height:440px;max-height:700px}
+  .c-hero{height:360px;min-height:360px;max-height:360px}
   .c-hero-inner{flex-direction:row;align-items:flex-end;gap:24px}
   .c-hero-cta{flex-direction:column;width:240px;flex-shrink:0}
   .c-hero-cta .b-p,.c-hero-cta .b-s{text-align:center}
@@ -222,7 +222,7 @@ html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
   .c-nav-links{display:flex}
   .c-nl{height:56px;padding:0 16px;font-size:13px;font-weight:500;color:var(--g);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s}
   .c-nl:hover,.c-nl.on{color:var(--n);border-bottom-color:var(--n)}
-  .c-hero{height:78vh;min-height:500px;max-height:720px}
+  .c-hero{height:380px;min-height:380px;max-height:380px}
   .c-hero-img{will-change:transform}
   .c-hero-body{will-change:opacity;padding:40px 24px 36px}
   .c-hero-inner{flex-direction:row;align-items:flex-end;gap:24px;max-width:1100px;margin:0 auto}

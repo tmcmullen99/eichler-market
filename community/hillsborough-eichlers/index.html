@@ -12,8 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
 /* ── Community Hero ── */
-.c-hero{height:420px;position:relative;overflow:hidden;margin-top:var(--nav-h,52px);}
-.c-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;}
+.c-hero{height:420px;position:relative;overflow:hidden;margin-top:var(--nav-h,52px);background:linear-gradient(145deg,#1a1f2e 0%,#0e1118 100%)}
+.c-hero-img{display:none}
 .c-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,31,46,.88) 0%,rgba(26,31,46,.3) 50%,transparent 100%);}
 .c-hero-body{position:absolute;bottom:0;left:0;right:0;padding:28px 48px 32px;}
 .c-hero-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;}
@@ -400,7 +400,6 @@ a{text-decoration:none;color:inherit}
 </nav>
 
 <div class="c-hero">
-  <img class="c-hero-img" src="https://drupal-prod.visitcalifornia.com/sites/default/files/styles/opengraph_1200x630/public/vc_ca101_fiveamazingthings_palalto_alto1_videostill_1280x640.jpg.webp?itok=KQIyGvMU" alt="Hillsborough Eichlers" loading="eager" fetchpriority="high">
   <div class="c-hero-grad"></div>
   <div class="c-hero-body">
     <div class="c-hero-inner">
