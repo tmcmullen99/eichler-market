@@ -484,7 +484,7 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <script type="application/json" id="cm-props-data">
-[{"a":"1611 Oakdell Drive","bd":3,"ba":2,"sf":1610,"sp":4200000,"dt":"Mar 2025","lat":37.437651,"lng":-122.189216,"img":"/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg","ppsf":2609,"c":"Menlo Park"},{"a":"1794 Oakdell Drive","bd":4,"ba":2,"sf":2668,"sp":3788000,"dt":"Mar 2019","lat":37.435087,"lng":-122.191922,"img":"/assets/photos/sm/1794-oakdell-drive-menlo-park.jpg","ppsf":1420,"c":"Menlo Park"},{"a":"565 Olive Street","bd":5,"ba":3,"sf":2790,"sp":3335000,"dt":"Jun 2020","lat":37.437447,"lng":-122.188776,"img":"/assets/photos/sm/565-olive-street-menlo-park.jpg","ppsf":1195,"c":"Menlo Park"},{"a":"1631 Magnolia Court","bd":4,"ba":2,"sf":1660,"sp":3300000,"dt":"Jun 2017","lat":37.437142,"lng":-122.189095,"img":"/assets/photos/sm/1631-magnolia-court-menlo-park.jpg","ppsf":1988,"c":"Menlo Park"}]
+[{"a":"1611 Oakdell Drive","bd":3,"ba":2,"sf":1610,"sp":4200000,"dt":"Mar 2025","lat":37.437651,"lng":-122.189216,"img":"/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg","ppsf":2609,"c":"Menlo Park","z":"94025"},{"a":"1794 Oakdell Drive","bd":4,"ba":2,"sf":2668,"sp":3788000,"dt":"Mar 2019","lat":37.435087,"lng":-122.191922,"img":"/assets/photos/sm/1794-oakdell-drive-menlo-park.jpg","ppsf":1420,"c":"Menlo Park","z":"94025"},{"a":"565 Olive Street","bd":5,"ba":3,"sf":2790,"sp":3335000,"dt":"Jun 2020","lat":37.437447,"lng":-122.188776,"img":"/assets/photos/sm/565-olive-street-menlo-park.jpg","ppsf":1195,"c":"Menlo Park","z":"94025"},{"a":"1631 Magnolia Court","bd":4,"ba":2,"sf":1660,"sp":3300000,"dt":"Jun 2017","lat":37.437142,"lng":-122.189095,"img":"/assets/photos/sm/1631-magnolia-court-menlo-park.jpg","ppsf":1988,"c":"Menlo Park","z":"94025"}]
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>setTimeout(function(){if(typeof initCmMap==="function"&&typeof L!=="undefined")initCmMap();if(typeof renderDossier==="function")renderDossier();if(typeof renderCompare==="function")renderCompare();},50);</script>
@@ -718,8 +718,9 @@ function selectHome(el){document.querySelectorAll('.c-u.sel').forEach(function(e
 
 // ── Community Map ─────────────────────────────────────────────────────────────
 function addrSlug(addr,city){return (addr+' '+city).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
-function realtorUrl(addr,city){
-  // City-only Realtor.com detail-search URL. Abbreviates common street suffixes, hyphenates, no ZIP.
+function realtorUrl(addr,city,zip){
+  // Realtor.com detail URL: {Street}_{City}_CA_{ZIP}. Abbreviates street suffixes, hyphenates.
+  // ZIP (reverse-geocoded) yields the resolving slug; the trailing _M property ID is not derivable.
   var s=(addr||'').trim()
     .replace(/\bStreet\b/gi,'St').replace(/\bDrive\b/gi,'Dr').replace(/\bAvenue\b/gi,'Ave')
     .replace(/\bCourt\b/gi,'Ct').replace(/\bRoad\b/gi,'Rd').replace(/\bLane\b/gi,'Ln')
@@ -727,7 +728,8 @@ function realtorUrl(addr,city){
     .replace(/\bTerrace\b/gi,'Ter').replace(/\bCircle\b/gi,'Cir').replace(/\bParkway\b/gi,'Pkwy');
   var street=s.replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
   var c=(city||'').replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
-  return 'https://www.realtor.com/realestateandhomes-detail/'+street+'_'+c+'_CA';
+  var base='https://www.realtor.com/realestateandhomes-detail/'+street+'_'+c+'_CA';
+  return (zip&&/^\d{5}$/.test(zip))?base+'_'+zip:base;
 }
 var CM_PROPS = JSON.parse(document.getElementById('cm-props-data').textContent);
 var cmMap = null, cmMapInitialized = false;
@@ -799,7 +801,7 @@ function renderCmMap(){
           +'<div class="cm-popup-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf</div>'
           +'<div class="cm-popup-price">'+cmFmtP(p.sp)+'</div>'
           +'<div class="cm-popup-ppsf">'+p.dt+'  ·  $'+p.ppsf.toLocaleString()+'/sf</div>'
-          +'<a href="'+realtorUrl(p.a,p.c)+'" target="_blank" rel="noopener nofollow" style="display:block;text-align:center;font-size:11px;font-weight:700;color:var(--n);padding:7px;border:1px solid var(--b);border-radius:6px;text-decoration:none;margin-bottom:6px">Photos &amp; sale history ↗</a>'
+          +'<a href="'+realtorUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow" style="display:block;text-align:center;font-size:11px;font-weight:700;color:var(--n);padding:7px;border:1px solid var(--b);border-radius:6px;text-decoration:none;margin-bottom:6px">Photos &amp; sale history ↗</a>'
           +'<button class="cm-popup-btn" onclick="openOffer(\''+p.a.replace(/'/g,'').replace(/"/g,'')+'\')">'
           +'Make an offer →</button></div>')).openPopup();
     });
@@ -850,7 +852,7 @@ function renderCmList(data){
   if(!sorted.length){el.innerHTML='<div style="padding:20px;color:var(--g);font-size:13px">No homes in this filter.</div>';return;}
   el.innerHTML=sorted.map(function(p){
     var imgH=p.img?'<img src="'+p.img+'" alt="" class="c-u-img" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="c-u-img" style="background:var(--b)"></div>';
-    var ru=realtorUrl(p.a,p.c);
+    var ru=realtorUrl(p.a,p.c,p.z);
     var safeAddr=p.a.replace(/'/g,'').replace(/"/g,'');
     return '<div class="c-u" style="cursor:default">'
       +'<a href="'+ru+'" target="_blank" rel="noopener nofollow" style="text-decoration:none;flex-shrink:0" title="Photos &amp; sale history on Realtor.com">'+imgH+'</a>'
