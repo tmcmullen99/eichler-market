@@ -718,18 +718,13 @@ function selectHome(el){document.querySelectorAll('.c-u.sel').forEach(function(e
 
 // ── Community Map ─────────────────────────────────────────────────────────────
 function addrSlug(addr,city){return (addr+' '+city).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
-function realtorUrl(addr,city,zip){
-  // Realtor.com detail URL: {Street}_{City}_CA_{ZIP}. Abbreviates street suffixes, hyphenates.
-  // ZIP (reverse-geocoded) yields the resolving slug; the trailing _M property ID is not derivable.
-  var s=(addr||'').trim()
-    .replace(/\bStreet\b/gi,'St').replace(/\bDrive\b/gi,'Dr').replace(/\bAvenue\b/gi,'Ave')
-    .replace(/\bCourt\b/gi,'Ct').replace(/\bRoad\b/gi,'Rd').replace(/\bLane\b/gi,'Ln')
-    .replace(/\bPlace\b/gi,'Pl').replace(/\bBoulevard\b/gi,'Blvd').replace(/\bWay\b/gi,'Way')
-    .replace(/\bTerrace\b/gi,'Ter').replace(/\bCircle\b/gi,'Cir').replace(/\bParkway\b/gi,'Pkwy');
-  var street=s.replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
+function zillowUrl(addr,city,zip){
+  // Zillow address-resolution URL: /homes/{Street}-{City}-CA-{ZIP}_rb/
+  // This path resolves a plain address to the property page without Zillow's internal zpid.
+  var street=(addr||'').replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
   var c=(city||'').replace(/[^A-Za-z0-9 ]+/g,'').trim().replace(/\s+/g,'-');
-  var base='https://www.realtor.com/realestateandhomes-detail/'+street+'_'+c+'_CA';
-  return (zip&&/^\d{5}$/.test(zip))?base+'_'+zip:base;
+  var q=street+'-'+c+'-CA'+((zip&&/^\d{5}$/.test(zip))?'-'+zip:'');
+  return 'https://www.zillow.com/homes/'+q+'_rb/';
 }
 var CM_PROPS = JSON.parse(document.getElementById('cm-props-data').textContent);
 var cmMap = null, cmMapInitialized = false;
@@ -801,7 +796,7 @@ function renderCmMap(){
           +'<div class="cm-popup-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf</div>'
           +'<div class="cm-popup-price">'+cmFmtP(p.sp)+'</div>'
           +'<div class="cm-popup-ppsf">'+p.dt+'  ·  $'+p.ppsf.toLocaleString()+'/sf</div>'
-          +'<a href="'+realtorUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow" style="display:block;text-align:center;font-size:11px;font-weight:700;color:var(--n);padding:7px;border:1px solid var(--b);border-radius:6px;text-decoration:none;margin-bottom:6px">Photos &amp; sale history ↗</a>'
+          +'<a href="'+zillowUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow" style="display:block;text-align:center;font-size:11px;font-weight:700;color:var(--n);padding:7px;border:1px solid var(--b);border-radius:6px;text-decoration:none;margin-bottom:6px">Photos &amp; sale history ↗</a>'
           +'<button class="cm-popup-btn" onclick="openOffer(\''+p.a.replace(/'/g,'').replace(/"/g,'')+'\')">'
           +'Make an offer →</button></div>')).openPopup();
     });
@@ -852,10 +847,10 @@ function renderCmList(data){
   if(!sorted.length){el.innerHTML='<div style="padding:20px;color:var(--g);font-size:13px">No homes in this filter.</div>';return;}
   el.innerHTML=sorted.map(function(p){
     var imgH=p.img?'<img src="'+p.img+'" alt="" class="c-u-img" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="c-u-img" style="background:var(--b)"></div>';
-    var ru=realtorUrl(p.a,p.c,p.z);
+    var ru=zillowUrl(p.a,p.c,p.z);
     var safeAddr=p.a.replace(/'/g,'').replace(/"/g,'');
     return '<div class="c-u" style="cursor:default">'
-      +'<a href="'+ru+'" target="_blank" rel="noopener nofollow" style="text-decoration:none;flex-shrink:0" title="Photos &amp; sale history on Realtor.com">'+imgH+'</a>'
+      +'<a href="'+ru+'" target="_blank" rel="noopener nofollow" style="text-decoration:none;flex-shrink:0" title="Photos &amp; sale history on Zillow">'+imgH+'</a>'
       +'<div class="c-u-body">'
         +'<div class="c-u-addr">'+p.a+'</div>'
         +'<div class="c-u-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf · $'+p.ppsf.toLocaleString()+'/sf</div>'
