@@ -424,6 +424,23 @@ a{text-decoration:none;color:inherit}
 .b3-utag{background:#f7f8fa;border:1px solid #e8ebf0;padding:9px 14px;margin-bottom:18px;border-radius:9px}
 .b3-utag-nm{font-size:14px;font-weight:700;color:#1a1f2e;margin-bottom:2px}
 .b3-utag-sub{font-size:11px;color:#6b7280}
+/* Property picker (offer step 0) */
+.b3-pick-intro{font-size:13px;color:#6b7280;line-height:1.55;margin-bottom:14px}
+.b3-pick-search{width:100%;padding:11px 12px 11px 36px;border:1.5px solid #e8ebf0;border-radius:9px;font-size:14px;color:#1a1f2e;font-family:inherit;outline:none;background:#fff url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239aa3b2' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E") 12px center no-repeat}
+.b3-pick-search:focus{border-color:#1a1f2e}
+.b3-pick-list{max-height:300px;overflow-y:auto;margin:12px -4px 4px;padding:0 4px}
+.b3-pick-row{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:#fff;border:1.5px solid #e8ebf0;border-radius:10px;padding:10px 12px;margin-bottom:7px;cursor:pointer;font-family:inherit;transition:border-color .12s,background .12s}
+.b3-pick-row:hover{border-color:#1a1f2e;background:#fafbfc}
+.b3-pick-img{width:50px;height:38px;object-fit:cover;border-radius:6px;flex-shrink:0;background:#eef1f5}
+.b3-pick-body{flex:1;min-width:0}
+.b3-pick-addr{font-size:13px;font-weight:600;color:#1a1f2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b3-pick-meta{font-size:10.5px;color:#6b7280;margin-top:1px}
+.b3-pick-go{font-size:16px;color:#c8a96e;flex-shrink:0}
+.b3-pick-empty{font-size:12px;color:#9aa3b2;text-align:center;padding:18px 8px}
+.b3-pick-or{display:flex;align-items:center;gap:10px;margin:16px 0 12px;color:#9aa3b2;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.b3-pick-or::before,.b3-pick-or::after{content:"";flex:1;height:1px;background:#e8ebf0}
+.b3-pick-manual{background:#f7f8fa;border:1px solid #e8ebf0;border-radius:10px;padding:14px}
+.b3-pick-manual-t{font-size:12px;font-weight:700;color:#1a1f2e;margin-bottom:8px}
 .b3-price-dsp{text-align:center;margin-bottom:22px}
 .b3-price-ey{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6b7280;margin-bottom:6px}
 .b3-price-big{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#1a1f2e;line-height:1}
@@ -861,7 +878,7 @@ a{text-decoration:none;color:inherit}
 </div>
 
 
-<section id="em-services-root" data-city="Menlo Park"></section>
+<section id="em-services-root" data-city="Palo Alto" data-county="Santa Clara"></section>
 <script src="/assets/em-services.js" defer></script>
 <footer style="background:var(--n);padding:22px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
   <div style="font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:#fff">Eichler Market</div>
@@ -1366,20 +1383,59 @@ function openMmsHero(){
 
 
 // B3 Offer Flow
-var B3={offer:0,lo:0,hi:0,pa:null,ac:null,cp:null,lastSold:0,bench:0,addr:'',sf:0};
+var B3={offer:0,lo:0,hi:0,pa:null,ac:null,cp:null,lastSold:0,bench:0,addr:'',sf:0,picked:false,manual:false};
 var TRACT_META={"name": "Green Gables", "recent_ppsf": 2094, "recent_dt": "Apr 2026", "recent_addr": "3862 Mumford Place", "avg_ppsf": 1580, "median": 2965000};
 function fP2(n){if(!n)return'—';if(n>=1e6)return'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';return'$'+Math.round(n/1000)+'K';}
 function openOffer(addr){
+  // Generic entry (no address) -> show the property picker first.
+  // Per-property entry (address passed) -> go straight to pricing on that home.
+  if(!addr){ b3OpenPicker(); return; }
+  b3OfferOn(addr);
+}
+function b3OpenPicker(){
+  B3.picked=false;
+  document.getElementById('b3-bg').classList.add('open');
+  var q=document.getElementById('b3-pick-q');if(q)q.value='';
+  var ma=document.getElementById('b3-pick-manual-addr');if(ma)ma.value='';
+  var mb=document.getElementById('b3-pick-manual-btn');if(mb)mb.disabled=true;
+  b3PickFilter('');
+  b3Go(0);
+}
+function b3PickFilter(q){
+  var host=document.getElementById('b3-pick-list');if(!host)return;
+  var props=(CM_PROPS||[]).slice();
+  q=(q||'').trim().toLowerCase();
+  var list=q?props.filter(function(p){return (p.a||'').toLowerCase().indexOf(q)>-1;}):props;
+  // most recent first
+  list.sort(function(a,b){return (_vizParseDt(b.dt)||0)-(_vizParseDt(a.dt)||0);});
+  if(!list.length){host.innerHTML='<div class="b3-pick-empty">No recorded sales match &#8220;'+(q||'')+'&#8221;. Use the address box below.</div>';return;}
+  host.innerHTML=list.slice(0,40).map(function(p){
+    var img=p.img?'<img class="b3-pick-img" src="'+p.img+'" alt="" onerror="this.style.visibility=\'hidden\'">':'<div class="b3-pick-img"></div>';
+    var sa=(p.a||'').replace(/'/g,'').replace(/"/g,'');
+    return '<button class="b3-pick-row" onclick="b3PickSelect(\''+sa+'\')">'+img
+      +'<div class="b3-pick-body"><div class="b3-pick-addr">'+p.a+'</div>'
+      +'<div class="b3-pick-meta">'+p.bd+'BR &middot; '+p.ba+'BA &middot; '+(p.sf?p.sf.toLocaleString()+' sf':'&#8212;')+' &middot; last sold '+cmFmtP(p.sp)+' ('+(p.dt||'')+')</div></div>'
+      +'<span class="b3-pick-go">&#8594;</span></button>';
+  }).join('');
+}
+function b3PickSelect(addr){B3.picked=true;b3OfferOn(addr);}
+function b3PickManualVal(){var v=document.getElementById('b3-pick-manual-addr').value.trim();document.getElementById('b3-pick-manual-btn').disabled=v.length<4;}
+function b3PickManual(){
+  var v=document.getElementById('b3-pick-manual-addr').value.trim();if(v.length<4)return;
+  B3.picked=true;b3OfferOn(v,true);
+}
+function b3OfferOn(addr,isManual){
   var props=CM_PROPS,meta=TRACT_META;
-  var p=addr?props.find(function(x){return x.a===addr;}):null;
+  var p=(!isManual&&addr)?props.find(function(x){return x.a===addr;}):null;
   var rPpsf=meta.recent_ppsf||meta.avg_ppsf||0;
-  if(p){B3.addr=p.a;B3.sf=p.sf||1500;B3.lastSold=p.sp||meta.median||0;
+  if(p){B3.addr=p.a;B3.sf=p.sf||1500;B3.lastSold=p.sp||meta.median||0;B3.manual=false;
     document.getElementById('b3-addr').textContent=p.a;
     document.getElementById('b3-specs').textContent=p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf';}
-  else{var avgSf=props.reduce(function(s,x){return s+(x.sf||0);},0)/(props.length||1);
-    B3.addr='Any home in '+meta.name;B3.sf=Math.round(avgSf)||1500;B3.lastSold=meta.median||0;
-    document.getElementById('b3-addr').textContent=B3.addr;
-    document.getElementById('b3-specs').textContent='Submit an offer on any home in this neighborhood';}
+  else{// manual / off-market address — no sale record, price off the neighborhood benchmark
+    var avgSf=props.reduce(function(s,x){return s+(x.sf||0);},0)/(props.length||1);
+    B3.addr=addr;B3.sf=Math.round(avgSf)||1500;B3.lastSold=0;B3.manual=true;
+    document.getElementById('b3-addr').textContent=addr;
+    document.getElementById('b3-specs').textContent='Off-market / not in recorded sales · priced off '+meta.name+' benchmark';}
   var benchSp=Math.round(rPpsf*B3.sf)||B3.lastSold||1500000;B3.bench=benchSp;
   var refSp=B3.lastSold||benchSp;
   var lo=Math.round(Math.min(refSp,benchSp)*0.80/5000)*5000;
@@ -1400,7 +1456,9 @@ function openOffer(addr){
   if(c2l)c2l.textContent=meta.name+(meta.recent_addr?' — '+meta.recent_addr.split(' ').slice(0,2).join(' '):'');
   document.getElementById('b3-c2v').textContent=fP2(benchSp);
   document.getElementById('b3-c2s').textContent='$'+rPpsf.toLocaleString()+'/sf · '+(meta.recent_dt||'');
-  b3Slide(benchSp);b3Go(1);document.getElementById('b3-bg').classList.add('open');
+  b3Slide(benchSp);b3Go(1);
+  var ch=document.getElementById('b3-change-home');if(ch)ch.style.display=B3.picked?'block':'none';
+  document.getElementById('b3-bg').classList.add('open');
 }
 function b3UpdTrack(sl){var pct=((sl.value-sl.min)/(sl.max-sl.min)*100).toFixed(1);sl.style.background='linear-gradient(to right,#1a1f2e 0%,#1a1f2e '+pct+'%,#e8ebf0 '+pct+'%,#e8ebf0 100%)';}
 function b3Slide(v){B3.offer=parseInt(v);var sl=document.getElementById('b3-sl');if(sl){sl.value=v;b3UpdTrack(sl);}
@@ -1410,10 +1468,13 @@ function b3Slide(v){B3.offer=parseInt(v);var sl=document.getElementById('b3-sl')
   if(de){de.textContent=Math.abs(diff)<2?'At market benchmark':sign+diff.toFixed(1)+'% vs. last sold';de.className='b3-delta '+(diff>2?'b3d-above':diff<-2?'b3d-below':'b3d-at');}
 }
 function b3Go(n){
-  ['b3s1','b3s2','b3s3'].forEach(function(id,i){var el=document.getElementById(id);if(el)el.style.display=(i+1===n)?'block':'none';});
-  var labs=['Step 1 of 3','Step 2 of 3','Done'];var ttls=['Set your offer price','Your details','Offer submitted'];
-  document.getElementById('b3-step-lbl').textContent=labs[n-1]||'';document.getElementById('b3-title').textContent=ttls[n-1]||'';
-  ['b3p0','b3p1','b3p2'].forEach(function(id,i){var el=document.getElementById(id);if(!el)return;el.style.background=i<n?'rgba(255,255,255,.6)':i===n-1?'#fff':'rgba(255,255,255,.18)';});
+  ['b3s0','b3s1','b3s2','b3s3'].forEach(function(id,i){var el=document.getElementById(id);if(el)el.style.display=(i===n)?'block':'none';});
+  var labs={0:'Step 1 · Select home',1:'Step 2 · Your price',2:'Step 3 · Your details',3:'Done'};
+  var ttls={0:'Which home is this offer for?',1:'Set your offer price',2:'Your details',3:'Offer submitted'};
+  document.getElementById('b3-step-lbl').textContent=labs[n]||'';document.getElementById('b3-title').textContent=ttls[n]||'';
+  ['b3p0','b3p1','b3p2'].forEach(function(id,i){var el=document.getElementById(id);if(!el)return;
+    // step 0 = picker (no bar lit), steps 1-3 light progressively
+    var lit=(n>=1 && i<=n-1);el.style.background=lit?(i===n-1?'#fff':'rgba(255,255,255,.6)'):'rgba(255,255,255,.18)';});
   if(n===2){var oa=document.getElementById('b3-ob-addr'),op=document.getElementById('b3-ob-price');if(oa)oa.textContent=B3.addr;if(op)op.textContent=fP2(B3.offer);b3Val();}
 }
 function b3PA(v){B3.pa=v;b3Tgl('pa-y',v===true);b3Tgl('pa-n',v===false);document.getElementById('b3-cash-wrap').style.display=v?'none':'block';if(v)B3.ac=null;b3Val();}
@@ -1487,6 +1548,17 @@ function addNext(){
       <div class="b3-hd-top"><div><div class="b3-hd-ey" id="b3-step-lbl">Step 1 of 3</div><div class="b3-hd-title" id="b3-title">Set your offer price</div></div><button class="b3-x" onclick="b3Close()">&#x2715;</button></div>
       <div class="b3-prog"><div class="b3-pb" id="b3p0"></div><div class="b3-pb" id="b3p1"></div><div class="b3-pb" id="b3p2"></div></div>
     </div>
+<div class="b3-bd" id="b3s0" style="display:none">
+      <div class="b3-pick-intro">An offer (Letter of Intent) is written on a specific home. Pick a property from this tract&#8217;s recorded sales, or enter the exact address of the home you want to make an offer on.</div>
+      <input type="text" class="b3-pick-search" id="b3-pick-q" placeholder="Search by street name or number&#8230;" oninput="b3PickFilter(this.value)">
+      <div class="b3-pick-list" id="b3-pick-list"></div>
+      <div class="b3-pick-or">or</div>
+      <div class="b3-pick-manual">
+        <div class="b3-pick-manual-t">Don&#8217;t see it? Enter the address</div>
+        <input class="b3-inp" id="b3-pick-manual-addr" placeholder="e.g. 240 Parkside Drive" style="margin-bottom:10px" oninput="b3PickManualVal()">
+        <button class="b3-btn" id="b3-pick-manual-btn" onclick="b3PickManual()" disabled style="margin-bottom:0">Write an offer on this address &#8594;</button>
+      </div>
+    </div>
     <div class="b3-bd" id="b3s1">
       <div class="b3-utag"><div class="b3-utag-nm" id="b3-addr"></div><div class="b3-utag-sub" id="b3-specs"></div></div>
       <div class="b3-price-dsp"><div class="b3-price-ey">Your offer</div><div class="b3-price-big" id="b3-price">&#8212;</div><div class="b3-price-sf" id="b3-ppsf"></div><div class="b3-delta b3d-at" id="b3-delta">at market</div></div>
@@ -1494,6 +1566,7 @@ function addNext(){
       <div class="b3-markers"><div class="b3-marker" id="b3-lm"><div class="b3-ml" id="b3-lm-l">Last sold</div><div class="b3-mt"></div><div class="b3-mv" id="b3-lm-v"></div></div><div class="b3-marker b3-bm-mk" id="b3-bm"><div class="b3-ml" id="b3-bm-l">Neighborhood</div><div class="b3-mt"></div><div class="b3-mv" id="b3-bm-v"></div></div></div>
       <div class="b3-bench-grid"><div class="b3-bench b3-sel"><div class="b3-bl">Last sold (this home)</div><div class="b3-bv" id="b3-c1v">&#8212;</div><div class="b3-bs" id="b3-c1s"></div></div><div class="b3-bench b3-sel"><div class="b3-bl" id="b3-c2l">Neighborhood &#8212; most recent</div><div class="b3-bv" id="b3-c2v">&#8212;</div><div class="b3-bs" id="b3-c2s"></div></div></div>
       <button class="b3-btn" onclick="b3Go(2)">Confirm offer price &#8594;</button>
+      <button id="b3-change-home" style="display:none;background:none;border:none;width:100%;font-size:12px;color:#6b7280;cursor:pointer;text-decoration:underline;font-family:inherit;padding:2px" onclick="b3OpenPicker()">&#8592; Choose a different home</button>
     </div>
     <div class="b3-bd" id="b3s2" style="display:none">
       <div class="b3-offer-bar"><span class="b3-ob-lbl">Offer on <strong style="color:#fff" id="b3-ob-addr"></strong></span><span class="b3-ob-price" id="b3-ob-price">&#8212;</span></div>
