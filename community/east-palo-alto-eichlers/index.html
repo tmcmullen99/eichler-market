@@ -173,12 +173,24 @@ a{text-decoration:none;color:inherit}
 .cm-viz-toggle{display:inline-flex;background:var(--bg);border:1px solid var(--b);border-radius:9px;padding:3px;gap:2px}
 .cm-vt{font-size:11px;font-weight:600;color:var(--g);background:none;border:none;padding:7px 12px;border-radius:7px;cursor:pointer;font-family:inherit;transition:.15s}
 .cm-vt.on{background:var(--n);color:#fff}
-.cm-chart-wrap{border:1px solid var(--b);border-radius:12px;background:var(--w);padding:16px 14px 10px;overflow:hidden}
+.cm-chart-wrap{border:1px solid var(--b);border-radius:12px;background:var(--w);padding:16px 14px 10px;overflow:hidden;position:relative}
 .cm-chart svg{display:block;width:100%;height:auto}
 .cm-chart-empty{font-size:12px;color:var(--g);text-align:center;padding:30px 10px;line-height:1.6}
 .cm-dot{cursor:pointer;transition:r .12s}
 .cm-dot:hover{r:7}
-.cm-chart-tip{font-size:10px;fill:var(--g)}
+.cm-dot.cm-dot-on{r:7.5}
+/* Chart hover card */
+.cm-htip{position:absolute;z-index:40;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;width:194px;background:#1a1f2e;border:1px solid rgba(200,169,110,.35);border-radius:11px;box-shadow:0 12px 32px rgba(14,17,24,.4);overflow:hidden}
+.cm-htip.on{opacity:1;transform:translateY(0)}
+.cm-htip-img{width:100%;height:96px;object-fit:cover;display:block;background:#0e1118}
+.cm-htip-body{padding:11px 13px 12px}
+.cm-htip-addr{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:3px}
+.cm-htip-meta{font-size:10.5px;color:rgba(145,161,186,.78);margin-bottom:9px}
+.cm-htip-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1)}
+.cm-htip-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
+.cm-htip-ppsf{font-size:11px;color:var(--warm);font-weight:600}
+.cm-htip-date{font-size:10px;color:rgba(145,161,186,.6);margin-top:5px}
+.cm-htip-link{display:block;text-align:center;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--warm);background:rgba(200,169,110,.12);border-radius:6px;padding:6px;margin-top:9px;text-decoration:none;pointer-events:auto}
 .cm-axis{stroke:var(--b);stroke-width:1}
 .cm-axis-lbl{font-size:9px;fill:var(--g);font-weight:600}
 .cm-trend{stroke:var(--warm);stroke-width:1.5;stroke-dasharray:4 3;fill:none}
@@ -1170,9 +1182,11 @@ function renderViz(){
         +'<button class="cm-vt'+(_vizMode==="price"?" on":"")+'" onclick="setViz(\'price\')">Price by year</button>'
       +'</div>'
     +'</div>'
-    +'<div class="cm-chart-wrap"><div class="cm-chart" id="cm-chart"></div></div>'
-    +'<div class="cm-tbl-wrap" id="cm-tbl-wrap"></div>';
-  drawChart(); drawTable();
+    +'<div class="cm-chart-wrap"><div class="cm-chart" id="cm-chart"></div>'
+      +'<div class="cm-htip" id="cm-htip"></div>'
+      +'<div style="font-size:10.5px;color:var(--g);text-align:center;margin-top:8px">Hover a point to see the home · '+d.length+' recorded sale'+(d.length===1?'':'s')+'</div>'
+    +'</div>';
+  drawChart();
 }
 function setViz(m){_vizMode=m;renderViz();}
 function drawChart(){
@@ -1197,7 +1211,7 @@ function drawChart(){
     svg+='<path class="cm-trend" d="M'+X(xmin)+' '+Y(inter)+' L'+X(xmax)+' '+Y(slope+inter)+'"/>';
     // x labels (year span)
     svg+='<text class="cm-axis-lbl" x="'+padL+'" y="'+(H-8)+'">'+new Date(xmin).getFullYear()+'</text><text class="cm-axis-lbl" x="'+(W-padR)+'" y="'+(H-8)+'" text-anchor="end">'+new Date(xmax).getFullYear()+'</text>';
-    d.forEach(function(x){var cx=X(x.d.getTime()),cy=Y(x.p.ppsf);svg+='<circle class="cm-dot" cx="'+cx+'" cy="'+cy+'" r="5" fill="#c8a96e" stroke="#1a1f2e" stroke-width="1"><title>'+x.p.a+' · '+x.p.dt+' · $'+x.p.ppsf.toLocaleString()+'/sf</title></circle>';});
+    d.forEach(function(x,i){var cx=X(x.d.getTime()),cy=Y(x.p.ppsf);svg+='<circle class="cm-dot" data-i="'+i+'" cx="'+cx+'" cy="'+cy+'" r="5" fill="#c8a96e" stroke="#1a1f2e" stroke-width="1"/>';});
   } else {
     // Price by year bars (median per year)
     var byYr={};d.forEach(function(x){var y=x.d.getFullYear();(byYr[y]=byYr[y]||[]).push(x.p.sp);});
@@ -1207,42 +1221,43 @@ function drawChart(){
     yrs.forEach(function(y,i){var bh=(vals[i]/ymax)*ih,bx=padL+i*gap+(gap-bw)/2,by=padT+ih-bh;svg+='<rect class="cm-barv" x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" rx="3"><title>'+y+' · median '+cmFmtP(vals[i])+' ('+byYr[y].length+' sale'+(byYr[y].length>1?'s':'')+')</title></rect><text class="cm-axis-lbl" x="'+(bx+bw/2)+'" y="'+(H-8)+'" text-anchor="middle">'+y+'</text>';});
   }
   svg+='</svg>';host.innerHTML=svg;
+  _vizData=d;
+  bindChartHover(host);
 }
-function setTblSort(k){if(_tblSort.k===k)_tblSort.dir*=-1;else{_tblSort={k:k,dir:(k==='dt'?-1:1)};}drawTable();}
-function drawTable(){
-  var host=document.getElementById('cm-tbl-wrap');if(!host)return;
-  var d=(CM_PROPS||[]).slice();
-  var k=_tblSort.k,dir=_tblSort.dir;
-  d.sort(function(a,b){
-    var va,vb;
-    if(k==='dt'){va=_vizParseDt(a.dt)||0;vb=_vizParseDt(b.dt)||0;va=+va;vb=+vb;}
-    else if(k==='a'){va=(a.a||'').toLowerCase();vb=(b.a||'').toLowerCase();return va<vb?-dir:va>vb?dir:0;}
-    else {va=a[k]||0;vb=b[k]||0;}
-    return (va-vb)*dir;
+var _vizData=[];
+function bindChartHover(host){
+  var tip=document.getElementById('cm-htip');if(!tip)return;
+  var wrap=host.closest('.cm-chart-wrap');
+  var dots=host.querySelectorAll('.cm-dot');
+  var active=null;
+  function show(dot){
+    var i=parseInt(dot.getAttribute('data-i'),10);var x=_vizData[i];if(!x)return;var p=x.p;
+    if(active)active.classList.remove('cm-dot-on');dot.classList.add('cm-dot-on');active=dot;
+    var img=p.img?'<img class="cm-htip-img" src="'+p.img+'" alt="" onerror="this.style.display=\'none\'">':'';
+    tip.innerHTML=img+'<div class="cm-htip-body">'
+      +'<div class="cm-htip-addr">'+p.a+'</div>'
+      +'<div class="cm-htip-meta">'+p.bd+' BR · '+p.ba+' BA · '+(p.sf?p.sf.toLocaleString()+' sf':'—')+'</div>'
+      +'<div class="cm-htip-row"><span class="cm-htip-price">'+cmFmtP(p.sp)+'</span><span class="cm-htip-ppsf">$'+(p.ppsf?p.ppsf.toLocaleString():'—')+'/sf</span></div>'
+      +'<div class="cm-htip-date">Sold '+p.dt+'</div>'
+      +'<a class="cm-htip-link" href="'+zillowUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow">Photos &amp; history ↗</a>'
+      +'</div>';
+    // position: dot center relative to wrap, place above, clamp to edges
+    var wr=wrap.getBoundingClientRect(),dr=dot.getBoundingClientRect();
+    var cx=dr.left-wr.left+dr.width/2, cy=dr.top-wr.top;
+    tip.classList.add('on');
+    var tw=tip.offsetWidth,th=tip.offsetHeight;
+    var left=cx-tw/2; left=Math.max(6,Math.min(left,wr.width-tw-6));
+    var top=cy-th-12; if(top<6)top=cy+18; // flip below if no room above
+    tip.style.left=left+'px';tip.style.top=top+'px';
+  }
+  function hide(){tip.classList.remove('on');if(active){active.classList.remove('cm-dot-on');active=null;}}
+  dots.forEach(function(dot){
+    dot.addEventListener('mouseenter',function(){show(dot);});
+    dot.addEventListener('click',function(e){e.stopPropagation();show(dot);});
   });
-  function thi(key){return (_tblSort.k===key?(_tblSort.dir>0?'▲':'▼'):'↕');}
-  function thc(key){return _tblSort.k===key?' on':'';}
-  var html='<table class="cm-tbl"><thead><tr>'
-    +'<th class="'+thc('a').trim()+'" onclick="setTblSort(\'a\')">Address<span class="cm-sort-i">'+thi('a')+'</span></th>'
-    +'<th onclick="setTblSort(\'bd\')" class="'+thc('bd').trim()+'">Beds<span class="cm-sort-i">'+thi('bd')+'</span></th>'
-    +'<th onclick="setTblSort(\'sf\')" class="'+thc('sf').trim()+'">Size<span class="cm-sort-i">'+thi('sf')+'</span></th>'
-    +'<th onclick="setTblSort(\'sp\')" class="'+thc('sp').trim()+'">Sold<span class="cm-sort-i">'+thi('sp')+'</span></th>'
-    +'<th onclick="setTblSort(\'ppsf\')" class="'+thc('ppsf').trim()+'">$/sf<span class="cm-sort-i">'+thi('ppsf')+'</span></th>'
-    +'<th onclick="setTblSort(\'dt\')" class="'+thc('dt').trim()+'">Date<span class="cm-sort-i">'+thi('dt')+'</span></th>'
-    +'<th></th></tr></thead><tbody>';
-  d.forEach(function(p){
-    html+='<tr>'
-      +'<td class="cm-td-addr">'+p.a+'</td>'
-      +'<td class="cm-tbl-num">'+p.bd+'BR/'+p.ba+'BA</td>'
-      +'<td class="cm-tbl-num">'+(p.sf?p.sf.toLocaleString()+' sf':'—')+'</td>'
-      +'<td class="cm-tbl-num">'+cmFmtP(p.sp)+'</td>'
-      +'<td class="cm-tbl-num">$'+(p.ppsf?p.ppsf.toLocaleString():'—')+'</td>'
-      +'<td class="cm-tbl-num">'+p.dt+'</td>'
-      +'<td><a class="cm-td-z" href="'+zillowUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow">Photos ↗</a></td>'
-    +'</tr>';
-  });
-  html+='</tbody></table>';
-  host.innerHTML=html;
+  wrap.addEventListener('mouseleave',hide);
+  // tap-outside dismiss on touch
+  document.addEventListener('click',function(e){if(!wrap.contains(e.target))hide();},{passive:true});
 }
 
 
