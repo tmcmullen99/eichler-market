@@ -247,6 +247,14 @@ a{text-decoration:none;color:inherit}
 .intel-traj-bookends b{color:var(--warm);font-weight:700;margin-left:7px;font-family:'Playfair Display',serif;font-style:italic;text-transform:none;letter-spacing:0;font-size:15px;}
 .intel-traj-delta{font-size:12px;font-weight:700;}
 .intel-traj-delta.up{color:#3B6D11;} .intel-traj-delta.down{color:#b4451f;}
+.intel-traj-wrap .intel-traj-svg{cursor:crosshair;}
+.intel-traj-tip{position:absolute;top:0;left:0;transform:translate(-50%,-118%);background:#1a1f2e;color:#fff;border-radius:7px;padding:6px 9px;font-size:11px;line-height:1.25;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .12s ease;box-shadow:0 4px 14px rgba(14,17,24,.28);z-index:5;}
+.intel-traj-tip.on{opacity:1;}
+.intel-traj-dot{position:absolute;top:0;left:0;width:9px;height:9px;border-radius:50%;background:#c8a96e;border:2px solid #fff;box-shadow:0 1px 4px rgba(14,17,24,.3);transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity .12s ease;z-index:4;}
+.intel-traj-dot.on{opacity:1;}
+.intel-traj-tip .q{color:#91a1ba;letter-spacing:.04em;text-transform:uppercase;font-size:9px;display:block;margin-bottom:1px;}
+.intel-traj-tip .v{font-family:'Playfair Display',serif;font-style:italic;color:#c8a96e;font-weight:700;font-size:15px;}
+.intel-traj-tip::after{content:'';position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid #1a1f2e;}
 
 /* stat strip */
 .intel-stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:24px;}
@@ -858,7 +866,7 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
           <span class="intel-traj-delta" id="intel-traj-delta"></span>
         </div>
         <p class="intel-card-sub">Median price per square foot, by quarter, across all tracts.</p>
-        <div class="intel-traj-wrap"><svg class="intel-traj-svg" id="intel-traj-svg" viewBox="0 0 520 200" preserveAspectRatio="none"></svg></div>
+        <div class="intel-traj-wrap"><svg class="intel-traj-svg" id="intel-traj-svg" viewBox="0 0 520 200" preserveAspectRatio="none"></svg><div class="intel-traj-dot" id="intel-traj-hot"></div><div class="intel-traj-tip" id="intel-traj-tip"></div></div>
         <div class="intel-traj-bookends">
           <span id="intel-traj-start">—</span>
           <span id="intel-traj-end">—</span>
@@ -2263,7 +2271,8 @@ function goSubmitLOI() {
         '<defs><linearGradient id="trajGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(200,169,110,0.22)"/><stop offset="100%" stop-color="rgba(200,169,110,0.02)"/></linearGradient></defs>'+
         '<path d="'+areaD+'" fill="url(#trajGrad)"/>'+
         '<path d="'+lineD+'" fill="none" stroke="#c8a96e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
-        dots;
+        dots+
+        '<line id="intel-traj-guide" x1="0" y1="'+padT+'" x2="0" y2="'+(H-padB)+'" stroke="#c8a96e" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>';
       // bookends + delta
       function qLabel(iso){ var d=new Date(iso+'T00:00:00'); return 'Q'+(Math.floor(d.getMonth()/3)+1)+' '+d.getFullYear(); }
       var first=rows[0], last=rows[n-1];
@@ -2273,6 +2282,35 @@ function goSubmitLOI() {
       var pct=Math.round((last.median_psf-first.median_psf)/first.median_psf*100);
       var dEl=document.getElementById('intel-traj-delta');
       if(dEl){ dEl.className='intel-traj-delta '+(pct>=0?'up':'down'); dEl.textContent=(pct>=0?'▲ +':'▼ ')+pct+'% over '+n+' quarters'; }
+
+      // ── hover interactivity ──
+      var tip=document.getElementById('intel-traj-tip');
+      var guide=document.getElementById('intel-traj-guide');
+      var hot=document.getElementById('intel-traj-hot');
+      function showAt(i){
+        var q=rows[i], vx=X(i), vy=Y(q.median_psf);
+        guide.setAttribute('x1',vx); guide.setAttribute('x2',vx); guide.setAttribute('opacity','0.55');
+        // viewBox units -> wrap pixels (preserveAspectRatio="none": axes scale independently)
+        var rect=svg.getBoundingClientRect();
+        var px=(vx/W)*rect.width, py=(vy/H)*rect.height;
+        hot.style.left=px+'px'; hot.style.top=py+'px'; hot.classList.add('on');
+        tip.style.left=px+'px'; tip.style.top=py+'px';
+        tip.innerHTML='<span class="q">'+qLabel(q.quarter_start)+'</span><span class="v">$'+iNum(q.median_psf)+'/sf</span>';
+        tip.classList.add('on');
+      }
+      function hide(){ tip.classList.remove('on'); hot.classList.remove('on'); guide.setAttribute('opacity','0'); }
+      function nearest(clientX){
+        var rect=svg.getBoundingClientRect();
+        var vx=((clientX-rect.left)/rect.width)*W;       // px -> viewBox X
+        var i=Math.round(((vx-padL)/(W-padL-padR))*(n-1));
+        return Math.max(0,Math.min(n-1,i));
+      }
+      svg.addEventListener('mousemove',function(ev){ showAt(nearest(ev.clientX)); });
+      svg.addEventListener('mouseleave',hide);
+      // touch: tap/drag to scrub on mobile
+      svg.addEventListener('touchstart',function(ev){ if(ev.touches[0]) showAt(nearest(ev.touches[0].clientX)); },{passive:true});
+      svg.addEventListener('touchmove',function(ev){ if(ev.touches[0]) showAt(nearest(ev.touches[0].clientX)); },{passive:true});
+      svg.addEventListener('touchend',hide);
     }).catch(function(){});
   }
 
