@@ -211,58 +211,98 @@ a{text-decoration:none;color:inherit}
 .hrc-watcher-badge{position:absolute;bottom:8px;right:8px;background:rgba(10,14,24,.75);color:rgba(255,255,255,.7);font-size:9px;font-weight:600;padding:3px 8px;border-radius:100px;display:flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.1);}
 .hrc-watch-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:livePulse 2s infinite;flex-shrink:0;}
 
-/* ── NEIGHBORHOOD INTELLIGENCE SECTION ── */
+/* ── NEIGHBORHOOD INTELLIGENCE SECTION (rebuilt: live + data-driven) ── */
 .intel-section{background:#fff;padding:72px 0 64px;border-top:1px solid #edf0f4;}
 .intel-inner{max-width:1260px;margin:0 auto;padding:0 64px;}
-.intel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;margin-bottom:40px;}
+.intel-header{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;margin-bottom:36px;}
 .intel-eyebrow{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--warm);margin-bottom:8px;}
-.intel-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,40px);font-weight:700;color:var(--n);margin-bottom:10px;}
-.intel-sub{font-size:14px;color:var(--g);line-height:1.7;max-width:420px;}
-.intel-actions{display:flex;gap:6px;flex-shrink:0;margin-top:6px;}
-.intel-tab{background:none;border:1.5px solid var(--b);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:600;color:var(--g);cursor:pointer;font-family:inherit;transition:all .15s;}
-.intel-tab.on{background:var(--n);color:#fff;border-color:var(--n);}
-.intel-velocity-grid{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start;}
-.intel-vel-chart{background:#f7f8fa;border:1px solid var(--b);border-radius:14px;padding:24px 24px 20px;}
-.intel-vel-label-row{display:flex;justify-content:space-between;margin-bottom:16px;}
+.intel-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,40px);font-weight:700;color:var(--n);margin-bottom:10px;line-height:1.08;}
+.intel-title em{font-style:italic;color:var(--warm);}
+.intel-sub{font-size:14px;color:var(--g);line-height:1.7;max-width:440px;}
+
+/* top showcase: live feed + trajectory */
+.intel-showcase{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;margin-bottom:24px;}
+.intel-card{background:#fbfcfd;border:1px solid var(--b);border-radius:16px;padding:24px 26px;display:flex;flex-direction:column;}
+.intel-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.intel-card-eyebrow{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--warm);display:flex;align-items:center;gap:8px;}
+.intel-live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.6);animation:intelPulse 2s infinite;}
+@keyframes intelPulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.55)}70%{box-shadow:0 0 0 7px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+.intel-card-sub{font-size:12.5px;color:var(--g);margin:2px 0 16px;line-height:1.5;}
+
+/* live feed */
+.intel-feed{display:flex;flex-direction:column;flex:1 1 auto;}
+.intel-feed-item{display:grid;grid-template-columns:1fr auto;gap:14px;padding:12px 0;border-bottom:1px solid var(--b);align-items:baseline;text-decoration:none;color:inherit;transition:padding-left .12s;}
+.intel-feed-item:hover{padding-left:5px;}
+.intel-feed-item:last-child{border-bottom:0;}
+.intel-feed-addr{font-size:14.5px;color:var(--n);font-weight:600;letter-spacing:-.005em;}
+.intel-feed-meta{font-size:11px;color:var(--g);margin-top:4px;letter-spacing:.01em;}
+.intel-feed-price{font-weight:700;font-size:14.5px;color:var(--warm);text-align:right;letter-spacing:-.005em;}
+.intel-feed-date{font-size:10.5px;color:var(--g);text-align:right;margin-top:3px;}
+.intel-loading{text-align:center;padding:48px 20px;font-style:italic;color:var(--g);font-size:13px;}
+
+/* trajectory chart */
+.intel-traj-wrap{position:relative;flex:1 1 auto;min-height:200px;margin:4px 0 6px;}
+.intel-traj-svg{width:100%;height:200px;display:block;overflow:visible;}
+.intel-traj-bookends{display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid var(--b);font-size:11px;color:var(--g);letter-spacing:.04em;text-transform:uppercase;}
+.intel-traj-bookends b{color:var(--warm);font-weight:700;margin-left:7px;font-family:'Playfair Display',serif;font-style:italic;text-transform:none;letter-spacing:0;font-size:15px;}
+.intel-traj-delta{font-size:12px;font-weight:700;}
+.intel-traj-delta.up{color:#3B6D11;} .intel-traj-delta.down{color:#b4451f;}
+
+/* stat strip */
+.intel-stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--b);border:1px solid var(--b);border-radius:14px;overflow:hidden;margin-bottom:24px;}
+.intel-stat-cell{background:#fff;padding:20px 22px;}
+.intel-stat-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--n);line-height:1;margin-bottom:6px;}
+.intel-stat-lbl{font-size:11px;color:var(--g);line-height:1.4;}
+
+/* leaderboard + side panels */
+.intel-grid2{display:grid;grid-template-columns:1.35fr .65fr;gap:24px;align-items:start;}
+.intel-board{background:#fbfcfd;border:1px solid var(--b);border-radius:16px;padding:22px 26px 16px;}
+.intel-board-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+.intel-board-title{font-size:15px;font-weight:700;color:var(--n);}
+.intel-board-toggle{display:flex;gap:4px;}
+.intel-bt{background:none;border:1.5px solid var(--b);border-radius:100px;padding:5px 13px;font-size:11px;font-weight:600;color:var(--g);cursor:pointer;font-family:inherit;transition:all .15s;}
+.intel-bt.on{background:var(--n);color:#fff;border-color:var(--n);}
+.intel-vel-label-row{display:flex;justify-content:space-between;margin-bottom:12px;}
 .intel-vel-col-l,.intel-vel-col-r{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);}
-.intel-vel-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer;}
-.intel-vel-row:hover .intel-vel-name{color:var(--n);}
-.intel-vel-name{font-size:13px;font-weight:600;color:#374151;width:180px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.intel-vel-bar-wrap{flex:1;background:#e8ebf0;border-radius:4px;height:8px;overflow:hidden;}
-.intel-vel-bar{height:8px;border-radius:4px;background:var(--n);transition:width .4s ease;}
-.intel-vel-bar.hot{background:#c8a96e;}
-.intel-vel-val{font-size:12px;font-weight:700;color:var(--n);width:68px;text-align:right;flex-shrink:0;}
-.intel-vel-cards{display:flex;flex-direction:column;gap:12px;}
-.intel-signal-card{background:#f7f8fa;border:1px solid var(--b);border-radius:12px;padding:16px 18px;}
-.intel-signal-card-hot{background:#fffbf5;border-color:rgba(200,169,110,.3);}
-.isc-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px;}
-.isc-tag-hot{color:var(--warm);}
-.isc-tag-velocity{color:#185FA5;}
-.isc-tag-opp{color:#3B6D11;}
-.isc-title{font-size:14px;font-weight:700;color:var(--n);margin-bottom:5px;}
-.isc-body{font-size:12px;color:var(--g);line-height:1.65;margin-bottom:10px;}
-.isc-stat-row{display:flex;gap:14px;margin-bottom:10px;}
-.isc-stat{font-size:11px;color:var(--g);} .isc-stat strong{color:var(--n);font-weight:700;}
-.isc-btn{background:none;border:1.5px solid var(--b);border-radius:8px;padding:6px 14px;font-size:11px;font-weight:700;color:var(--n);cursor:pointer;font-family:inherit;transition:all .15s;}
-.isc-btn:hover{background:var(--n);color:#fff;border-color:var(--n);}
-.intel-activity-list{background:#f7f8fa;border:1px solid var(--b);border-radius:14px;overflow:hidden;}
-.ial-row{display:flex;align-items:center;gap:12px;padding:13px 20px;border-bottom:1px solid var(--b);}
-.ial-row:last-child{border-bottom:none;}
-.ial-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.ial-dot-offer{background:#4ade80;}
-.ial-dot-watch{background:#60a5fa;}
-.ial-dot-mms{background:#c8a96e;}
-.ial-content{flex:1;display:flex;flex-direction:column;gap:2px;}
-.ial-action{font-size:12px;font-weight:600;color:var(--n);}
-.ial-addr{font-size:11px;color:var(--g);}
-.ial-time{font-size:10px;color:var(--g);flex-shrink:0;}
-@media(max-width:900px){
+.intel-vel-row{display:flex;align-items:center;gap:12px;margin-bottom:11px;cursor:pointer;text-decoration:none;}
+.intel-vel-row:hover .intel-vel-name{color:var(--warm);}
+.intel-vel-rank{font-size:11px;font-weight:700;color:var(--g);width:18px;flex-shrink:0;text-align:right;}
+.intel-vel-name{font-size:13px;font-weight:600;color:#374151;width:172px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.intel-vel-bar-wrap{flex:1;background:#e8ebf0;border-radius:4px;height:8px;overflow:hidden;min-width:40px;}
+.intel-vel-bar{height:8px;border-radius:4px;background:var(--n);transition:width .5s ease;}
+.intel-vel-bar.top{background:var(--warm);}
+.intel-vel-val{font-size:12px;font-weight:700;color:var(--n);width:74px;text-align:right;flex-shrink:0;}
+.intel-vel-sub{font-size:10px;color:var(--g);width:56px;text-align:right;flex-shrink:0;}
+.intel-board-foot{margin-top:8px;padding-top:12px;border-top:1px solid var(--b);font-size:11px;color:var(--g);text-align:center;}
+.intel-board-foot a{color:var(--warm);font-weight:600;text-decoration:none;}
+
+/* side cards */
+.intel-side{display:flex;flex-direction:column;gap:16px;}
+.intel-side-card{background:#fbfcfd;border:1px solid var(--b);border-radius:16px;padding:20px 22px;}
+.intel-side-card.gold{background:#fffbf5;border-color:rgba(200,169,110,.35);}
+.intel-side-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;color:var(--warm);}
+.intel-side-tag.blue{color:#185FA5;} .intel-side-tag.green{color:#3B6D11;}
+.intel-side-h{font-size:14px;font-weight:700;color:var(--n);margin-bottom:5px;}
+.intel-side-body{font-size:12px;color:var(--g);line-height:1.6;margin-bottom:12px;}
+.intel-side-body strong{color:var(--n);font-weight:700;}
+.intel-bd-tiers{display:flex;flex-direction:column;gap:7px;}
+.intel-bd-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
+.intel-bd-row .lbl{color:var(--g);} .intel-bd-row .val{font-weight:700;color:var(--n);}
+.intel-side-btn{display:inline-block;background:none;border:1.5px solid var(--b);border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;color:var(--n);cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;}
+.intel-side-btn:hover{background:var(--n);color:#fff;border-color:var(--n);}
+
+@media(max-width:980px){
   .intel-inner{padding:0 24px;}
   .intel-header{flex-direction:column;gap:16px;}
-  .intel-velocity-grid{grid-template-columns:1fr;}
+  .intel-showcase{grid-template-columns:1fr;}
+  .intel-grid2{grid-template-columns:1fr;}
+  .intel-stat-strip{grid-template-columns:repeat(2,1fr);}
   .intel-vel-name{width:130px;}
 }
-
+@media(max-width:560px){
+  .intel-vel-sub{display:none;}
+  .intel-vel-name{width:108px;}
+}
 /* ── GUIDED OFFER MODAL ── */
 #guided-offer-overlay{display:none}
 .go-modal{background:#fff;border-radius:20px;width:100%;max-width:640px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.4);position:relative;max-height:92vh;overflow-y:auto;}
@@ -796,69 +836,75 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
     <div class="intel-header">
       <div>
         <div class="intel-eyebrow">Market Intelligence</div>
-        <h2 class="intel-title">Where the deals are happening.</h2>
-        <p class="intel-sub">Real price velocity data from 1,768 Eichler transactions across 54 Silicon Valley tracts.</p>
-      </div>
-      <div class="intel-actions">
-        <button class="intel-tab on" onclick="setIntelTab('velocity',this)">Price velocity</button>
-        <button class="intel-tab" onclick="setIntelTab('activity',this)">Active signals</button>
+        <h2 class="intel-title">The Eichler market, <em>measured.</em></h2>
+        <p class="intel-sub" id="intel-sub">Every recorded Eichler sale across Silicon Valley — tracked, ranked, and updated as new sales close.</p>
       </div>
     </div>
 
-    <!-- Velocity view -->
-    <div id="intel-velocity" class="intel-view">
-      <div class="intel-velocity-grid">
-        <div class="intel-vel-chart">
-          <div class="intel-vel-label-row">
-            <span class="intel-vel-col-l">Tract</span>
-            <span class="intel-vel-col-r">Avg $/sf · trend</span>
-          </div>
-          <div id="intel-bars"></div>
+    <!-- Showcase: live feed + trajectory -->
+    <div class="intel-showcase">
+      <div class="intel-card">
+        <div class="intel-card-head">
+          <span class="intel-card-eyebrow"><span class="intel-live-dot"></span> Live sales feed</span>
         </div>
-        <div class="intel-vel-cards">
-          <div class="intel-signal-card intel-signal-card-hot">
-            <div class="isc-tag isc-tag-hot">Price acceleration</div>
-            <div class="isc-title">Greenmeadow, Palo Alto</div>
-            <div class="isc-body">90-day avg up 8.3%. Only 2 sales — low volume creating upward skew. 3 homes likely to list Q2.</div>
-            <div class="isc-stat-row">
-              <span class="isc-stat"><strong>$1,607</strong>/sf avg</span>
-              <span class="isc-stat"><strong>32</strong> homes tracked</span>
-            </div>
-            <button class="isc-btn" onclick="scrollToTract('greenmeadow')">Browse Greenmeadow →</button>
-          </div>
-          <div class="intel-signal-card">
-            <div class="isc-tag isc-tag-velocity">Velocity spike</div>
-            <div class="isc-title">Green Gables, Palo Alto</div>
-            <div class="isc-body">DOM dropped from 22 to 6 days. 140 homes tracked. Demand outpacing supply — first offers converting at high rates.</div>
-            <div class="isc-stat-row">
-              <span class="isc-stat"><strong>$1,580</strong>/sf avg</span>
-              <span class="isc-stat"><strong>140</strong> homes tracked</span>
-            </div>
-            <button class="isc-btn" onclick="scrollToTract('green-gables')">Browse Green Gables →</button>
-          </div>
-          <div class="intel-signal-card">
-            <div class="isc-tag isc-tag-opp">High opportunity</div>
-            <div class="isc-title">Charleston Meadows, Sunnyvale</div>
-            <div class="isc-body">Largest tract by volume (186 sales). Price still 15% below Palo Alto comps for similar specs. Undervalued relative to quality.</div>
-            <div class="isc-stat-row">
-              <span class="isc-stat"><strong>$1,491</strong>/sf avg</span>
-              <span class="isc-stat"><strong>186</strong> homes tracked</span>
-            </div>
-            <button class="isc-btn" onclick="scrollToTract('charleston-meadows')">Browse Charleston →</button>
-          </div>
+        <p class="intel-card-sub">The most recent Eichler closings on record, newest first.</p>
+        <div class="intel-feed" id="intel-feed"><div class="intel-loading">Loading recent sales…</div></div>
+      </div>
+
+      <div class="intel-card">
+        <div class="intel-card-head">
+          <span class="intel-card-eyebrow">$/sf trajectory</span>
+          <span class="intel-traj-delta" id="intel-traj-delta"></span>
+        </div>
+        <p class="intel-card-sub">Median price per square foot, by quarter, across all tracts.</p>
+        <div class="intel-traj-wrap"><svg class="intel-traj-svg" id="intel-traj-svg" viewBox="0 0 520 200" preserveAspectRatio="none"></svg></div>
+        <div class="intel-traj-bookends">
+          <span id="intel-traj-start">—</span>
+          <span id="intel-traj-end">—</span>
         </div>
       </div>
     </div>
 
-    <!-- Activity view -->
-    <div id="intel-activity" class="intel-view" style="display:none">
-      <div class="intel-activity-list" id="intel-act-list">
-        <div class="ial-row"><div class="ial-dot ial-dot-offer"></div><div class="ial-content"><span class="ial-action">Offer submitted</span><span class="ial-addr">876 Southampton Drive, Palo Alto</span></div><span class="ial-time">2h ago</span></div>
-        <div class="ial-row"><div class="ial-dot ial-dot-watch"></div><div class="ial-content"><span class="ial-action">8 buyers watching</span><span class="ial-addr">Green Gables tract</span></div><span class="ial-time">live</span></div>
-        <div class="ial-row"><div class="ial-dot ial-dot-mms"></div><div class="ial-content"><span class="ial-action">Make Me Move price set</span><span class="ial-addr">Cupertino Eichlers</span></div><span class="ial-time">5h ago</span></div>
-        <div class="ial-row"><div class="ial-dot ial-dot-offer"></div><div class="ial-content"><span class="ial-action">Offer submitted</span><span class="ial-addr">Palo Verde, Palo Alto</span></div><span class="ial-time">8h ago</span></div>
-        <div class="ial-row"><div class="ial-dot ial-dot-watch"></div><div class="ial-content"><span class="ial-action">12 buyers watching</span><span class="ial-addr">Greenmeadow tract</span></div><span class="ial-time">live</span></div>
-        <div class="ial-row"><div class="ial-dot ial-dot-mms"></div><div class="ial-content"><span class="ial-action">Make Me Move price set</span><span class="ial-addr">Los Altos Eichlers</span></div><span class="ial-time">yesterday</span></div>
+    <!-- Headline stat strip -->
+    <div class="intel-stat-strip" id="intel-stat-strip"></div>
+
+    <!-- Leaderboard + side panels -->
+    <div class="intel-grid2">
+      <div class="intel-board">
+        <div class="intel-board-head">
+          <span class="intel-board-title" id="intel-board-title">Tracts ranked by value</span>
+          <div class="intel-board-toggle">
+            <button class="intel-bt on" id="bt-ppsf" onclick="setBoardMode('ppsf')">$/sf</button>
+            <button class="intel-bt" id="bt-vol" onclick="setBoardMode('vol')">Volume</button>
+            <button class="intel-bt" id="bt-price" onclick="setBoardMode('price')">Median price</button>
+          </div>
+        </div>
+        <div class="intel-vel-label-row">
+          <span class="intel-vel-col-l">Tract</span>
+          <span class="intel-vel-col-r" id="intel-vel-col-r">Median $/sf</span>
+        </div>
+        <div id="intel-bars"></div>
+        <div class="intel-board-foot">Showing the top tracts by the selected metric · <a href="#map-section" onclick="document.getElementById('map-section').scrollIntoView({behavior:'smooth'});return false;">Explore all 54 tracts on the map →</a></div>
+      </div>
+
+      <div class="intel-side">
+        <div class="intel-side-card gold">
+          <div class="intel-side-tag">Widest value spread</div>
+          <div class="intel-side-h" id="intel-spread-h">—</div>
+          <div class="intel-side-body" id="intel-spread-body">—</div>
+          <a class="intel-side-btn" href="#map-section" onclick="document.getElementById('map-section').scrollIntoView({behavior:'smooth'});return false;">See the map →</a>
+        </div>
+        <div class="intel-side-card">
+          <div class="intel-side-tag blue">Price by bedroom</div>
+          <div class="intel-side-h">What Eichlers trade for</div>
+          <div class="intel-bd-tiers" id="intel-bd-tiers"></div>
+        </div>
+        <div class="intel-side-card">
+          <div class="intel-side-tag green">Most active tract</div>
+          <div class="intel-side-h" id="intel-vol-h">—</div>
+          <div class="intel-side-body" id="intel-vol-body">—</div>
+          <a class="intel-side-btn" id="intel-vol-btn" href="#">Browse tract →</a>
+        </div>
       </div>
     </div>
 
@@ -2149,50 +2195,177 @@ function goSubmitLOI() {
   });
 }
 
-// ── Intelligence section ───────────────────────────────────
-function setIntelTab(tab, btn) {
-  document.querySelectorAll('.intel-tab').forEach(function(t){t.classList.remove('on');});
-  btn.classList.add('on');
-  document.getElementById('intel-velocity').style.display = tab === 'velocity' ? 'block' : 'none';
-  document.getElementById('intel-activity').style.display = tab === 'activity' ? 'block' : 'none';
-}
-function scrollToTract(slug) {
-  var el = document.getElementById('map-section');
-  if (el) el.scrollIntoView({behavior:'smooth'});
-}
-function buildIntelBars() {
-  var tractPpsf = [
-    {name:'Oakdell Park', ppsf:1803, count:4, max:1803, slug:'oakdell-park'},
-    {name:'Atherton Eichlers', ppsf:1660, count:5, max:1803, slug:'atherton-eichlers'},
-    {name:'Greenmeadow', ppsf:1607, count:32, max:1803, slug:'greenmeadow', hot:true},
-    {name:'Green Gables', ppsf:1580, count:140, max:1803, slug:'green-gables'},
-    {name:'Palo Verde', ppsf:1573, count:70, max:1803, slug:'palo-verde'},
-    {name:'Charleston Meadows', ppsf:1491, count:186, max:1803, slug:'charleston-meadows'},
-    {name:'Menlo Oaks', ppsf:1406, count:4, max:1803, slug:'menlo-oaks'},
-    {name:'Cuernavaca', ppsf:1355, count:56, max:1803, slug:'cuernavaca'},
-    {name:'Ladera', ppsf:1353, count:7, max:1803, slug:'ladera'},
-  ];
-  var barsEl = document.getElementById('intel-bars');
-  if (!barsEl) return;
-  var barsHtml = '';
-  tractPpsf.forEach(function(t) {
-    var pct = Math.round(t.ppsf / 1803 * 100);
-    var div = document.createElement('div');
-    div.className = 'intel-vel-row';
-    div.style.cursor = 'pointer';
-    div.innerHTML = '<div class="intel-vel-name">' + t.name + '</div>' +
-      '<div class="intel-vel-bar-wrap"><div class="intel-vel-bar' + (t.hot?' hot':'') + '" style="width:' + pct + '%"></div></div>' +
-      '<div class="intel-vel-val">$' + t.ppsf.toLocaleString() + '/sf</div>';
-    div.addEventListener('click', (function(slug){ return function(){ window.location.href = '/community/' + slug; }; })(t.slug));
-    barsEl.appendChild(div);
-  });
-}
-// Run on load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', buildIntelBars);
-} else {
-  buildIntelBars();
-}
+// ── Market Intelligence (rebuilt: live feed + data-driven analysis) ──
+(function(){
+  var STATS = null, TRACT_NAMES = {}, BOARD_MODE = 'ppsf';
+
+  function iMoney(n){ if(n==null)return'—'; if(n>=1e6)return '$'+(n/1e6).toFixed(n%1e6===0?0:2)+'M'; return '$'+Number(n).toLocaleString(); }
+  function iNum(n){ return Number(n||0).toLocaleString(); }
+  function iEsc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function tractHref(slug){ var L=window.EMListings; var h=L&&L.communityHref?L.communityHref(slug):null; return h||('/community/'+slug+'/'); }
+  function prettyDate(iso){ if(!iso)return''; var d=new Date(iso+'T00:00:00'); if(isNaN(d))return''; return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+  // Build tract display-name map from the property dataset if present, else titlecase the slug
+  function buildNameMap(){
+    try{
+      var P = window.__EM_PROPS_FULL__ || null;
+      if(P){ Object.keys(P).forEach(function(k){ var v=P[k]; if(v&&v.ts&&v.t) TRACT_NAMES[v.ts]=v.t; }); }
+    }catch(e){}
+  }
+  function tractName(slug){
+    if(TRACT_NAMES[slug]) return TRACT_NAMES[slug];
+    return slug.split('-').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1);}).join(' ');
+  }
+
+  // ── LIVE FEED ──
+  function renderFeed(){
+    var el=document.getElementById('intel-feed'); if(!el) return;
+    var L=window.EMListings;
+    if(!L||!L.recentSales){ el.innerHTML='<div class="intel-loading">Could not load recent sales.</div>'; return; }
+    L.recentSales(7).then(function(rows){
+      if(!rows||!rows.length){ el.innerHTML='<div class="intel-loading">No recent sales recorded yet.</div>'; return; }
+      el.innerHTML=rows.map(function(r){
+        var href=tractHref(r.building_slug);
+        var meta=iEsc(r.tract_name)+(r.city?' · '+iEsc(r.city):'')+(r.sqft?' · '+iNum(r.sqft)+' sf':'')+(r.ppsf?' · $'+iNum(r.ppsf)+'/sf':'');
+        return '<a class="intel-feed-item" href="'+href+'">'+
+          '<div><div class="intel-feed-addr">'+iEsc(r.unit_address)+'</div>'+
+          '<div class="intel-feed-meta">'+meta+'</div></div>'+
+          '<div><div class="intel-feed-price">'+iMoney(r.sale_price)+'</div>'+
+          '<div class="intel-feed-date">'+prettyDate(r.sale_date)+'</div></div></a>';
+      }).join('');
+    }).catch(function(){ el.innerHTML='<div class="intel-loading">Could not load recent sales.</div>'; });
+  }
+
+  // ── TRAJECTORY (inline SVG area + line) ──
+  function renderTrajectory(){
+    var svg=document.getElementById('intel-traj-svg'); if(!svg) return;
+    var L=window.EMListings;
+    if(!L||!L.psfQuarterly){ return; }
+    L.psfQuarterly(16).then(function(rows){
+      if(!rows||rows.length<4){ document.querySelector('.intel-traj-wrap').innerHTML='<div class="intel-loading">Not enough data yet.</div>'; return; }
+      rows=rows.slice().sort(function(a,b){return new Date(a.quarter_start)-new Date(b.quarter_start);});
+      var W=520,H=200,padT=14,padB=18,padL=4,padR=4;
+      var vals=rows.map(function(q){return q.median_psf;});
+      var min=Math.min.apply(null,vals), max=Math.max.apply(null,vals);
+      var span=(max-min)||1; min-=span*0.12; max+=span*0.12; span=max-min;
+      var n=rows.length;
+      function X(i){ return padL+(i/(n-1))*(W-padL-padR); }
+      function Y(v){ return padT+(1-(v-min)/span)*(H-padT-padB); }
+      var linePts=rows.map(function(q,i){return X(i)+','+Y(q.median_psf);});
+      var areaD='M'+X(0)+','+(H-padB)+' L'+linePts.join(' L')+' L'+X(n-1)+','+(H-padB)+' Z';
+      var lineD='M'+linePts.join(' L');
+      var dots=rows.map(function(q,i){return '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(q.median_psf).toFixed(1)+'" r="2.4" fill="#1a1f2e" opacity="'+(i===n-1?1:0.0)+'"/>';}).join('');
+      // gridlines (3)
+      var grid='';
+      for(var g=0;g<=2;g++){ var gy=padT+(g/2)*(H-padT-padB); grid+='<line x1="0" y1="'+gy.toFixed(1)+'" x2="'+W+'" y2="'+gy.toFixed(1)+'" stroke="#eef1f5" stroke-width="1"/>'; }
+      svg.innerHTML=grid+
+        '<defs><linearGradient id="trajGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(200,169,110,0.22)"/><stop offset="100%" stop-color="rgba(200,169,110,0.02)"/></linearGradient></defs>'+
+        '<path d="'+areaD+'" fill="url(#trajGrad)"/>'+
+        '<path d="'+lineD+'" fill="none" stroke="#c8a96e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'+
+        dots;
+      // bookends + delta
+      function qLabel(iso){ var d=new Date(iso+'T00:00:00'); return 'Q'+(Math.floor(d.getMonth()/3)+1)+' '+d.getFullYear(); }
+      var first=rows[0], last=rows[n-1];
+      var s=document.getElementById('intel-traj-start'), e=document.getElementById('intel-traj-end');
+      if(s) s.innerHTML=qLabel(first.quarter_start)+'<b>$'+iNum(first.median_psf)+'</b>';
+      if(e) e.innerHTML=qLabel(last.quarter_start)+'<b>$'+iNum(last.median_psf)+'</b>';
+      var pct=Math.round((last.median_psf-first.median_psf)/first.median_psf*100);
+      var dEl=document.getElementById('intel-traj-delta');
+      if(dEl){ dEl.className='intel-traj-delta '+(pct>=0?'up':'down'); dEl.textContent=(pct>=0?'▲ +':'▼ ')+pct+'% over '+n+' quarters'; }
+    }).catch(function(){});
+  }
+
+  // ── STAT STRIP (from static stats file) ──
+  function renderStatStrip(){
+    var el=document.getElementById('intel-stat-strip'); if(!el||!STATS) return;
+    var g=STATS.global;
+    var nTracts=Object.keys(STATS.tracts).length;
+    var cells=[
+      {v:iNum(g.count), l:'Eichler sales on record'},
+      {v:'$'+iNum(g.median_ppsf), l:'Median price / sq ft, marketwide'},
+      {v:iMoney(g.median_price), l:'Median Eichler sale price'},
+      {v:nTracts, l:'Tracts tracked across Silicon Valley'}
+    ];
+    el.innerHTML=cells.map(function(c){return '<div class="intel-stat-cell"><div class="intel-stat-val">'+c.v+'</div><div class="intel-stat-lbl">'+c.l+'</div></div>';}).join('');
+  }
+
+  // ── LEADERBOARD ──
+  function boardData(){
+    var arr=Object.keys(STATS.tracts).map(function(s){var d=STATS.tracts[s];return{slug:s,name:tractName(s),ppsf:d.median_ppsf,count:d.count,price:d.median_price};});
+    // stability filter for $/sf + price views
+    if(BOARD_MODE==='ppsf'){ return arr.filter(function(t){return t.count>=5;}).sort(function(a,b){return b.ppsf-a.ppsf;}).slice(0,10); }
+    if(BOARD_MODE==='price'){ return arr.filter(function(t){return t.count>=5;}).sort(function(a,b){return b.price-a.price;}).slice(0,10); }
+    return arr.sort(function(a,b){return b.count-a.count;}).slice(0,10); // volume
+  }
+  function renderBoard(){
+    var el=document.getElementById('intel-bars'); if(!el||!STATS) return;
+    var data=boardData();
+    var key=BOARD_MODE==='ppsf'?'ppsf':(BOARD_MODE==='price'?'price':'count');
+    var max=Math.max.apply(null,data.map(function(t){return t[key];}))||1;
+    var colR=document.getElementById('intel-vel-col-r');
+    if(colR) colR.textContent=BOARD_MODE==='ppsf'?'Median $/sf':(BOARD_MODE==='price'?'Median price':'Sales tracked');
+    el.innerHTML=data.map(function(t,i){
+      var pct=Math.max(6,Math.round(t[key]/max*100));
+      var valTxt=BOARD_MODE==='ppsf'?('$'+iNum(t.ppsf)+'/sf'):(BOARD_MODE==='price'?iMoney(t.price):iNum(t.count));
+      var subTxt=BOARD_MODE==='ppsf'?(iNum(t.count)+' sales'):(BOARD_MODE==='price'?('$'+iNum(t.ppsf)+'/sf'):('$'+iNum(t.ppsf)+'/sf'));
+      return '<a class="intel-vel-row" href="'+tractHref(t.slug)+'">'+
+        '<span class="intel-vel-rank">'+(i+1)+'</span>'+
+        '<span class="intel-vel-name">'+iEsc(t.name)+'</span>'+
+        '<span class="intel-vel-bar-wrap"><span class="intel-vel-bar'+(i===0?' top':'')+'" style="width:'+pct+'%"></span></span>'+
+        '<span class="intel-vel-val">'+valTxt+'</span>'+
+        '<span class="intel-vel-sub">'+subTxt+'</span></a>';
+    }).join('');
+  }
+  window.setBoardMode=function(m){
+    BOARD_MODE=m;
+    ['ppsf','vol','price'].forEach(function(k){var b=document.getElementById('bt-'+k);if(b)b.classList.toggle('on',(k==='vol'?'vol':k)===m);});
+    renderBoard();
+  };
+
+  // ── SIDE PANELS ──
+  function renderSide(){
+    if(!STATS) return;
+    var arr=Object.keys(STATS.tracts).map(function(s){var d=STATS.tracts[s];return{slug:s,name:tractName(s),ppsf:d.median_ppsf,count:d.count,price:d.median_price};}).filter(function(t){return t.count>=5;});
+    // Spread
+    var byPsf=arr.slice().sort(function(a,b){return b.ppsf-a.ppsf;});
+    var hi=byPsf[0], lo=byPsf[byPsf.length-1];
+    if(hi&&lo){
+      var mult=(hi.ppsf/lo.ppsf).toFixed(1);
+      var h=document.getElementById('intel-spread-h'); if(h) h.textContent=hi.name+' vs '+lo.name;
+      var b=document.getElementById('intel-spread-body');
+      if(b) b.innerHTML='At <strong>$'+iNum(hi.ppsf)+'/sf</strong>, '+iEsc(hi.name)+' commands roughly <strong>'+mult+'×</strong> the per-foot price of '+iEsc(lo.name)+' (<strong>$'+iNum(lo.ppsf)+'/sf</strong>) — the widest value gap in the Eichler market.';
+    }
+    // Bedroom tiers
+    var bd=STATS.global.medians_by_bd||{};
+    var order=['2','3','4','5','6','7'];
+    var tEl=document.getElementById('intel-bd-tiers');
+    if(tEl){ tEl.innerHTML=order.filter(function(k){return bd[k];}).map(function(k){
+      return '<div class="intel-bd-row"><span class="lbl">'+k+'-bedroom</span><span class="val">'+iMoney(bd[k])+'</span></div>';
+    }).join(''); }
+    // Most active
+    var byVol=arr.slice().sort(function(a,b){return b.count-a.count;});
+    var top=byVol[0];
+    if(top){
+      var vh=document.getElementById('intel-vol-h'); if(vh) vh.textContent=top.name;
+      var vb=document.getElementById('intel-vol-body');
+      if(vb) vb.innerHTML='With <strong>'+iNum(top.count)+' recorded sales</strong>, '+iEsc(top.name)+' is the most-traded Eichler tract on record — a median <strong>$'+iNum(top.ppsf)+'/sf</strong> and <strong>'+iMoney(top.price)+'</strong> sale price.';
+      var vbtn=document.getElementById('intel-vol-btn'); if(vbtn) vbtn.href=tractHref(top.slug);
+    }
+  }
+
+  // ── BOOT ──
+  function boot(){
+    buildNameMap();
+    fetch('/assets/em-market-stats.json').then(function(r){return r.json();}).then(function(s){
+      STATS=s;
+      renderStatStrip(); renderBoard(); renderSide();
+    }).catch(function(){});
+    // live (DB) parts wait for EMListings
+    function whenReady(fn){ if(window.EMListings) fn(); else setTimeout(function(){whenReady(fn);},80); }
+    whenReady(function(){ renderFeed(); renderTrajectory(); });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
 
 </script>
 <!-- Mobile Map Bottom Sheet -->

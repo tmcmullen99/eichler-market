@@ -106,6 +106,18 @@
     }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
   }
 
+  // POST to a Postgres RPC (returns [] on any failure so callers can degrade gracefully)
+  function rpc(fn, params) {
+    return fetch(SB_URL + '/rest/v1/rpc/' + fn, {
+      method: 'POST',
+      headers: {
+        apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params || {})
+    }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
+  }
+
   function money(n) {
     if (n == null) return '';
     if (n >= 1e6) return '$' + (n / 1e6).toFixed(n % 1e6 === 0 ? 0 : 2) + 'M';
@@ -146,6 +158,10 @@
       return api(q);
     },
     communityHref: communityHref,
+    // Live sales feed (DB, day-dated, freshest first)
+    recentSales: function (limit) { return rpc('eichler_recent_sales', { p_limit: limit || 12 }); },
+    // Quarterly median $/sf trajectory (Eichler-wide)
+    psfQuarterly: function (quarters) { return rpc('eichler_psf_quarterly', { p_quarters: quarters || 16 }); },
     money: money, esc: esc, specLine: specLine
   };
 })();
