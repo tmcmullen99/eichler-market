@@ -36,6 +36,22 @@ a{text-decoration:none;color:inherit}
 
 /* ── NAV ── */
 .nav{position:fixed;top:0;left:0;right:0;z-index:800;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 28px;transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+/* Live activity ticker (revealed by JS once recent-sales data loads) */
+.em-ticker{display:none;position:fixed;top:var(--nav-h);left:0;right:0;z-index:799;height:34px;align-items:center;background:rgba(10,14,24,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.07);overflow:hidden}
+.em-ticker.on{display:flex}
+.em-ticker-label{flex:0 0 auto;display:flex;align-items:center;gap:6px;height:100%;padding:0 14px 0 28px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c8a96e;background:linear-gradient(90deg,rgba(10,14,24,.95) 70%,transparent);position:relative;z-index:2;white-space:nowrap}
+.em-ticker-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 0 rgba(74,222,128,.6);animation:emTickPulse 2s infinite}
+@keyframes emTickPulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 5px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+.em-ticker-viewport{flex:1 1 auto;height:100%;overflow:hidden;position:relative}
+.em-ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;will-change:transform;animation:emTickScroll var(--em-tick-dur,48s) linear infinite}
+.em-ticker:hover .em-ticker-track{animation-play-state:paused}
+.em-tick-item{display:inline-flex;align-items:center;gap:8px;padding:0 22px;font-size:12px;color:rgba(238,241,245,.82);text-decoration:none;border-right:1px solid rgba(255,255,255,.06)}
+.em-tick-item:hover{color:#fff}
+.em-tick-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#c8a96e}
+.em-tick-price{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;color:#c8a96e}
+.em-tick-sep{color:rgba(238,241,245,.3)}
+@media (max-width:760px){.em-ticker{height:30px}.em-ticker-label{padding-left:16px}}
+@media (prefers-reduced-motion:reduce){.em-ticker-track{animation:none}}
 .nav.scrolled{background:rgba(14,17,24,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom-color:rgba(255,255,255,.07)}
 .nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none}
 .nav-icon{width:32px;height:32px;background:rgba(200,169,110,.18);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -75,7 +91,7 @@ a{text-decoration:none;color:inherit}
 
 /* Live badge */
 .hero-live-badge {
-  position: absolute; top: calc(var(--nav-h) + 16px); right: 40px; z-index: 5;
+  position: absolute; top: calc(var(--nav-h) + 34px + 16px); right: 40px; z-index: 5;
   background: rgba(0,0,0,.42); border: 1px solid rgba(255,255,255,.1);
   border-radius: 100px; padding: 7px 16px;
   display: flex; align-items: center; gap: 9px;
@@ -699,6 +715,11 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
     </button>
   </div>
 </nav>
+<!-- Live activity ticker — recent Eichler closings, pinned under the nav -->
+<div class="em-ticker" id="em-ticker" aria-hidden="true">
+  <div class="em-ticker-label"><span class="em-ticker-dot"></span>Live market</div>
+  <div class="em-ticker-viewport"><div class="em-ticker-track" id="em-ticker-track"></div></div>
+</div>
 <!-- nav-drawer injected by JS on first hamburger tap -->
 
 <!-- HERO — FIRST FOLD -->
@@ -958,6 +979,41 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
   function ready(fn){ if(window.EMListings) fn(); else setTimeout(function(){ready(fn);},80); }
   ready(function(){
     var L = window.EMListings;
+
+    // ── Live activity ticker — recent Eichler closings ──
+    (function(){
+      if(!L.recentSales) return;
+      var track = document.getElementById('em-ticker-track');
+      var band  = document.getElementById('em-ticker');
+      if(!track || !band) return;
+      L.recentSales(10).then(function(rows){
+        if(!rows || !rows.length) return;            // stay hidden if no data
+        function money(n){ if(n==null) return ''; return n>=1e6 ? '$'+(n/1e6).toFixed(n%1e6===0?0:2)+'M' : '$'+Number(n).toLocaleString(); }
+        function pretty(iso){ if(!iso) return ''; var d=new Date(iso+'T00:00:00'); return isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+        function item(r){
+          var href = (L.communityHref && L.communityHref(r.building_slug)) || ('/community/'+r.building_slug+'/');
+          var bits = [
+            '<span class="em-tick-tag">Just sold</span>',
+            L.esc(r.unit_address||''),
+            r.tract_name ? '<span class="em-tick-sep">·</span>'+L.esc(r.tract_name) : '',
+            '<span class="em-tick-sep">·</span><span class="em-tick-price">'+money(r.sale_price)+'</span>',
+            r.ppsf ? '<span class="em-tick-sep">·</span>$'+Number(r.ppsf).toLocaleString()+'/sf' : '',
+            r.sale_date ? '<span class="em-tick-sep">·</span>'+pretty(r.sale_date) : ''
+          ].filter(Boolean).join(' ');
+          return '<a class="em-tick-item" href="'+href+'">'+bits+'</a>';
+        }
+        var html = rows.map(item).join('');
+        // Duplicate the run so the marquee loops seamlessly.
+        track.innerHTML = html + html;
+        band.classList.add('on');
+        // Pace the scroll to content width (~90px/sec), clamped to a sane range.
+        requestAnimationFrame(function(){
+          var w = track.scrollWidth / 2;            // width of one run
+          var dur = Math.min(120, Math.max(28, Math.round(w / 90)));
+          track.style.setProperty('--em-tick-dur', dur + 's');
+        });
+      }).catch(function(){});
+    })();
 
     // Live active count in the strip
     L.activeCount().then(function(n){
