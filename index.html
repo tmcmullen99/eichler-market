@@ -654,7 +654,7 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
 <!-- HERO — FIRST FOLD -->
 <section class="hero" id="hero">
   <!-- Full-bleed background photo -->
-  <div class="hero-bg" style="background:url('https://cdn.prod.website-files.com/65a1ca4354f63bd7376b5027/69dfc101baabf5d962e33f4a_image%20-%202026-04-15T094520.936.jpg') center/cover no-repeat;transform:scale(1.02)"></div>
+  <div class="hero-bg" data-parallax="0.12" style="background:url('https://cdn.prod.website-files.com/65a1ca4354f63bd7376b5027/69dfc101baabf5d962e33f4a_image%20-%202026-04-15T094520.936.jpg') center/cover no-repeat;transform:scale(1.06)"></div>
 
   <!-- Multi-layer overlay: dark vignette bottom + left edge -->
   <div class="hero-overlay"></div>
@@ -672,7 +672,7 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
       <span class="hero-eyebrow-text">Silicon Valley · Eichler Homes</span>
     </div>
 
-    <h1 class="hero-h1">Every Eichler<br>is for sale<br>for <em>the right price.</em></h1>
+    <h1 class="hero-h1">Every Eichler<br>is for sale<br>for <em data-tw>the right price.</em></h1>
 
     <p class="hero-sub">1,768 homes across 54 tracts. Submit an offer on any Eichler in Silicon Valley — listed or not.</p>
 
@@ -698,14 +698,14 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
     </div>
 
     <!-- Stats strip -->
-    <div class="hero-stats-strip">
-      <div class="hss-item"><div class="hss-v">1,768</div><div class="hss-l">Homes tracked</div></div>
+    <div class="hero-stats-strip" data-reveal>
+      <div class="hss-item" data-reveal-child><div class="hss-v"><span data-count="1768" data-comma="1">1,768</span></div><div class="hss-l">Homes tracked</div></div>
       <div class="hss-item hss-sep"></div>
-      <div class="hss-item"><div class="hss-v">54</div><div class="hss-l">Named tracts</div></div>
+      <div class="hss-item" data-reveal-child><div class="hss-v"><span data-count="54">54</span></div><div class="hss-l">Named tracts</div></div>
       <div class="hss-item hss-sep"></div>
-      <div class="hss-item"><div class="hss-v">$2.1M</div><div class="hss-l">Median price</div></div>
+      <div class="hss-item" data-reveal-child><div class="hss-v"><span data-count="2.1" data-prefix="$" data-suffix="M" data-dec="1">$2.1M</span></div><div class="hss-l">Median price</div></div>
       <div class="hss-item hss-sep"></div>
-      <div class="hss-item"><div class="hss-v">$1,342<span style="font-size:13px;font-weight:400">/sf</span></div><div class="hss-l">Avg price/sqft</div></div>
+      <div class="hss-item" data-reveal-child><div class="hss-v"><span data-count="1342" data-prefix="$" data-comma="1">$1,342</span><span style="font-size:13px;font-weight:400">/sf</span></div><div class="hss-l">Avg price/sqft</div></div>
     </div>
   </div>
 
@@ -968,11 +968,11 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
       <span class="section-eyebrow-text">Joseph Eichler · 1900–1974</span>
     </div>
 
-    <div class="hist-header">
-      <div>
+    <div class="hist-header" data-reveal>
+      <div data-reveal-child>
         <h2 class="hist-title">A developer who<br>believed <em>everyone</em><br>deserved great design.</h2>
       </div>
-      <div class="hist-body-col">
+      <div class="hist-body-col" data-reveal-child>
         <p class="hist-lead">Joseph Eichler built over 11,000 homes across California between 1950 and 1974 — and changed what a middle-class home could be. Flat or low-pitched roofs. Post-and-beam frames. Floor-to-ceiling glass. Private atriums open to the sky.</p>
         <p class="hist-body-text">Working with architects Anshen + Allen, Jones & Emmons, and Claude Oakland, Eichler brought the California Case Study aesthetic to entire neighborhoods — not just wealthy clients. He pioneered open-plan living, indoor-outdoor flow, and radiant heat floors decades before they became industry standards.</p>
         <p class="hist-body-text">Eichler also broke with his era: he sold to Black buyers in California at a time when most developers refused. He insisted on quality materials and honest structure. He treated architecture as a public good.</p>
@@ -1041,32 +1041,32 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
       <span class="section-eyebrow-text">Eichler Market · How It Works</span>
     </div>
 
-    <div class="hiw-header">
-      <h2 class="hiw-title">The private market<br>for <em>every</em> Eichler.</h2>
-      <p class="hiw-intro">Browse 1,768 homes across 54 tracts. Submit an offer on any Eichler — listed or not. McMullen Properties facilitates LOI to close.</p>
+    <div class="hiw-header" data-reveal>
+      <h2 class="hiw-title" data-reveal-child>The private market<br>for <em>every</em> Eichler.</h2>
+      <p class="hiw-intro" data-reveal-child>Browse 1,768 homes across 54 tracts. Submit an offer on any Eichler — listed or not. McMullen Properties facilitates LOI to close.</p>
     </div>
 
     <!-- Process steps -->
-    <div class="hiw-steps-strip">
-      <div class="hiw-step-card">
+    <div class="hiw-steps-strip" data-reveal>
+      <div class="hiw-step-card" data-reveal-child>
         <div class="hiw-step-num">1</div>
         <div class="hiw-step-title">Find your home</div>
         <div class="hiw-step-text">Browse 1,768 tracked Eichlers by city, tract, beds, and price per square foot. Every home has full sale history.</div>
         <span class="hiw-step-tag">Immediate</span>
       </div>
-      <div class="hiw-step-card">
+      <div class="hiw-step-card" data-reveal-child>
         <div class="hiw-step-num">2</div>
         <div class="hiw-step-title">Submit your offer</div>
         <div class="hiw-step-text">Name, email, offer amount. The platform generates a non-binding Letter of Intent. Takes 60 seconds.</div>
         <span class="hiw-step-tag">60 seconds</span>
       </div>
-      <div class="hiw-step-card">
+      <div class="hiw-step-card" data-reveal-child>
         <div class="hiw-step-num">3</div>
         <div class="hiw-step-title">Offer review call</div>
         <div class="hiw-step-text">A short call to align on terms before the offer goes to the owner.</div>
         <span class="hiw-step-tag">Within 24 hrs</span>
       </div>
-      <div class="hiw-step-card">
+      <div class="hiw-step-card" data-reveal-child>
         <div class="hiw-step-num">4</div>
         <div class="hiw-step-title">Close on your terms</div>
         <div class="hiw-step-text">If the owner engages, McMullen Properties facilitates through LOI, CAR contract, and escrow. Flat 3% — always.</div>
@@ -1075,22 +1075,22 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
     </div>
 
     <!-- Fee bar -->
-    <div class="hiw-fee-bar">
-      <div class="hiw-fee-label">
-        <strong>One flat fee. Always 3%.</strong> — Eichler Market replaces the standard 5–6% commission entirely. Of the 3%: 2% is the platform fee. If a buyer nominates an agent, their fee comes from within that 2% — never added on top. The total never changes.
+    <div class="hiw-fee-bar" data-reveal>
+      <div class="hiw-fee-label" data-reveal-child>
+        <strong>One flat fee. Always 3%.</strong> — Eichler Market replaces the standard 5–6% commission entirely. The platform fee is always 3%. If a buyer nominates their own agent, that agent's 1% is paid from within the 3% — never added on top. The seller always pays exactly 3%.
       </div>
-      <div class="hiw-fee-numbers">
+      <div class="hiw-fee-numbers" data-reveal-child>
         <div class="hiw-fee-num">
-          <div class="hiw-fee-pct">3%</div>
-          <div class="hiw-fee-pct-l">Total — always</div>
+          <div class="hiw-fee-pct"><span data-count="3" data-suffix="%">3%</span></div>
+          <div class="hiw-fee-pct-l">Seller pays — always</div>
         </div>
         <div class="hiw-fee-num">
-          <div class="hiw-fee-pct">3%</div>
+          <div class="hiw-fee-pct"><span data-count="3" data-suffix="%">3%</span></div>
           <div class="hiw-fee-pct-l">Platform fee</div>
         </div>
         <div class="hiw-fee-num">
-          <div class="hiw-fee-pct">1%</div>
-          <div class="hiw-fee-pct-l">Buyer's agent if nominated</div>
+          <div class="hiw-fee-pct"><span data-count="1" data-suffix="%">1%</span></div>
+          <div class="hiw-fee-pct-l">Buyer's agent — from within the 3%</div>
         </div>
       </div>
     </div>
@@ -1105,18 +1105,18 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
 
 <!-- THE IMPOSSIBLE OFFER -->
 <div class="refer-section">
-  <div class="refer-inner">
-    <div class="refer-text">
-      <div class="refer-eyebrow">Eichler Market · The Impossible Offer</div>
+  <div class="refer-inner" data-reveal>
+    <div class="refer-text" data-reveal-child>
+      <div class="refer-eyebrow">Eichler Market · The $10,000 Credit</div>
       <h2>List with Tim. Get $10,000 toward your next move.</h2>
       <p>Set a Make Me Move price and receive a $10,000 account credit — applied toward buyer's agent commission or closing costs on your next deal with McMullen Properties. No points. No tiers. Flat.</p>
     </div>
-    <div class="refer-stats">
-      <div class="rp"><div class="rp-v">$10K</div><div class="rp-l">Account credit</div></div>
-      <div class="rp"><div class="rp-v">3%</div><div class="rp-l">Flat commission</div></div>
-      <div class="rp"><div class="rp-v">$0</div><div class="rp-l">Up front</div></div>
+    <div class="refer-stats" data-reveal-child>
+      <div class="rp"><div class="rp-v"><span data-count="10" data-prefix="$" data-suffix="K">$10K</span></div><div class="rp-l">Account credit</div></div>
+      <div class="rp"><div class="rp-v"><span data-count="3" data-suffix="%">3%</span></div><div class="rp-l">Flat commission</div></div>
+      <div class="rp"><div class="rp-v"><span data-count="0" data-prefix="$">$0</span></div><div class="rp-l">Up front</div></div>
     </div>
-    <button class="refer-btn" onclick="location.href='/make-me-move/'">Claim your $10K →</button>
+    <button class="refer-btn" onclick="location.href='/refer/'" data-cm-cta="home-claim-10k" data-reveal-child>Claim your $10K →</button>
   </div>
 </div>
 
@@ -2190,5 +2190,6 @@ if (document.readyState === 'loading') {
 </div>
 
 <script src="/assets/cm-track.js" defer></script>
+<script src="/assets/em-motion.js" defer></script>
 </body>
 </html>

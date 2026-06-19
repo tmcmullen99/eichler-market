@@ -180,15 +180,15 @@ a{text-decoration:none;color:inherit}
 </nav>
 
 <!-- HERO -->
-<section class="hiw-hero">
+<section class="hiw-hero" data-reveal>
   <div class="hiw-glow hiw-glow-1"></div>
-  <div class="hiw-eyebrow">Eichler Market · Silicon Valley</div>
-  <h1 class="hiw-h1">Every Eichler is for sale<br>for <em>the right price.</em></h1>
-  <p class="hiw-sub">A private marketplace connecting Eichler buyers and sellers across 28 Silicon Valley tracts — without listings, without agents in the middle, and without the usual friction.</p>
-  <div class="hiw-hero-ctas">
+  <div class="hiw-eyebrow" data-reveal-child>Eichler Market · Silicon Valley</div>
+  <h1 class="hiw-h1" data-reveal-child>Every Eichler is for sale<br>for <em data-tw>the right price.</em></h1>
+  <p class="hiw-sub" data-reveal-child>A private marketplace connecting Eichler buyers and sellers across 54 Silicon Valley tracts — without listings, without agents in the middle, and without the usual friction.</p>
+  <div class="hiw-hero-ctas" data-reveal-child>
     <a href="/" class="btn-p">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Browse 1,298 homes
+      Browse 1,768 homes
     </a>
     <a href="#buyer" class="btn-s">For buyers</a>
     <a href="#seller" class="btn-s">For sellers</a>
@@ -198,8 +198,8 @@ a{text-decoration:none;color:inherit}
 <!-- WHAT IS EICHLER MARKET -->
 <section class="hiw-what">
   <div class="hiw-section">
-    <div class="hiw-section-label">The Platform</div>
-    <h2 class="hiw-section-h2">An Eichler-only marketplace<br>built around a simple idea.</h2>
+    <div class="hiw-section-label" data-reveal-self>The Platform</div>
+    <h2 class="hiw-section-h2" data-reveal-self>An Eichler-only marketplace<br>built around a simple idea.</h2>
     <p class="hiw-section-p">Most of the best Eichler transactions never hit the MLS. They happen through community, through relationships, through someone knowing someone. Eichler Market brings that process online — with data, transparency, and a direct line to a specialist agent who has actually sold at record prices.</p>
     <div class="hiw-cols">
       <div class="hiw-col-img">
@@ -209,7 +209,7 @@ a{text-decoration:none;color:inherit}
         <div class="hiw-feature">
           <div class="hiw-feature-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
           <div>
-            <div class="hiw-feature-title">1,298 homes tracked</div>
+            <div class="hiw-feature-title"><span data-count="1768" data-comma="1">1,768</span> homes tracked</div>
             <div class="hiw-feature-desc">Every Eichler sold in Silicon Valley mapped by tract, price, and $/sqft. Real data, not aggregator estimates.</div>
           </div>
         </div>
@@ -243,7 +243,7 @@ a{text-decoration:none;color:inherit}
 <section class="hiw-process" id="buyer">
   <div class="hiw-section">
     <div class="hiw-section-label">Step by Step</div>
-    <h2 class="hiw-section-h2">Simple for buyers.<br>Straightforward for sellers.</h2>
+    <h2 class="hiw-section-h2" data-reveal-self>Simple for buyers.<br>Straightforward for sellers.</h2>
 
     <div class="hiw-process-tabs">
       <button class="hiw-tab on" onclick="switchTab('buyer')">I'm a buyer</button>
@@ -256,7 +256,7 @@ a{text-decoration:none;color:inherit}
         <div class="hiw-step-num">1</div>
         <div>
           <div class="hiw-step-title">Browse the map</div>
-          <div class="hiw-step-body">Every Eichler in Silicon Valley is plotted on the map — all 1,298 of them across 28 named tracts. Filter by city, sort by price or $/sqft, and click any home to see sale history. No account required to browse.</div>
+          <div class="hiw-step-body">Every Eichler in Silicon Valley is plotted on the map — all 1,768 of them across 54 named tracts. Filter by city, sort by price or $/sqft, and click any home to see sale history. No account required to browse.</div>
           <div class="hiw-step-tag"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> No login required</div>
         </div>
       </div>
@@ -362,10 +362,10 @@ a{text-decoration:none;color:inherit}
         <div class="hiw-mms-badge">Make Me Move</div>
       </div>
       <div class="hiw-mms-addr">783 Holly Oak Drive · 4BR · 3BA · 2,100 sf</div>
-      <div class="hiw-mms-stats">
-        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">$1,619</div><div class="hiw-mms-stat-l">Your $/sqft</div></div>
-        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">$1,580</div><div class="hiw-mms-stat-l">Tract avg $/sf</div></div>
-        <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">$2.98M</div><div class="hiw-mms-stat-l">Tract median</div></div>
+      <div class="hiw-mms-stats" data-reveal>
+        <div class="hiw-mms-stat" data-reveal-child><div class="hiw-mms-stat-v"><span data-count="1619" data-prefix="$" data-comma="1">$1,619</span></div><div class="hiw-mms-stat-l">Your $/sqft</div></div>
+        <div class="hiw-mms-stat" data-reveal-child><div class="hiw-mms-stat-v"><span data-count="1580" data-prefix="$" data-comma="1">$1,580</span></div><div class="hiw-mms-stat-l">Tract avg $/sf</div></div>
+        <div class="hiw-mms-stat" data-reveal-child><div class="hiw-mms-stat-v"><span data-count="2.98" data-prefix="$" data-suffix="M" data-dec="2">$2.98M</span></div><div class="hiw-mms-stat-l">Tract median</div></div>
         <div class="hiw-mms-stat"><div class="hiw-mms-stat-v">3%</div><div class="hiw-mms-stat-l">Fee if closes</div></div>
       </div>
       <div style="background:rgba(200,169,110,.08);border:1px solid rgba(200,169,110,.18);border-radius:8px;padding:12px;font-size:12px;color:rgba(200,169,110,.8);line-height:1.6">
@@ -387,7 +387,7 @@ a{text-decoration:none;color:inherit}
         <div class="hiw-fee-card-price">Free</div>
         <div class="hiw-fee-card-sub">to browse, submit offers, and search</div>
         <div class="hiw-fee-list">
-          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Browse all 1,298 homes</div>
+          <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Browse all 1,768 homes</div>
           <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Submit offers on any home</div>
           <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> View sale history and $/sqft data</div>
           <div class="hiw-fee-item"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> No account required</div>
@@ -406,7 +406,7 @@ a{text-decoration:none;color:inherit}
         </div>
       </div>
       <div class="hiw-fee-card">
-        <div class="hiw-fee-card-label">The Impossible Offer</div>
+        <div class="hiw-fee-card-label">The $10,000 Credit</div>
         <div class="hiw-fee-card-price">$10K</div>
         <div class="hiw-fee-card-sub">account credit toward your next deal</div>
         <div class="hiw-fee-list">
@@ -459,7 +459,7 @@ a{text-decoration:none;color:inherit}
           <span class="hiw-faq-q-text">Where does the sale history data come from?</span>
           <svg class="hiw-faq-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="hiw-faq-a">The 1,298 home database is compiled from MLS sale records across all Silicon Valley Eichler tracts, normalized and geocoded by tract. Every address, sale price, date, beds, baths, and square footage is sourced from recorded transactions. The data is updated periodically as new sales are recorded.</div>
+        <div class="hiw-faq-a">The 1,768 home database is compiled from MLS sale records across all Silicon Valley Eichler tracts, normalized and geocoded by tract. Every address, sale price, date, beds, baths, and square footage is sourced from recorded transactions. The data is updated periodically as new sales are recorded.</div>
       </div>
       <div class="hiw-faq-item">
         <div class="hiw-faq-q" onclick="toggleFaq(this)">
@@ -475,7 +475,7 @@ a{text-decoration:none;color:inherit}
 <!-- FINAL CTA -->
 <div class="hiw-cta">
   <h2>Ready to find your Eichler?</h2>
-  <p>Browse 1,298 homes across 28 Silicon Valley tracts. Submit an offer on any home, any time.</p>
+  <p>Browse 1,768 homes across 54 Silicon Valley tracts. Submit an offer on any home, any time.</p>
   <div class="hiw-cta-btns">
     <a href="/" class="btn-dark">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -544,5 +544,6 @@ function toggleFaq(btn){
   </div>
 </div>
 <script src="/assets/cm-track.js" defer></script>
+<script src="/assets/em-motion.js" defer></script>
 </body>
 </html>

@@ -150,7 +150,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height
   .mms-hero-ctas{flex-direction:column;align-items:center}
 }
 
-/* ── The Impossible Offer Section ── */
+/* ── The $10,000 Credit Section ── */
 .mms-refer{background:#1a1f2e;padding:80px 0;}
 .mms-refer-inner{max-width:1100px;margin:0 auto;padding:0 48px;}
 .refer-split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
@@ -220,12 +220,12 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height
 <body>
 <div id="em-auth-nav"></div>
 
-<section class="mms-hero">
+<section class="mms-hero" data-reveal>
   <div class="mms-hero-inner">
-    <div class="mms-hero-ey">Eichler Market · Make Me Move</div>
-    <h1 class="mms-hero-title">Name the price<br>you'd <em>actually</em> sell for.</h1>
-    <p class="mms-hero-sub">Set a public Make Me Move price on your Eichler. Signal you're open to the right offer — without a listing, lockbox, or open house.</p>
-    <div class="mms-hero-ctas">
+    <div class="mms-hero-ey" data-reveal-child>Eichler Market · Make Me Move</div>
+    <h1 class="mms-hero-title" data-reveal-child>Name the price<br>you'd <em data-tw>actually</em> sell for.</h1>
+    <p class="mms-hero-sub" data-reveal-child>Set a public Make Me Move price on your Eichler. Signal you're open to the right offer — without a listing, lockbox, or open house.</p>
+    <div class="mms-hero-ctas" data-reveal-child>
       <button class="btn-warm" onclick="openMmsModal()">Set my price →</button>
       <a href="/" class="btn-ghost">Browse Eichler homes</a>
     </div>
@@ -233,10 +233,10 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height
 </section>
 
 <div class="mms-numbers">
-  <div class="mms-nums-inner">
-    <div class="mms-num"><div class="mms-num-v">3%</div><div class="mms-num-l">Flat fee — always</div></div>
-    <div class="mms-num"><div class="mms-num-v">1,768</div><div class="mms-num-l">Eichler homes tracked</div></div>
-    <div class="mms-num"><div class="mms-num-v">$0</div><div class="mms-num-l">To list. No obligation.</div></div>
+  <div class="mms-nums-inner" data-reveal>
+    <div class="mms-num" data-reveal-child><div class="mms-num-v"><span data-count="3" data-suffix="%">3%</span></div><div class="mms-num-l">Flat fee — always</div></div>
+    <div class="mms-num" data-reveal-child><div class="mms-num-v"><span data-count="1768" data-comma="1">1,768</span></div><div class="mms-num-l">Eichler homes tracked</div></div>
+    <div class="mms-num" data-reveal-child><div class="mms-num-v"><span data-count="0" data-prefix="$">$0</span></div><div class="mms-num-l">To list. No obligation.</div></div>
   </div>
 </div>
 
@@ -337,25 +337,25 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height
 
 <section class="mms-fee">
   <div class="mms-fee-inner">
-    <div class="fee-header">
+    <div class="fee-header" data-reveal-self>
       <div class="sec-ey">Pricing</div>
       <h2 class="sec-title">One flat fee. Always 3%.</h2>
       <p class="sec-sub">Replaces traditional 5–6% commissions entirely. The split changes if a buyer nominates an agent — the total never does.</p>
     </div>
-    <div class="fee-grid">
-      <div class="fee-card">
+    <div class="fee-grid" data-reveal>
+      <div class="fee-card" data-reveal-child>
         <div class="fee-label">Always</div>
         <div class="fee-pct">3%</div>
         <div class="fee-title">Platform fee</div>
         <div class="fee-desc">Covers full facilitation by McMullen Properties — LOI, CAR purchase contract, and close of escrow.</div>
       </div>
-      <div class="fee-card">
+      <div class="fee-card" data-reveal-child>
         <div class="fee-label">If buyer nominates an agent</div>
         <div class="fee-pct">1%</div>
         <div class="fee-title">Buyer's agent commission</div>
         <div class="fee-desc">1% of the platform fee is allocated to the buyer's nominated agent. Your total cost as seller stays 3% — never added on top.</div>
       </div>
-      <div class="fee-card">
+      <div class="fee-card" data-reveal-child>
         <div class="fee-label">Traditional commission</div>
         <div class="fee-pct">5–6%</div>
         <div class="fee-title">What you're replacing</div>
@@ -363,7 +363,7 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height
       </div>
     </div>
     <div class="fee-always">
-      <div class="fee-always-pct">3%</div>
+      <div class="fee-always-pct"><span data-count="3" data-suffix="%">3%</span></div>
       <div>
         <div class="fee-always-title">The fee is always 3%. The split just changes.</div>
         <div class="fee-always-sub">The platform fee is always 3%. If the buyer nominates an agent, 1% of that 3% is paid to their agent. The seller always pays exactly 3%.</div>
@@ -372,26 +372,26 @@ body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--n);line-height
   </div>
 </section>
 
-<!-- The Impossible Offer Section -->
+<!-- The $10,000 Credit Section -->
 <section class="mms-refer">
   <div class="mms-refer-inner">
     <div class="refer-split">
       <div class="refer-left">
-        <div class="sec-ey" style="color:var(--warm)">The Impossible Offer</div>
+        <div class="sec-ey" style="color:var(--warm)">The $10,000 Credit</div>
         <h2 class="sec-title" style="color:#fff">List with Tim.<br>Get $10,000 toward your next move.</h2>
         <p class="sec-sub" style="color:rgba(145,161,186,.7)">Set a Make Me Move price and receive a $10,000 account credit — applied toward buyer's agent commission or closing costs on your next deal with McMullen Properties. No points. No tiers. Flat.</p>
-        <div class="refer-how">
-          <div class="refer-step"><div class="refer-step-num">1</div><div class="refer-step-text"><strong>Set your Make Me Move price</strong> — name the number that would make you move. Takes 60 seconds, no listing required.</div></div>
-          <div class="refer-step"><div class="refer-step-num">2</div><div class="refer-step-text"><strong>Tim reviews and activates</strong> — your price goes live privately to qualified buyers. You stay in control the entire time.</div></div>
-          <div class="refer-step"><div class="refer-step-num">3</div><div class="refer-step-text"><strong>A deal comes together</strong> — when a buyer engages, McMullen Properties facilitates LOI through close at a flat 3%.</div></div>
-          <div class="refer-step"><div class="refer-step-num">4</div><div class="refer-step-text"><strong>Claim your $10,000</strong> — credited toward your next purchase or sale through McMullen Properties. No expiration, applied at close.</div></div>
+        <div class="refer-how" data-reveal>
+          <div class="refer-step" data-reveal-child><div class="refer-step-num">1</div><div class="refer-step-text"><strong>Set your Make Me Move price</strong> — name the number that would make you move. Takes 60 seconds, no listing required.</div></div>
+          <div class="refer-step" data-reveal-child><div class="refer-step-num">2</div><div class="refer-step-text"><strong>Tim reviews and activates</strong> — your price goes live privately to qualified buyers. You stay in control the entire time.</div></div>
+          <div class="refer-step" data-reveal-child><div class="refer-step-num">3</div><div class="refer-step-text"><strong>A deal comes together</strong> — when a buyer engages, McMullen Properties facilitates LOI through close at a flat 3%.</div></div>
+          <div class="refer-step" data-reveal-child><div class="refer-step-num">4</div><div class="refer-step-text"><strong>Claim your $10,000</strong> — credited toward your next purchase or sale through McMullen Properties. No expiration, applied at close.</div></div>
         </div>
         <button class="mms-cta-btn" onclick="document.getElementById('mms-form')?.scrollIntoView({behavior:'smooth'})" style="margin-top:28px">Set my Make Me Move price →</button>
       </div>
       <div class="refer-right">
         <div class="refer-cards">
-          <div class="refer-point-card">
-            <div class="rpc-big">$10K</div>
+          <div class="refer-point-card" data-reveal-self>
+            <div class="rpc-big"><span data-count="10" data-prefix="$" data-suffix="K">$10K</span></div>
             <div class="rpc-label">Account credit toward<br>your next deal</div>
           </div>
           <div class="refer-calc">
@@ -590,5 +590,6 @@ async function submitMms(){
   </div>
 </div>
 <script src="/assets/cm-track.js" defer></script>
+<script src="/assets/em-motion.js" defer></script>
 </body>
 </html>
