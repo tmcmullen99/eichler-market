@@ -35,7 +35,7 @@
 [data-reveal-self].is-in{opacity:1;transform:none}
 .c-hero-img{display:none}
 .c-hero-grad{position:absolute;inset:0;}
-.c-hero-wrap{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;}
+.c-hero-wrap{position:relative;z-index:2;width:100%;max-width:1260px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;}
 .c-hero-lead{padding:48px 0;}
 .c-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,.9);margin-bottom:14px;}
 .c-h1{font-family:'Playfair Display',serif;font-size:58px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.02;letter-spacing:-.02em;min-height:60px;}
@@ -217,10 +217,11 @@ a{text-decoration:none;color:inherit}
 .c-prow{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--b)}
 .c-prow:last-child{border-bottom:none}
 /* ABOUT / SELL sections */
-.c-info,.cm-sell{padding:72px 64px;background:#fff;}
+.c-info,.cm-sell{padding:72px 0;background:#fff;}
+.c-info>*{max-width:1260px;margin-left:auto;margin-right:auto;padding-left:48px;padding-right:48px;box-sizing:border-box;}
 .c-info{border-top:2px solid var(--b)}
 .cm-sell{background:#fff;border-top:2px solid var(--n)}
-.sell2{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.sell2{max-width:1260px;margin:0 auto;padding:0 48px;box-sizing:border-box;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
 .sell2-eyebrow{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:12px}
 .sell2-h2{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--n);margin-bottom:14px;line-height:1.12}
 .sell2-p{font-size:14.5px;color:#6b7280;line-height:1.7;margin-bottom:22px;max-width:460px}
@@ -274,7 +275,8 @@ a{text-decoration:none;color:inherit}
   .c-hero-wrap{grid-template-columns:1fr;gap:24px;padding:0 28px;}
   .c-hero{min-height:auto;}
   .c-tabs{padding:0 20px}
-  .c-info,.cm-sell{padding:28px 20px}
+  .c-info,.cm-sell{padding:28px 0}
+  .c-info>*,.sell2{padding-left:20px;padding-right:20px}
 }
 
 /* ── Tract Facts card ─────────────────────────────────────────── */
@@ -485,7 +487,7 @@ a{text-decoration:none;color:inherit}
   .c-hero-lead{padding:36px 0 12px;}
   .c-h1{font-size:44px;}
   .c-hero-card{margin-bottom:0;}
-  .c-info,.cm-sell{padding:28px 20px;}
+  .c-info,.cm-sell{padding:28px 0;}
 }
 @media(max-width:600px){
   .c-hero{min-height:auto;}
@@ -505,7 +507,8 @@ a{text-decoration:none;color:inherit}
   .c-body{padding:0 0 32px;}
   #c-homes{padding:14px 14px 16px;}
   .c-side{padding:0 14px 28px;}
-  .c-info,.cm-sell{padding:18px 14px;}
+  .c-info,.cm-sell{padding:18px 0;}
+  .c-info>*,.sell2{padding-left:14px;padding-right:14px}
   .nbhd-bar{padding:12px 14px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
   .feat-row{margin:0 14px 12px;border-radius:12px;}
   .mms-banner{margin:0 14px 10px;border-radius:12px;}
@@ -529,7 +532,7 @@ a{text-decoration:none;color:inherit}
 
 /* ── Footer How It Works ── */
 .footer-hiw{background:#0d1119;border-top:1px solid rgba(255,255,255,.07);padding:48px 0 40px;}
-.footer-hiw-inner{max-width:1200px;margin:0 auto;padding:0 64px;}
+.footer-hiw-inner{max-width:1260px;margin:0 auto;padding:0 48px;}
 .footer-hiw-eyebrow{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,169,110,.6);margin-bottom:24px;}
 .footer-hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-bottom:28px;}
 .footer-hiw-step{display:flex;gap:12px;align-items:flex-start;}
