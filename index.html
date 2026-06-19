@@ -908,8 +908,9 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
       if(el) el.textContent = n;
     });
 
-    // Active listings grid
-    L.activeListings().then(function(rows){
+    // Active listings grid — use the GALLERY view so covers come from re-hosted
+    // Supabase storage (photos[0]) instead of hotlink-blocked MLS media URLs.
+    L.activeGallery().then(function(rows){
       var g = document.getElementById('em-active-grid');
       if(!g) return;
       if(!rows.length){ g.innerHTML = '<div style="color:#91a1ba;font-size:14px">No active listings right now — check back soon.</div>'; return; }
@@ -919,8 +920,9 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
         var comm = chref
           ? '<a href="'+chref+'" style="color:var(--warm);text-decoration:none">'+L.esc(r.community_name)+'</a>'
           : '<span style="color:#91a1ba">'+L.esc(r.community_name||'')+'</span>';
-        var photo = r.photo_url
-          ? '<div style="aspect-ratio:4/3;background:#eceef2 url('+L.esc(r.photo_url)+') center/cover"></div>'
+        var cover = (r.photos && r.photos.length ? r.photos[0] : r.photo_url) || '';
+        var photo = cover
+          ? '<div style="aspect-ratio:4/3;background:#eceef2 url('+L.esc(cover)+') center/cover"></div>'
           : '<div style="aspect-ratio:4/3;background:#1a1f2e;display:flex;align-items:center;justify-content:center;color:#3a4256;font-size:12px">No photo</div>';
         return '<a href="'+href+'" style="display:block;text-decoration:none;border:1px solid #e6e9ee;border-radius:12px;overflow:hidden;background:#fff;transition:box-shadow .15s" onmouseover="this.style.boxShadow=\'0 8px 24px rgba(26,31,46,.10)\'" onmouseout="this.style.boxShadow=\'none\'">'
           + photo
