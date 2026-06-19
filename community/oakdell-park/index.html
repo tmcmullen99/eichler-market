@@ -23,6 +23,11 @@
 .c-stat{display:flex;flex-direction:column;}
 .c-stat-v{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:2px;}
 .c-stat-l{font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(145,161,186,.6);}
+.c-hero-sub{font-size:13px;line-height:1.5;color:rgba(232,235,240,.78);max-width:420px;margin:10px 0 16px;}
+.c-hero-credit{margin-top:14px;font-size:12px;color:rgba(232,235,240,.82);line-height:1.5;}
+.c-hero-credit-amt{font-family:'Playfair Display',serif;font-weight:700;color:var(--warm);font-size:15px;}
+.c-hero-credit a{color:var(--warm);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(200,169,110,.4);}
+.c-hero-credit a:hover{border-color:var(--warm);}
 .c-hero-cta{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
 .btn-hero-p,.btn-hero-s{font-size:12px;font-weight:700;border-radius:100px;cursor:pointer;font-family:inherit;white-space:nowrap;letter-spacing:.02em;padding:11px 22px;}
 .btn-hero-p{background:var(--warm,#c8a96e);color:#1a1f2e;border:none;}
@@ -126,6 +131,37 @@ a{text-decoration:none;color:inherit}
 .is-self .cm-bar-t,.is-self .cm-bar-v{color:#fff}
 .is-self .cm-bar-s{color:rgba(255,255,255,.5)}
 .cm-bar-self-tag{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--warm);margin-left:8px}
+/* Interactive viz: chart + table */
+.cm-viz{margin-top:26px}
+.cm-viz-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.cm-viz-toggle{display:inline-flex;background:var(--bg);border:1px solid var(--b);border-radius:9px;padding:3px;gap:2px}
+.cm-vt{font-size:11px;font-weight:600;color:var(--g);background:none;border:none;padding:7px 12px;border-radius:7px;cursor:pointer;font-family:inherit;transition:.15s}
+.cm-vt.on{background:var(--n);color:#fff}
+.cm-chart-wrap{border:1px solid var(--b);border-radius:12px;background:var(--w);padding:16px 14px 10px;overflow:hidden}
+.cm-chart svg{display:block;width:100%;height:auto}
+.cm-chart-empty{font-size:12px;color:var(--g);text-align:center;padding:30px 10px;line-height:1.6}
+.cm-dot{cursor:pointer;transition:r .12s}
+.cm-dot:hover{r:7}
+.cm-chart-tip{font-size:10px;fill:var(--g)}
+.cm-axis{stroke:var(--b);stroke-width:1}
+.cm-axis-lbl{font-size:9px;fill:var(--g);font-weight:600}
+.cm-trend{stroke:var(--warm);stroke-width:1.5;stroke-dasharray:4 3;fill:none}
+.cm-barv{fill:var(--n);transition:fill .15s}
+.cm-barv:hover{fill:var(--warm)}
+/* Sortable table */
+.cm-tbl-wrap{margin-top:18px;border:1px solid var(--b);border-radius:12px;overflow:hidden;overflow-x:auto}
+.cm-tbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:480px}
+.cm-tbl thead th{background:var(--bg);text-align:left;padding:10px 12px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);cursor:pointer;white-space:nowrap;user-select:none;border-bottom:1px solid var(--b)}
+.cm-tbl thead th:hover{color:var(--n)}
+.cm-tbl thead th .cm-sort-i{opacity:.4;font-size:8px;margin-left:3px}
+.cm-tbl thead th.on .cm-sort-i{opacity:1;color:var(--warm)}
+.cm-tbl tbody td{padding:11px 12px;border-bottom:1px solid var(--bg);color:var(--n)}
+.cm-tbl tbody tr:last-child td{border-bottom:none}
+.cm-tbl tbody tr:hover{background:rgba(200,169,110,.05)}
+.cm-tbl .cm-td-addr{font-weight:600}
+.cm-tbl .cm-td-z{color:var(--warm);font-weight:600;text-decoration:none;font-size:11px;white-space:nowrap}
+.cm-tbl .cm-td-z:hover{text-decoration:underline}
+.cm-tbl-num{font-variant-numeric:tabular-nums;white-space:nowrap}
 /* Group header */
 .c-grp{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--g);padding:14px 0 6px;border-top:1px solid var(--b);margin-top:6px;display:flex;align-items:baseline;gap:8px}
 .c-grps{font-family:'Playfair Display',serif;font-size:12px;color:var(--warm);font-weight:400;text-transform:none;letter-spacing:0}
@@ -239,6 +275,55 @@ a{text-decoration:none;color:inherit}
 .mms-card-ppsf{font-size:10px;color:rgba(145,161,186,.4);margin-top:2px;text-align:right}
 .mms-card-btn{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;cursor:pointer;font-family:inherit;border-radius:6px;flex-shrink:0;transition:background .15s}
 .mms-card-btn:hover{background:rgba(255,255,255,.2)}
+/* MMS gate (logged-out off-market teaser) */
+.mms-gate{display:flex;gap:14px;padding:16px 18px;align-items:flex-start}
+.mms-gate-lock{width:38px;height:38px;border-radius:50%;background:rgba(200,169,110,.12);border:1px solid rgba(200,169,110,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mms-gate-hd{font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;margin-bottom:5px;line-height:1.3}
+.mms-gate-sub{font-size:11.5px;color:rgba(145,161,186,.72);line-height:1.55;margin-bottom:11px}
+.mms-gate-btn{background:var(--warm);color:var(--n);border:none;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;cursor:pointer;font-family:inherit;border-radius:7px;transition:.15s}
+.mms-gate-btn:hover{filter:brightness(1.07)}
+/* Account / seller signup modal */
+.em-modal-bg{display:none;position:fixed;inset:0;background:rgba(26,31,46,.7);z-index:10000;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.em-modal-bg.open{display:flex}
+.em-modal{background:#fff;width:100%;max-width:560px;max-height:94vh;overflow-y:auto;box-shadow:0 24px 64px rgba(26,31,46,.26);border-radius:18px}
+.em-mhd{background:linear-gradient(145deg,#1a1f2e,#0e1118);padding:22px 24px 20px;position:relative}
+.em-mhd-x{position:absolute;top:16px;right:18px;background:rgba(255,255,255,.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;line-height:1}
+.em-mhd-eyebrow{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--warm);margin-bottom:7px}
+.em-mhd-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#fff;line-height:1.12;margin-bottom:6px}
+.em-mhd-sub{font-size:12.5px;color:rgba(232,235,240,.72);line-height:1.5}
+.em-mbody{padding:22px 24px 24px}
+/* Trust pillars */
+.em-trust{display:flex;flex-direction:column;gap:12px;margin:4px 0 20px}
+.em-trust-row{display:flex;gap:12px;align-items:flex-start}
+.em-trust-i{width:30px;height:30px;border-radius:8px;background:var(--bg);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.em-trust-t{font-size:13px;font-weight:700;color:var(--n);margin-bottom:2px}
+.em-trust-s{font-size:11.5px;color:var(--g);line-height:1.5}
+/* Price slider */
+.em-slider-wrap{background:var(--bg);border:1px solid var(--b);border-radius:14px;padding:18px;margin-bottom:18px}
+.em-slider-lab{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:8px}
+.em-slider-val{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--n);line-height:1;margin-bottom:4px}
+.em-slider-ppsf{font-size:11px;color:var(--g);margin-bottom:14px}
+.em-range{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--warm) 0%,var(--warm) 50%,var(--b) 50%);outline:none}
+.em-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--n);border:3px solid var(--warm);cursor:pointer}
+.em-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--n);border:3px solid var(--warm);cursor:pointer}
+.em-range-ends{display:flex;justify-content:space-between;font-size:10px;color:var(--g);margin-top:6px}
+/* Form */
+.em-field{margin-bottom:13px}
+.em-field label{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--g);margin-bottom:5px}
+.em-input{width:100%;padding:12px 14px;border:1.5px solid var(--b);border-radius:10px;font-size:14px;font-family:inherit;color:var(--n);outline:none;transition:border-color .15s;box-sizing:border-box}
+.em-input:focus{border-color:var(--warm)}
+.em-btn-primary{width:100%;background:var(--n);color:#fff;border:none;padding:14px;font-size:14px;font-weight:700;border-radius:11px;cursor:pointer;font-family:inherit;transition:.15s}
+.em-btn-primary:hover{background:#0e1118}
+.em-btn-ghost{width:100%;background:none;color:var(--g);border:none;padding:11px;font-size:12px;cursor:pointer;font-family:inherit;margin-top:4px}
+.em-fineprint{font-size:10.5px;color:var(--g);line-height:1.5;text-align:center;margin-top:12px}
+.em-fineprint a{color:var(--n);font-weight:600}
+.em-progress{display:flex;gap:5px;margin-bottom:18px}
+.em-progress span{flex:1;height:3px;border-radius:2px;background:var(--b);transition:background .2s}
+.em-progress span.on{background:var(--warm)}
+.em-step{display:none}.em-step.on{display:block;animation:emfade .25s}
+@keyframes emfade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.em-toggle-mode{font-size:12px;color:var(--g);text-align:center;margin-top:10px}
+.em-toggle-mode a{color:var(--n);font-weight:700;cursor:pointer}
 
 
 /* B3 Offer Modal */
@@ -434,18 +519,20 @@ a{text-decoration:none;color:inherit}
   <div class="c-hero-grad"></div>
   <div class="c-hero-body">
     <div class="c-hero-inner">
-      <div>
+      <div class="c-hero-lead">
         <div class="c-eyebrow">Menlo Park · Eichler Tract</div>
         <h1 class="c-h1 sf">Oakdell Park</h1>
-        <div class="c-stats">
-          <div class="c-stat"><div class="c-stat-v">140</div><div class="c-stat-l">Homes</div></div>
-          <div class="c-stat"><div class="c-stat-v">$2,980K</div><div class="c-stat-l">Median</div></div>
-          <div class="c-stat"><div class="c-stat-v">$1,580/sf</div><div class="c-stat-l">Avg $/sf</div></div>
+        <div class="c-hero-sub">Anshen + Allen Eichlers · A private off-market exchange for every home in the tract.</div>
+        <div class="c-stats" id="c-hero-stats">
+          <div class="c-stat"><div class="c-stat-v">~140</div><div class="c-stat-l">Homes in tract</div></div>
+          <div class="c-stat"><div class="c-stat-v" id="hs-sales">4</div><div class="c-stat-l">Sales on record</div></div>
+          <div class="c-stat"><div class="c-stat-v" id="hs-ppsf">$1,704</div><div class="c-stat-l">Median $/sf</div></div>
         </div>
       </div>
       <div class="c-hero-cta">
         <button class="btn-hero-p" onclick="openOffer('')">Make an offer →</button>
-        <button class="btn-hero-s" onclick="openMmsHero()">Make Me Move ↗</button>
+        <button class="btn-hero-s" onclick="openMmsHero()">Name your price ↗</button>
+        <div class="c-hero-credit"><span class="c-hero-credit-amt">$10,000</span> buyer credit at close · <a href="#" onclick="emOpenSignup('hero-credit');return false;">create a free account →</a></div>
       </div>
     </div>
   </div>
@@ -487,7 +574,7 @@ a{text-decoration:none;color:inherit}
 [{"a":"1611 Oakdell Drive","bd":3,"ba":2,"sf":1610,"sp":4200000,"dt":"Mar 2025","lat":37.437651,"lng":-122.189216,"img":"/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg","ppsf":2609,"c":"Menlo Park","z":"94025"},{"a":"1794 Oakdell Drive","bd":4,"ba":2,"sf":2668,"sp":3788000,"dt":"Mar 2019","lat":37.435087,"lng":-122.191922,"img":"/assets/photos/sm/1794-oakdell-drive-menlo-park.jpg","ppsf":1420,"c":"Menlo Park","z":"94025"},{"a":"565 Olive Street","bd":5,"ba":3,"sf":2790,"sp":3335000,"dt":"Jun 2020","lat":37.437447,"lng":-122.188776,"img":"/assets/photos/sm/565-olive-street-menlo-park.jpg","ppsf":1195,"c":"Menlo Park","z":"94025"},{"a":"1631 Magnolia Court","bd":4,"ba":2,"sf":1660,"sp":3300000,"dt":"Jun 2017","lat":37.437142,"lng":-122.189095,"img":"/assets/photos/sm/1631-magnolia-court-menlo-park.jpg","ppsf":1988,"c":"Menlo Park","z":"94025"}]
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>setTimeout(function(){if(typeof initCmMap==="function"&&typeof L!=="undefined")initCmMap();if(typeof renderDossier==="function")renderDossier();if(typeof renderCompare==="function")renderCompare();},50);</script>
+<script>setTimeout(function(){if(typeof initCmMap==="function"&&typeof L!=="undefined")initCmMap();if(typeof renderDossier==="function")renderDossier();if(typeof renderViz==="function")renderViz();if(typeof renderCompare==="function")renderCompare();},50);</script>
 
       <div class="cm-map-outer">
         <div id="cm-map"></div>
@@ -498,6 +585,9 @@ a{text-decoration:none;color:inherit}
 
       <!-- By the numbers (Arden-grade, computed from sales) -->
       <div class="cm-dossier" id="cm-dossier"></div>
+
+      <!-- Interactive chart (toggleable views) + sortable sales table -->
+      <div class="cm-viz" id="cm-viz"></div>
 
       <div class="c-fr">
         <button class="c-ft on" id="ft-all" onclick="setCmTab('all')">All <span class="c-ftc">4</span></button>
@@ -529,8 +619,8 @@ a{text-decoration:none;color:inherit}
       <div class="c-shd">About Oakdell Park</div>
       <p class="c-desc">Built in 1950, Oakdell Park is one of Eichler's earliest tracts and among the most historically significant — the original 63 homes on Ivy Lane, Channing Avenue, Greer Road, and Wildwood Lane are on the National Register of Historic Places. Eichler also built Edgewood Plaza nearby, the only shopping center he ever developed. The later Edgewood homes (1955–56) are not on the Register.</p>
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
-        <div style="background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">140</span> <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)">Homes tracked</span></div>
-        <div style="background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">$2,980,000</span> <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)">Median</span></div>
+        <div style="background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">~140</span> <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)">Homes in tract</span></div>
+        <div style="background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">$3,561,500</span> <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)">Median sale</span></div>
         <div style="background:var(--bg);border:1px solid var(--b);padding:8px 14px"><span style="font-size:14px;font-weight:700;color:var(--n)">$1,580/sf</span> <span style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g)">Avg $/sqft</span></div>
       </div>
       <div class="c-shd">Eichler Features</div>
@@ -905,7 +995,7 @@ function renderDossier(){
       +'<div class="cm-num"><div class="cm-num-v">'+cmFmtP(medPrice)+'</div><div class="cm-num-l">Median sale price</div><div class="cm-num-s">All recorded closings</div></div>'
       +'<div class="cm-num"><div class="cm-num-v">'+soldLabel+'</div><div class="cm-num-l">Recent sales</div><div class="cm-num-s">Closed, '+soldWindow+'</div></div>'
       +'<div class="cm-num"><div class="cm-num-v">'+cmFmtP(last.sp)+'</div><div class="cm-num-l">Last sale</div><div class="cm-num-s">'+last.a+' · '+last.dt+'</div></div>'
-      +'<div class="cm-num"><div class="cm-num-v">'+d.length+'</div><div class="cm-num-l">Homes tracked</div><div class="cm-num-s">Sales in our records</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+d.length+'</div><div class="cm-num-l">Sales on record</div><div class="cm-num-s">Out of ~140 homes in tract</div></div>'
       +'<div class="cm-num"><div class="cm-num-v">'+yrRange+'</div><div class="cm-num-l">Sale years</div><div class="cm-num-s">Earliest–latest on record</div></div>'
     +'</div>'
     +'<div class="cm-num-cmp"><div class="cm-cmp-chip">vs. all Eichler median ($'+ALL_EICHLER_PPSF.toLocaleString()+'/sf) <b class="'+diffCls+'">'+diffSign+diff+'%</b></div></div>';
@@ -926,6 +1016,96 @@ function renderCompare(){
     }).join('')+'</div>';
 }
 
+// ── Interactive chart + sortable table ──────────────────────────────────────
+var _vizMode='ppsf';   // 'ppsf' (scatter $/sf over time) | 'price' (price by year bars)
+var _tblSort={k:'dt',dir:-1};
+function _vizParseDt(s){var m=(s||'').match(/([A-Za-z]{3})\s+(\d{4})/);if(!m)return null;var mo={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11}[m[1]];return new Date(+m[2],mo||0,1);}
+function renderViz(){
+  var el=document.getElementById('cm-viz');if(!el)return;
+  var d=CM_PROPS||[];
+  el.innerHTML=
+    '<div class="cm-viz-head">'
+      +'<div><div class="cm-dossier-hd">Sale history</div><h2 class="cm-dossier-h2">Price <em>trends</em></h2></div>'
+      +'<div class="cm-viz-toggle">'
+        +'<button class="cm-vt'+(_vizMode==="ppsf"?" on":"")+'" onclick="setViz(\'ppsf\')">$/sf over time</button>'
+        +'<button class="cm-vt'+(_vizMode==="price"?" on":"")+'" onclick="setViz(\'price\')">Price by year</button>'
+      +'</div>'
+    +'</div>'
+    +'<div class="cm-chart-wrap"><div class="cm-chart" id="cm-chart"></div></div>'
+    +'<div class="cm-tbl-wrap" id="cm-tbl-wrap"></div>';
+  drawChart(); drawTable();
+}
+function setViz(m){_vizMode=m;renderViz();}
+function drawChart(){
+  var host=document.getElementById('cm-chart');if(!host)return;
+  var d=(CM_PROPS||[]).map(function(p){return {p:p,d:_vizParseDt(p.dt)};}).filter(function(x){return x.d&&x.p.ppsf&&x.p.sp;});
+  if(d.length<2){host.innerHTML='<div class="cm-chart-empty">Not enough recorded sales in this tract to chart a trend yet.<br>'+(CM_PROPS.length||0)+' sale'+((CM_PROPS.length===1)?'':'s')+' on record.</div>';return;}
+  var W=620,H=240,padL=48,padR=16,padT=14,padB=30,iw=W-padL-padR,ih=H-padT-padB;
+  var xs=d.map(function(x){return x.d.getTime();}),xmin=Math.min.apply(0,xs),xmax=Math.max.apply(0,xs);
+  if(xmin===xmax){xmin-=15768e7;xmax+=15768e7;}
+  function X(t){return padL+(t-xmin)/(xmax-xmin)*iw;}
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+  if(_vizMode==='ppsf'){
+    var ys=d.map(function(x){return x.p.ppsf;}),ymin=Math.min.apply(0,ys),ymax=Math.max.apply(0,ys);
+    var pad=(ymax-ymin)*0.15||ymax*0.1;ymin=Math.max(0,ymin-pad);ymax=ymax+pad;
+    function Y(v){return padT+ih-(v-ymin)/(ymax-ymin)*ih;}
+    // gridlines + y labels
+    for(var g=0;g<=3;g++){var yv=ymin+(ymax-ymin)*g/3,yy=Y(yv);svg+='<line class="cm-axis" x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" opacity="0.5"/><text class="cm-axis-lbl" x="'+(padL-6)+'" y="'+(yy+3)+'" text-anchor="end">$'+Math.round(yv).toLocaleString()+'</text>';}
+    // trend line (least squares)
+    var n=d.length,sx=0,sy=0,sxy=0,sxx=0;
+    d.forEach(function(x){var xv=(x.d.getTime()-xmin)/(xmax-xmin),yv=x.p.ppsf;sx+=xv;sy+=yv;sxy+=xv*yv;sxx+=xv*xv;});
+    var slope=(n*sxy-sx*sy)/((n*sxx-sx*sx)||1),inter=(sy-slope*sx)/n;
+    svg+='<path class="cm-trend" d="M'+X(xmin)+' '+Y(inter)+' L'+X(xmax)+' '+Y(slope+inter)+'"/>';
+    // x labels (year span)
+    svg+='<text class="cm-axis-lbl" x="'+padL+'" y="'+(H-8)+'">'+new Date(xmin).getFullYear()+'</text><text class="cm-axis-lbl" x="'+(W-padR)+'" y="'+(H-8)+'" text-anchor="end">'+new Date(xmax).getFullYear()+'</text>';
+    d.forEach(function(x){var cx=X(x.d.getTime()),cy=Y(x.p.ppsf);svg+='<circle class="cm-dot" cx="'+cx+'" cy="'+cy+'" r="5" fill="#c8a96e" stroke="#1a1f2e" stroke-width="1"><title>'+x.p.a+' · '+x.p.dt+' · $'+x.p.ppsf.toLocaleString()+'/sf</title></circle>';});
+  } else {
+    // Price by year bars (median per year)
+    var byYr={};d.forEach(function(x){var y=x.d.getFullYear();(byYr[y]=byYr[y]||[]).push(x.p.sp);});
+    var yrs=Object.keys(byYr).sort(),vals=yrs.map(function(y){var a=byYr[y].slice().sort(function(p,q){return p-q;});return a[Math.floor(a.length/2)];});
+    var ymax=Math.max.apply(0,vals)*1.12,bw=iw/yrs.length*0.62,gap=iw/yrs.length;
+    for(var g2=0;g2<=3;g2++){var yv2=ymax*g2/3,yy2=padT+ih-(yv2/ymax)*ih;svg+='<line class="cm-axis" x1="'+padL+'" y1="'+yy2+'" x2="'+(W-padR)+'" y2="'+yy2+'" opacity="0.5"/><text class="cm-axis-lbl" x="'+(padL-6)+'" y="'+(yy2+3)+'" text-anchor="end">'+cmFmtP(yv2)+'</text>';}
+    yrs.forEach(function(y,i){var bh=(vals[i]/ymax)*ih,bx=padL+i*gap+(gap-bw)/2,by=padT+ih-bh;svg+='<rect class="cm-barv" x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" rx="3"><title>'+y+' · median '+cmFmtP(vals[i])+' ('+byYr[y].length+' sale'+(byYr[y].length>1?'s':'')+')</title></rect><text class="cm-axis-lbl" x="'+(bx+bw/2)+'" y="'+(H-8)+'" text-anchor="middle">'+y+'</text>';});
+  }
+  svg+='</svg>';host.innerHTML=svg;
+}
+function setTblSort(k){if(_tblSort.k===k)_tblSort.dir*=-1;else{_tblSort={k:k,dir:(k==='dt'?-1:1)};}drawTable();}
+function drawTable(){
+  var host=document.getElementById('cm-tbl-wrap');if(!host)return;
+  var d=(CM_PROPS||[]).slice();
+  var k=_tblSort.k,dir=_tblSort.dir;
+  d.sort(function(a,b){
+    var va,vb;
+    if(k==='dt'){va=_vizParseDt(a.dt)||0;vb=_vizParseDt(b.dt)||0;va=+va;vb=+vb;}
+    else if(k==='a'){va=(a.a||'').toLowerCase();vb=(b.a||'').toLowerCase();return va<vb?-dir:va>vb?dir:0;}
+    else {va=a[k]||0;vb=b[k]||0;}
+    return (va-vb)*dir;
+  });
+  function thi(key){return (_tblSort.k===key?(_tblSort.dir>0?'▲':'▼'):'↕');}
+  function thc(key){return _tblSort.k===key?' on':'';}
+  var html='<table class="cm-tbl"><thead><tr>'
+    +'<th class="'+thc('a').trim()+'" onclick="setTblSort(\'a\')">Address<span class="cm-sort-i">'+thi('a')+'</span></th>'
+    +'<th onclick="setTblSort(\'bd\')" class="'+thc('bd').trim()+'">Beds<span class="cm-sort-i">'+thi('bd')+'</span></th>'
+    +'<th onclick="setTblSort(\'sf\')" class="'+thc('sf').trim()+'">Size<span class="cm-sort-i">'+thi('sf')+'</span></th>'
+    +'<th onclick="setTblSort(\'sp\')" class="'+thc('sp').trim()+'">Sold<span class="cm-sort-i">'+thi('sp')+'</span></th>'
+    +'<th onclick="setTblSort(\'ppsf\')" class="'+thc('ppsf').trim()+'">$/sf<span class="cm-sort-i">'+thi('ppsf')+'</span></th>'
+    +'<th onclick="setTblSort(\'dt\')" class="'+thc('dt').trim()+'">Date<span class="cm-sort-i">'+thi('dt')+'</span></th>'
+    +'<th></th></tr></thead><tbody>';
+  d.forEach(function(p){
+    html+='<tr>'
+      +'<td class="cm-td-addr">'+p.a+'</td>'
+      +'<td class="cm-tbl-num">'+p.bd+'BR/'+p.ba+'BA</td>'
+      +'<td class="cm-tbl-num">'+(p.sf?p.sf.toLocaleString()+' sf':'—')+'</td>'
+      +'<td class="cm-tbl-num">'+cmFmtP(p.sp)+'</td>'
+      +'<td class="cm-tbl-num">$'+(p.ppsf?p.ppsf.toLocaleString():'—')+'</td>'
+      +'<td class="cm-tbl-num">'+p.dt+'</td>'
+      +'<td><a class="cm-td-z" href="'+zillowUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow">Photos ↗</a></td>'
+    +'</tr>';
+  });
+  html+='</tbody></table>';
+  host.innerHTML=html;
+}
+
 
 // ── Make Me Move loader ─────────────────────────────────────────────────────
 (function(){
@@ -938,20 +1118,42 @@ function renderCompare(){
   function fP(n){if(!n)return'—';if(n>=1e6)return'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';return'$'+Math.round(n/1000)+'K';}
   
   function loadMMS() {
-    if (typeof EM === 'undefined' || !EM.getPublicListings) return;
+    if (typeof EM === 'undefined' || !EM.getPublicListings) {
+      // EM not ready — still show the generic off-market hook to logged-out visitors.
+      renderMMS([]);
+      return;
+    }
     EM.getPublicListings({ community: tractSlug })
       .then(function(listings) {
-        if (!listings || !listings.length) {
-          // Also try by city name from page heading
-          return;
-        }
-        renderMMS(listings);
-      }).catch(function(){});
+        renderMMS(listings || []);
+      }).catch(function(){ renderMMS([]); });
   }
   
   function renderMMS(listings) {
     var banner = document.getElementById('mms-banner');
-    if (!banner || !listings.length) return;
+    if (!banner) return;
+    var signedIn = (typeof EM !== 'undefined' && EM.isAuth);
+    var n = listings.length;
+    // Logged out: always show the off-market hook (even with zero live listings).
+    if (!signedIn) {
+      var headline = n>0
+        ? (n+' owner'+(n>1?'s have':' has')+' set a private price in this tract')
+        : 'Private, owner-set prices live here';
+      var sub = n>0
+        ? 'These are off-market homes whose owners named a number they\u2019d sell for \u2014 never listed publicly, never on Zillow. Prices are visible to verified members only.'
+        : 'When an owner here names a Make-Me-Move price, it appears for verified members only \u2014 off-market, never on Zillow or the MLS. Create a free account to see them the moment they post.';
+      banner.innerHTML =
+        '<div class="mms-gate">'
+        + '<div class="mms-gate-lock"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>'
+        + '<div class="mms-gate-body">'
+          + '<div class="mms-gate-hd"><span class="mms-pulse"></span>'+headline+'</div>'
+          + '<div class="mms-gate-sub">'+sub+'</div>'
+          + '<button class="mms-gate-btn" onclick="emOpenSignup(\'mms-gate\')">'+(n>0?'See the off-market prices':'Unlock off-market access')+' \u2192</button>'
+        + '</div></div>';
+      banner.style.display = 'block';
+      return;
+    }
+    if (!n) { banner.style.display='none'; return; }
     var html = '';
     listings.slice(0,3).forEach(function(l) {
       var ppsf = l.sqft ? Math.round(l.price/l.sqft) : null;
@@ -968,6 +1170,8 @@ function renderCompare(){
     banner.innerHTML = '<div class="mms-banner-hd"><span class="mms-pulse"></span><span class="mms-banner-label">Make Me Move — Owner-set prices</span></div>' + html;
     banner.style.display = 'block';
   }
+  // Re-render the MMS banner when auth state changes (sign-in unlocks prices).
+  document.addEventListener('em:auth', function(){ setTimeout(loadMMS, 100); });
   
   // Wait for EM to be ready
   if (document.readyState === 'loading') {
@@ -980,9 +1184,12 @@ function renderCompare(){
 
 // ── Make Me Move hero button ──────────────────────────────────────────────────
 function openMmsHero(){
-  // If user is signed in, open Add Listing modal; otherwise go to Make Me Move page
+  // Signed-in owners go straight to add-a-listing; everyone else gets the
+  // interactive, trust-stacking seller onboarding (slider → details → account).
   if(typeof EM !== 'undefined' && EM.isAuth){
     openAddHome();
+  } else if(typeof emOpenSignup === 'function'){
+    emOpenSignup('seller');
   } else {
     window.location.href = '/make-me-move/';
   }
@@ -1064,7 +1271,14 @@ document.addEventListener('click',function(e){if(e.target===document.getElementB
 function offerChk0(){var n=document.getElementById('offer-name').value.trim(),e=document.getElementById('offer-email').value.trim();document.getElementById('offer-cta').disabled=!(n&&e);}
 function offerChk1(){var v=document.getElementById('offer-home').value;document.getElementById('offer-cta').disabled=!v;if(v){var conf=document.getElementById('offer-sel-confirm');conf.style.display='';conf.textContent='✓ '+v;}}
 
-function openAddHome(){aStep=0;document.getElementById('add-modal').style.display='block';addGo(0);}
+function openAddHome(){
+  // Logged-out owners get the trust-stacking onboarding first; signed-in owners
+  // (who already cleared trust + account) go straight to the quick add-listing modal.
+  if(typeof EM !== 'undefined' && !EM.isAuth && typeof emOpenSignup === 'function'){
+    emOpenSignup('seller');return;
+  }
+  aStep=0;document.getElementById('add-modal').style.display='block';addGo(0);
+}
 function closeAdd(){document.getElementById('add-modal').style.display='none';}
 function addGo(s){
   aStep=s;
@@ -1168,6 +1382,161 @@ function addNext(){
   </div>
 </div>
 
+<!-- ── Account / Seller Make-Me-Move modal (mirrors Condo Market onboarding) ── -->
+<div class="em-modal-bg" id="em-modal-bg" onclick="if(event.target===this)emCloseSignup()">
+  <div class="em-modal" role="dialog" aria-modal="true">
+    <div class="em-mhd">
+      <button class="em-mhd-x" onclick="emCloseSignup()" aria-label="Close">×</button>
+      <div class="em-mhd-eyebrow" id="em-mhd-eyebrow">Off-market access</div>
+      <div class="em-mhd-title" id="em-mhd-title">See every price in the tract</div>
+      <div class="em-mhd-sub" id="em-mhd-sub">A free account unlocks owner-set Make-Me-Move prices — the off-market homes you won't find on Zillow or the MLS.</div>
+    </div>
+    <div class="em-mbody" id="em-mbody"><!-- injected by JS --></div>
+  </div>
+</div>
+<script>
+// ── Eichler Market signup / seller onboarding (mirrors Condo Market) ─────────
+var _emMode='buyer';        // 'buyer' (account to see prices) | 'seller' (name your price)
+var _emStep=0;
+var _emSeller={price:0,address:'',sf:0};
+function _emMedian(arr){if(!arr.length)return 0;var a=arr.slice().sort(function(x,y){return x-y;});var m=Math.floor(a.length/2);return a.length%2?a[m]:Math.round((a[m-1]+a[m])/2);}
+function _emTractMedians(){
+  var d=(typeof CM_PROPS!=='undefined'?CM_PROPS:[])||[];
+  var price=_emMedian(d.map(function(p){return p.sp;}).filter(Boolean))||2500000;
+  var ppsf=_emMedian(d.map(function(p){return p.ppsf;}).filter(Boolean))||1200;
+  var sf=_emMedian(d.map(function(p){return p.sf;}).filter(Boolean))||1500;
+  return {price:price,ppsf:ppsf,sf:sf};
+}
+function emOpenSignup(src){
+  _emMode = (src==='seller'||src==='hero-mms'||src==='add-home') ? 'seller' : 'buyer';
+  _emStep = 0;
+  if (typeof EM!=='undefined' && EM.isAuth && _emMode==='buyer'){ /* already in */ }
+  document.getElementById('em-modal-bg').classList.add('open');
+  document.body.style.overflow='hidden';
+  emRenderModal();
+}
+function emCloseSignup(){document.getElementById('em-modal-bg').classList.remove('open');document.body.style.overflow='';}
+function emSetMode(m){_emMode=m;_emStep=0;emRenderModal();}
+function emRenderModal(){
+  var eb=document.getElementById('em-mhd-eyebrow'),tt=document.getElementById('em-mhd-title'),sb=document.getElementById('em-mhd-sub'),body=document.getElementById('em-mbody');
+  if(_emMode==='seller'){
+    eb.textContent='For Eichler owners';
+    tt.innerHTML='What\u2019s your number?';
+    sb.textContent='Set the price you\u2019d actually take. We listen for it against live buyer demand. No listing, no staging, no open houses.';
+    body.innerHTML=emSellerStep();
+    if(_emStep===0) setTimeout(emInitSlider,30);
+  } else {
+    eb.textContent='Off-market access';
+    tt.innerHTML='See every price in the tract';
+    sb.textContent='A free account unlocks owner-set Make-Me-Move prices \u2014 off-market homes you won\u2019t find on Zillow or the MLS.';
+    body.innerHTML=emBuyerStep();
+  }
+}
+// ---- Buyer / account path ----
+function emBuyerStep(){
+  return ''
+  +'<div class="em-trust">'
+    + emTrust('lock','Off-market by design','Owner-set prices show only to verified members. Never public, never on Zillow.')
+    + emTrust('eye','Your name stays private','Browse and make offers without exposing your identity until you choose to engage.')
+    + emTrust('gift','$10,000 buyer credit','Close on any Eichler through the market and we credit you $10,000 toward your next deal.')
+  +'</div>'
+  +'<div class="em-field"><label>Full name</label><input class="em-input" id="em-f-name" placeholder="Your name"></div>'
+  +'<div class="em-field"><label>Email</label><input class="em-input" id="em-f-email" type="email" placeholder="you@email.com"></div>'
+  +'<div class="em-field"><label>Password</label><input class="em-input" id="em-f-pass" type="password" placeholder="Create a password"></div>'
+  +'<button class="em-btn-primary" onclick="emDoSignup(\'buyer\')">Create my free account \u2192</button>'
+  +'<div class="em-fineprint">Free forever. No obligation. By continuing you agree to the <a href="/methodology/" target="_blank">terms &amp; privacy</a>.</div>'
+  +'<div class="em-toggle-mode">Own an Eichler here? <a onclick="emSetMode(\'seller\')">Name your price instead \u2192</a></div>';
+}
+// ---- Seller / Make-Me-Move path ----
+function emSellerStep(){
+  if(_emStep===0){
+    var m=_emTractMedians();
+    if(!_emSeller.price)_emSeller.price=m.price;
+    if(!_emSeller.sf)_emSeller.sf=m.sf;
+    return ''
+    +'<div class="em-progress"><span class="on"></span><span></span><span></span></div>'
+    +'<div class="em-step on">'
+      +'<div class="em-slider-wrap">'
+        +'<div class="em-slider-lab">The price you\u2019d say yes to</div>'
+        +'<div class="em-slider-val" id="em-sv">$'+(_emSeller.price/1e6).toFixed(2)+'M</div>'
+        +'<div class="em-slider-ppsf" id="em-sppsf">~ $'+Math.round(_emSeller.price/(_emSeller.sf||1500)).toLocaleString()+'/sf at '+(_emSeller.sf||1500).toLocaleString()+' sf</div>'
+        +'<input type="range" class="em-range" id="em-range" min="1000000" max="6000000" step="25000" value="'+_emSeller.price+'" oninput="emSlide(this.value)">'
+        +'<div class="em-range-ends"><span>$1M</span><span>$6M</span></div>'
+      +'</div>'
+      +'<div class="em-trust">'
+        + emTrust('home','You don\u2019t move out','Stay until a number you like lands \u2014 or forever. No staging, no relocation, no open houses.')
+        + emTrust('lock','You don\u2019t go public','Your price shows only to verified members. Never on Zillow, never in MLS. Your name stays private until you engage.')
+      +'</div>'
+      +'<button class="em-btn-primary" onclick="emSellerNext()">Save my number \u2014 create account \u2192</button>'
+      +'<div class="em-fineprint">Free \u00b7 zero commitment \u00b7 discounted commission only if you sell through the market.</div>'
+      +'<div class="em-toggle-mode">Just want to browse prices? <a onclick="emSetMode(\'buyer\')">Create a buyer account \u2192</a></div>'
+    +'</div>';
+  }
+  if(_emStep===1){
+    return ''
+    +'<div class="em-progress"><span class="on"></span><span class="on"></span><span></span></div>'
+    +'<div class="em-step on">'
+      +'<div class="em-field"><label>Your Eichler\u2019s address</label><input class="em-input" id="em-s-addr" placeholder="Street address in this tract" value="'+(_emSeller.address||'')+'"></div>'
+      +'<div class="em-field"><label>Approx. interior size (sf)</label><input class="em-input" id="em-s-sf" type="number" placeholder="e.g. 1500" value="'+(_emSeller.sf||'')+'"></div>'
+      +'<div class="em-trust">'+emTrust('shield','Address stays private','We use it only to match buyer offers to your home. It is never displayed publicly.')+'</div>'
+      +'<button class="em-btn-primary" onclick="emSellerDetails()">Continue \u2192</button>'
+      +'<button class="em-btn-ghost" onclick="_emStep=0;emRenderModal()">\u2190 Back to price</button>'
+    +'</div>';
+  }
+  // step 2 — account
+  return ''
+  +'<div class="em-progress"><span class="on"></span><span class="on"></span><span class="on"></span></div>'
+  +'<div class="em-step on">'
+    +'<div style="background:var(--bg);border:1px solid var(--b);border-radius:12px;padding:14px 16px;margin-bottom:16px">'
+      +'<div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--g);margin-bottom:4px">Your private number</div>'
+      +'<div style="font-family:\'Playfair Display\',serif;font-size:24px;font-weight:700;color:var(--n)">$'+(_emSeller.price/1e6).toFixed(2)+'M</div>'
+      +'<div style="font-size:11px;color:var(--g);margin-top:2px">'+(_emSeller.address||'Your Eichler')+'</div>'
+    +'</div>'
+    +'<div class="em-field"><label>Full name</label><input class="em-input" id="em-f-name" placeholder="Your name"></div>'
+    +'<div class="em-field"><label>Email</label><input class="em-input" id="em-f-email" type="email" placeholder="you@email.com"></div>'
+    +'<div class="em-field"><label>Phone</label><input class="em-input" id="em-f-phone" type="tel" placeholder="(optional) for offer alerts"></div>'
+    +'<div class="em-field"><label>Password</label><input class="em-input" id="em-f-pass" type="password" placeholder="Create a password"></div>'
+    +'<button class="em-btn-primary" onclick="emDoSignup(\'seller\')">Save my number &amp; create account \u2192</button>'
+    +'<div class="em-fineprint">We notify you only when a buyer\u2019s offer matches your number. <a href="/methodology/" target="_blank">Terms &amp; privacy</a>.</div>'
+  +'</div>';
+}
+function emTrust(icon,t,s){
+  var paths={lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',gift:'<rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M4 12v9h16v-9M12 8a3 3 0 1 0-3-3M12 8a3 3 0 1 1 3-3"/>',home:'<path d="M3 11l9-8 9 8M5 10v10h14V10"/>',shield:'<path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/>'};
+  return '<div class="em-trust-row"><div class="em-trust-i"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+(paths[icon]||paths.lock)+'</svg></div><div><div class="em-trust-t">'+t+'</div><div class="em-trust-s">'+s+'</div></div></div>';
+}
+function emInitSlider(){emSlide(_emSeller.price);}
+function emSlide(v){
+  v=parseInt(v,10);_emSeller.price=v;
+  var sv=document.getElementById('em-sv'),sp=document.getElementById('em-sppsf'),r=document.getElementById('em-range');
+  if(sv)sv.textContent='$'+(v/1e6).toFixed(2)+'M';
+  if(sp)sp.textContent='~ $'+Math.round(v/(_emSeller.sf||1500)).toLocaleString()+'/sf at '+(_emSeller.sf||1500).toLocaleString()+' sf';
+  if(r){var pct=(v-1000000)/(6000000-1000000)*100;r.style.background='linear-gradient(90deg,var(--warm) 0%,var(--warm) '+pct+'%,var(--b) '+pct+'%)';}
+}
+function emSellerNext(){_emStep=1;emRenderModal();}
+function emSellerDetails(){
+  var a=document.getElementById('em-s-addr'),s=document.getElementById('em-s-sf');
+  _emSeller.address=(a&&a.value||'').trim();
+  _emSeller.sf=parseInt(s&&s.value||_emSeller.sf,10)||_emSeller.sf;
+  _emStep=2;emRenderModal();
+}
+function emDoSignup(mode){
+  var name=(document.getElementById('em-f-name')||{}).value||'';
+  var email=(document.getElementById('em-f-email')||{}).value||'';
+  var pass=(document.getElementById('em-f-pass')||{}).value||'';
+  var phone=(document.getElementById('em-f-phone')||{}).value||'';
+  if(!email||!pass||!name){toast&&toast('Please fill in your name, email, and password.');return;}
+  if(typeof EM==='undefined'||!EM.signUp){toast&&toast('Account system loading — try again in a moment.');return;}
+  EM.signUp(email,pass,name,phone).then(function(){
+    if(mode==='seller'&&EM.setMakeMyMove){
+      return EM.setMakeMyMove({address:_emSeller.address,price:_emSeller.price,sqft:_emSeller.sf,community:(window.location.pathname.replace(/\/community\/|\/$/g,'').split('/').pop())});
+    }
+  }).then(function(){
+    toast&&toast(mode==='seller'?'Your number is saved. Welcome to Eichler Market.':'Account created. Off-market prices unlocked.');
+    emCloseSignup();
+    setTimeout(function(){window.location.reload();},900);
+  }).catch(function(e){toast&&toast((e&&e.message)||'Could not create account.');});
+}
+</script>
 <script src="/assets/cm-track.js" defer></script>
 </body>
 </html>
