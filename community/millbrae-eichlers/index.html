@@ -1110,11 +1110,13 @@ a{text-decoration:none;color:inherit}
 
 <div id="cm-toast"></div>
 
+<script src="/assets/em-lead.js"></script>
 <script>
-var EJ={svc:'service_733sibl',key:'rjIXPckMwcWAXnyPx',tB:'template_dqt85kb',tO:'template_vu9b3uo'};
+var EM_SLUG='millbrae-eichlers';
+var EJ={tB:'buyer',tO:'owner'};
 var MED_PPSF=1580;
 function goTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
-function ejSend(t,p){fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:EJ.svc,template_id:t,user_id:EJ.key,template_params:p})}).catch(function(){});}
+function ejSend(t,p){p=p||{};if(t===EJ.tO){EMLead.submitLead({email:p.owner_email||p.from_email||p.to_email,intent:'mmm_price',building_slug:EM_SLUG,unit_label:p.unit||p.property,target_price:p.price,message:p.building||p.message});}else{EMLead.submitOffer({name:p.from_name||p.owner_name,email:p.from_email||p.owner_email,building_slug:EM_SLUG,unit_label:p.property||p.unit,amount:p.offer_amount,message:p.subject||p.message});}}
 function toast(msg){var t=document.getElementById('cm-toast');t.textContent=msg;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(function(){t.style.display='none';},4000);}
 
 
@@ -1672,7 +1674,7 @@ function b3Close(){document.getElementById('b3-bg').classList.remove('open');}
 function b3Submit(){
   var n=document.getElementById('b3n').value,em=document.getElementById('b3e').value,c=document.getElementById('b3c').value;
   var params={to_name:'Tim',from_name:n,from_email:em,phone:c,offer_amount:fP2(B3.offer)+' ($'+Math.round(B3.offer/(B3.sf||1)).toLocaleString()+'/sf)',preapproved:B3.pa?'Yes':'No',allcash:B3.pa?'N/A':B3.ac?'Yes':'No',contact_pref:B3.cp||'',property:B3.addr,subject:'New Offer: '+B3.addr};
-  fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:'service_733sibl',template_id:'template_dqt85kb',user_id:'rjIXPckMwcWAXnyPx',template_params:params})}).catch(function(){});
+  EMLead.submitOffer({name:n,email:em,building_slug:EM_SLUG,unit_label:B3.addr,amount:B3.offer,message:'Phone: '+c+' · Pre-approved: '+(B3.pa?'Yes':'No')+' · All-cash: '+(B3.pa?'N/A':(B3.ac?'Yes':'No'))+' · Contact: '+(B3.cp||'')});
   var s3a=document.getElementById('b3-s3-addr'),s3p=document.getElementById('b3-s3-price'),s3cp=document.getElementById('b3-s3-cp');
   if(s3a)s3a.textContent=B3.addr;if(s3p)s3p.textContent=fP2(B3.offer);
   var cpMap={text:'text',call:'call',email:'email'};if(s3cp)s3cp.textContent=cpMap[B3.cp]||'message';
