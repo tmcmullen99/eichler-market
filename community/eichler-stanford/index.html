@@ -130,9 +130,10 @@ a{text-decoration:none;color:inherit}
 .c-u:hover{background:rgba(200,169,110,.04);margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:6px}
 .c-u-img{width:72px;height:54px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--b);display:block}
 .c-u-body{flex:1;min-width:0}
-.c-u-addr{font-size:13px;font-weight:600;color:var(--n);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.c-u-meta{font-size:10px;color:var(--g);margin-top:1px}
-.c-u-price{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--n);flex-shrink:0;text-align:right}
+.c-u-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.c-u-addr{font-size:13px;font-weight:600;color:var(--n);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.c-u-meta{font-size:10px;color:var(--g);margin-top:2px}
+.c-u-price{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--n);flex-shrink:0;white-space:nowrap}
 .c-u-date{display:block;font-size:9px;color:var(--g);font-family:'DM Sans',sans-serif;font-weight:400}
 .c-u-acts{display:flex;align-items:center;gap:12px;margin-top:5px}
 .c-u-link{font-size:10px;font-weight:700;letter-spacing:.02em;color:var(--warm);text-decoration:none;white-space:nowrap}
@@ -190,7 +191,11 @@ a{text-decoration:none;color:inherit}
 .cm-htip-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff}
 .cm-htip-ppsf{font-size:11px;color:var(--warm);font-weight:600}
 .cm-htip-date{font-size:10px;color:rgba(145,161,186,.6);margin-top:5px}
-.cm-htip-link{display:block;text-align:center;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--warm);background:rgba(200,169,110,.12);border-radius:6px;padding:6px;margin-top:9px;text-decoration:none;pointer-events:auto}
+.cm-htip-link{display:block;text-align:center;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--warm);background:rgba(200,169,110,.12);border-radius:6px;padding:6px;margin-top:9px;text-decoration:none}
+.cm-htip-card{display:block;text-decoration:none;pointer-events:auto;cursor:pointer}
+.cm-htip-card:hover{background:rgba(255,255,255,.03)}
+.cm-htip-card:hover .cm-htip-link{background:var(--warm);color:#1a1f2e}
+.cm-htip-card:hover .cm-htip-img{filter:brightness(1.06)}
 .cm-axis{stroke:var(--b);stroke-width:1}
 .cm-axis-lbl{font-size:9px;fill:var(--g);font-weight:600}
 .cm-trend{stroke:var(--warm);stroke-width:1.5;stroke-dasharray:4 3;fill:none}
@@ -1083,14 +1088,10 @@ function renderCmList(data){
     return '<div class="c-u" style="cursor:default">'
       +'<a href="'+ru+'" target="_blank" rel="noopener nofollow" style="text-decoration:none;flex-shrink:0" title="Photos &amp; sale history on Zillow">'+imgH+'</a>'
       +'<div class="c-u-body">'
-        +'<div class="c-u-addr">'+p.a+'</div>'
-        +'<div class="c-u-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf · $'+p.ppsf.toLocaleString()+'/sf</div>'
+        +'<div class="c-u-top"><div class="c-u-addr">'+p.a+'</div><div class="c-u-price">'+cmFmtP(p.sp)+'</div></div>'
+        +'<div class="c-u-meta">'+p.bd+'BR · '+p.ba+'BA · '+p.sf.toLocaleString()+' sf · $'+p.ppsf.toLocaleString()+'/sf · sold '+p.dt+'</div>'
         +'<div class="c-u-acts"><a href="'+ru+'" target="_blank" rel="noopener nofollow" class="c-u-link">Photos &amp; history ↗</a>'
         +'<button class="c-u-offer" onclick="openOffer(\''+safeAddr+'\')">Make an offer →</button></div>'
-      +'</div>'
-      +'<div style="text-align:right;flex-shrink:0">'
-        +'<div class="c-u-price">'+cmFmtP(p.sp)+'</div>'
-        +'<span class="c-u-date">'+p.dt+'</span>'
       +'</div>'
     +'</div>';
   }).join('');
@@ -1225,13 +1226,14 @@ function bindChartHover(host){
     var i=parseInt(dot.getAttribute('data-i'),10);var x=_vizData[i];if(!x)return;var p=x.p;
     if(active)active.classList.remove('cm-dot-on');dot.classList.add('cm-dot-on');active=dot;
     var img=p.img?'<img class="cm-htip-img" src="'+p.img+'" alt="" onerror="this.style.display=\'none\'">':'';
-    tip.innerHTML=img+'<div class="cm-htip-body">'
+    var zu=zillowUrl(p.a,p.c,p.z);
+    tip.innerHTML='<a class="cm-htip-card" href="'+zu+'" target="_blank" rel="noopener nofollow">'+img+'<div class="cm-htip-body">'
       +'<div class="cm-htip-addr">'+p.a+'</div>'
       +'<div class="cm-htip-meta">'+p.bd+' BR · '+p.ba+' BA · '+(p.sf?p.sf.toLocaleString()+' sf':'—')+'</div>'
       +'<div class="cm-htip-row"><span class="cm-htip-price">'+cmFmtP(p.sp)+'</span><span class="cm-htip-ppsf">$'+(p.ppsf?p.ppsf.toLocaleString():'—')+'/sf</span></div>'
       +'<div class="cm-htip-date">Sold '+p.dt+'</div>'
-      +'<a class="cm-htip-link" href="'+zillowUrl(p.a,p.c,p.z)+'" target="_blank" rel="noopener nofollow">Photos &amp; history ↗</a>'
-      +'</div>';
+      +'<span class="cm-htip-link">Photos &amp; history ↗</span>'
+      +'</div></a>';
     // position: dot center relative to wrap, place above, clamp to edges
     var wr=wrap.getBoundingClientRect(),dr=dot.getBoundingClientRect();
     var cx=dr.left-wr.left+dr.width/2, cy=dr.top-wr.top;
@@ -1244,7 +1246,12 @@ function bindChartHover(host){
   function hide(){tip.classList.remove('on');if(active){active.classList.remove('cm-dot-on');active=null;}}
   dots.forEach(function(dot){
     dot.addEventListener('mouseenter',function(){show(dot);});
-    dot.addEventListener('click',function(e){e.stopPropagation();show(dot);});
+    dot.addEventListener('click',function(e){
+      e.stopPropagation();
+      var i=parseInt(dot.getAttribute('data-i'),10);var x=_vizData[i];
+      if(active===dot && x){window.open(zillowUrl(x.p.a,x.p.c,x.p.z),'_blank','noopener'); }
+      else { show(dot); }
+    });
   });
   wrap.addEventListener('mouseleave',hide);
   // tap-outside dismiss on touch
