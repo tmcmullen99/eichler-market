@@ -952,6 +952,7 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
 </section>
 
 <script src="/assets/em-listings.js" defer></script>
+<script src="/assets/em-lead.js" defer></script>
 <script defer>
 (function(){
   function ready(fn){ if(window.EMListings) fn(); else setTimeout(function(){ready(fn);},80); }
@@ -1707,13 +1708,7 @@ function submitOffer(){
   var e=document.getElementById('om-email').value.trim();
   var a=document.getElementById('om-addr').value.trim();
   if(!n||!e||!a){toast('Please fill in all fields.');return;}
-  fetch('https://api.emailjs.com/api/v1.0/email/send',{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({service_id:'service_733sibl',template_id:'template_dqt85kb',
-      user_id:'rjIXPckMwcWAXnyPx',
-      template_params:{to_email:'Tim@eichlermarket.com',buyer_name:n,buyer_email:e,
-        unit:a,building:'Eichler Market Silicon Valley'}})
-  }).catch(function(){});
+  EMLead.submitOffer({name:n,email:e,building_slug:'eichler-direct',unit_label:a,message:'Submitted via homepage offer modal'});
   var ok=document.getElementById('om-ok');if(ok)ok.style.display='block';
 }
 
@@ -2166,31 +2161,13 @@ function goSubmitLOI() {
     (message ? 'Message: ' + message + '\n' : '') +
     '\nSubmitted via Eichler Market Guided Offer Tool';
 
-  fetch('https://api.emailjs.com/api/v1.0/email/send', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      service_id: 'service_733sibl',
-      template_id: 'template_dqt85kb',
-      user_id: 'rjIXPckMwcWAXnyPx',
-      template_params: {
-        to_name: 'Tim',
-        to_email: 'Tim@eichlermarket.com',
-        from_name: name,
-        from_email: email,
-        phone: phone,
-        offer_amount: fmtGO(GO.price),
-        property: addr,
-        subject: subject,
-        preapproved: financing === 'all-cash' ? 'All cash' : financing === 'pre-approved' ? 'Pre-approved' : 'Contingent',
-        allcash: financing === 'all-cash' ? 'Yes' : 'No',
-        contact_pref: 'Email',
-        unit: addr,
-        Offer: loiText + (agentName ? '\n\nBuyer\'s nominated agent: ' + agentName + ' (receives 1% of 3% platform fee)' : ''),
-        building: 'Eichler Market — ' + (GO.selectedProp ? GO.selectedProp.t || 'Silicon Valley' : 'Silicon Valley'),
-        Offer: loiText,
-      }
-    })
+  EMLead.submitOffer({
+    name: name,
+    email: email,
+    building_slug: (GO.selectedProp && GO.selectedProp.slug) ? GO.selectedProp.slug : 'eichler-direct',
+    unit_label: addr,
+    amount: GO.price,
+    message: loiText + (agentName ? '\n\nBuyer\'s nominated agent: ' + agentName + ' (receives 1% of 3% platform fee)' : '')
   }).then(function() {
     document.getElementById('go-loi-doc').style.display = 'none';
     document.getElementById('go-submit-note').style.display = 'none';
