@@ -12,9 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
 /* ── Community Hero ── */
-.c-hero{height:420px;position:relative;overflow:hidden;margin-top:var(--nav-h,52px);background:linear-gradient(145deg,#1a1f2e 0%,#0e1118 100%)}
-.c-hero-photo{position:absolute;inset:-30px;background-size:cover;background-position:center 40%;filter:blur(22px) saturate(1.1) brightness(.7);opacity:.55;transform:scale(1.12);will-change:transform}
-.c-hero .c-hero-grad{background:linear-gradient(120deg,rgba(14,17,24,.92) 0%,rgba(26,31,46,.74) 48%,rgba(26,31,46,.5) 100%)}
+.c-hero{min-height:520px;position:relative;overflow:hidden;margin-top:var(--nav-h,52px);background:linear-gradient(145deg,#1a1f2e 0%,#0e1118 100%);display:flex}
+.c-hero-photo{position:absolute;inset:-30px;background-size:cover;background-position:center 38%;filter:blur(26px) saturate(1.15) brightness(.78);opacity:.45;transform:scale(1.14);will-change:transform}
+.c-hero .c-hero-grad{background:radial-gradient(120% 110% at 18% 30%,rgba(14,17,24,.55) 0%,rgba(14,17,24,.82) 60%,rgba(10,13,20,.95) 100%)}
 /* Motion: reveal-up with staggered children */
 [data-reveal-child]{opacity:0;transform:translateY(16px);transition:opacity .55s cubic-bezier(.2,.6,.2,1),transform .55s cubic-bezier(.2,.6,.2,1)}
 [data-reveal].is-in [data-reveal-child]{opacity:1;transform:none}
@@ -34,24 +34,40 @@
 [data-reveal-self]{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.2,.6,.2,1),transform .6s cubic-bezier(.2,.6,.2,1)}
 [data-reveal-self].is-in{opacity:1;transform:none}
 .c-hero-img{display:none}
-.c-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,31,46,.88) 0%,rgba(26,31,46,.3) 50%,transparent 100%);}
-.c-hero-body{position:absolute;bottom:0;left:0;right:0;padding:28px 48px 32px;}
-.c-hero-inner{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;}
-.c-eyebrow{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,169,110,.85);margin-bottom:6px;}
-.c-h1{font-family:'Playfair Display',serif;font-size:40px;font-weight:700;color:#fff;margin-bottom:12px;line-height:1.05;letter-spacing:-.02em;}
-.c-stats{display:flex;gap:20px;flex-wrap:wrap;}
+.c-hero-grad{position:absolute;inset:0;}
+.c-hero-wrap{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;}
+.c-hero-lead{padding:48px 0;}
+.c-eyebrow{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,169,110,.9);margin-bottom:14px;}
+.c-h1{font-family:'Playfair Display',serif;font-size:58px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.02;letter-spacing:-.02em;min-height:60px;}
+.c-hero-sub{font-size:15px;line-height:1.62;color:rgba(232,235,240,.82);max-width:480px;margin:0 0 26px;}
+.c-stats{display:flex;align-items:center;gap:22px;margin-bottom:26px;}
 .c-stat{display:flex;flex-direction:column;}
-.c-stat-v{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:2px;}
-.c-stat-l{font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(145,161,186,.6);}
-.c-hero-sub{font-size:13px;line-height:1.5;color:rgba(232,235,240,.78);max-width:420px;margin:10px 0 16px;}
-.c-hero-credit{margin-top:14px;font-size:12px;color:rgba(232,235,240,.82);line-height:1.5;}
-.c-hero-credit-amt{font-family:'Playfair Display',serif;font-weight:700;color:var(--warm);font-size:15px;}
-.c-hero-credit a{color:var(--warm);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(200,169,110,.4);}
-.c-hero-credit a:hover{border-color:var(--warm);}
-.c-hero-cta{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
-.btn-hero-p,.btn-hero-s{font-size:12px;font-weight:700;border-radius:100px;cursor:pointer;font-family:inherit;white-space:nowrap;letter-spacing:.02em;padding:11px 22px;}
+.c-stat-div{width:1px;height:34px;background:rgba(255,255,255,.14);}
+.c-stat-v{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:#fff;margin-bottom:3px;line-height:1;}
+.c-stat-l{font-size:9px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(145,161,186,.7);}
+.c-hero-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-hero-p,.btn-hero-s{font-size:13px;font-weight:700;border-radius:100px;cursor:pointer;font-family:inherit;white-space:nowrap;letter-spacing:.02em;padding:13px 26px;transition:filter .15s,background .15s;}
 .btn-hero-p{background:var(--warm,#c8a96e);color:#1a1f2e;border:none;}
-.btn-hero-s{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.22);}
+.btn-hero-p:hover{filter:brightness(1.07);}
+.btn-hero-s{background:rgba(255,255,255,.08);color:#fff;border:1.5px solid rgba(255,255,255,.24);}
+.btn-hero-s:hover{background:rgba(255,255,255,.16);}
+/* Glass control card (right panel) */
+.c-hero-card{background:rgba(255,255,255,.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);border-radius:20px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.4);}
+.c-hero-card-photo{position:relative;height:150px;overflow:hidden;background:#0e1118;}
+.c-hero-card-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.05);}
+.c-hero-card-tag{position:absolute;top:12px;left:12px;background:rgba(14,17,24,.78);color:var(--warm);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:6px;backdrop-filter:blur(4px);}
+.c-hero-card-body{padding:18px 20px 20px;}
+.c-hero-card-addr{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:4px;}
+.c-hero-card-meta{font-size:11px;color:rgba(145,161,186,.7);margin-bottom:12px;}
+.c-hero-card-price{display:flex;align-items:baseline;gap:10px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:14px;}
+.c-hero-card-p{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;}
+.c-hero-card-ppsf{font-size:11px;color:rgba(145,161,186,.6);}
+.c-hero-card-credit{display:flex;align-items:center;gap:10px;background:rgba(200,169,110,.1);border:1px solid rgba(200,169,110,.25);border-radius:11px;padding:10px 12px;margin-bottom:14px;}
+.c-hero-card-credit-amt{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--warm);flex-shrink:0;line-height:1;}
+.c-hero-card-credit-l{font-size:10.5px;color:rgba(232,235,240,.8);line-height:1.35;}
+.c-hero-card-cta{width:100%;background:var(--warm);color:#1a1f2e;border:none;padding:13px;font-size:13px;font-weight:700;border-radius:11px;cursor:pointer;font-family:inherit;transition:filter .15s;}
+.c-hero-card-cta:hover{filter:brightness(1.07);}
+.c-hero-card-fine{font-size:10.5px;color:rgba(145,161,186,.6);text-align:center;margin-top:9px;}
 .c-tabs{position:sticky;top:var(--nav-h,52px);z-index:100;background:#fff;border-bottom:2px solid #e8ebf0;padding:0;display:flex;overflow-x:auto;scrollbar-width:none;}
 .c-tabs::-webkit-scrollbar{display:none;}
 .c-tab{padding:14px 22px;font-size:13px;font-weight:600;color:#6b7280;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;cursor:pointer;font-family:inherit;transition:color .15s,border-color .15s;}
@@ -255,10 +271,8 @@ a{text-decoration:none;color:inherit}
   .c-body{grid-template-columns:1fr}
   .c-side{padding:0 20px 40px}
   #c-homes{padding:20px 20px 20px}
-  .c-hero-body-OLD{}
-  .c-hero-inner{flex-direction:column;align-items:flex-start}
-  .c-hero-cta-OLD{}
-  .c-hero{height:380px;position:relative;overflow:hidden;margin-top:var(--nav-h,52px)}
+  .c-hero-wrap{grid-template-columns:1fr;gap:24px;padding:0 28px;}
+  .c-hero{min-height:auto;}
   .c-tabs{padding:0 20px}
   .c-info,.cm-sell{padding:28px 20px}
 }
@@ -468,19 +482,21 @@ a{text-decoration:none;color:inherit}
   .c-body{grid-template-columns:1fr;}
   .c-side{padding:0 20px 40px;}
   #c-homes{padding:20px 20px 20px;}
-  .c-hero-body{padding:20px 28px 24px;}
-  .c-hero-inner{flex-direction:column;align-items:flex-start;gap:6px;}
-  .c-hero-cta{flex-direction:row;}
-  .c-hero{height:340px;}
+  .c-hero-lead{padding:32px 0 8px;}
+  .c-h1{font-size:44px;}
+  .c-hero-card{margin-bottom:8px;}
   .c-info,.cm-sell{padding:28px 20px;}
 }
 @media(max-width:600px){
-  .c-hero{height:220px;min-height:220px;}
-  .c-hero-body{padding:12px 18px 16px;}
-  .c-h1{font-size:24px;margin-bottom:8px;}
-  .c-stat-v{font-size:16px;}
-  .c-stats{gap:12px;}
-  .c-hero-cta{display:none;}
+  .c-hero-wrap{padding:0 18px;}
+  .c-hero-lead{padding:24px 0 4px;}
+  .c-h1{font-size:34px;min-height:36px;margin-bottom:10px;}
+  .c-hero-sub{font-size:13.5px;margin-bottom:20px;}
+  .c-stat-v{font-size:23px;}
+  .c-stats{gap:14px;margin-bottom:20px;}
+  .c-stat-div{height:28px;}
+  .c-hero-actions{display:flex;}
+  .c-hero-card-photo{height:130px;}
   .c-tabs{top:52px;}
   .c-tab{padding:12px 16px;font-size:12px;}
   .c-body{padding:0 0 32px;}
@@ -556,22 +572,38 @@ a{text-decoration:none;color:inherit}
 <div class="c-hero">
   <div class="c-hero-photo" style="background-image:url('/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg')"></div>
   <div class="c-hero-grad"></div>
-  <div class="c-hero-body">
-    <div class="c-hero-inner">
-      <div class="c-hero-lead" data-reveal>
-        <div class="c-eyebrow" data-reveal-child>Menlo Park · Eichler Tract</div>
-        <h1 class="c-h1 sf" data-reveal-child data-tw>Oakdell Park</h1>
-        <div class="c-hero-sub" data-reveal-child>Anshen + Allen Eichlers · A private off-market exchange for every home in the tract.</div>
-        <div class="c-stats" id="c-hero-stats" data-reveal-child>
-          <div class="c-stat"><div class="c-stat-v"><span data-count="140" data-prefix="~">~140</span></div><div class="c-stat-l">Homes in tract</div></div>
-          <div class="c-stat"><div class="c-stat-v"><span data-count="4" id="hs-sales">4</span></div><div class="c-stat-l">Sales on record</div></div>
-          <div class="c-stat"><div class="c-stat-v"><span data-count="1704" data-prefix="$" data-comma="1" id="hs-ppsf">$1,704</span></div><div class="c-stat-l">Median $/sf</div></div>
-        </div>
+  <div class="c-hero-wrap">
+    <div class="c-hero-lead" data-reveal>
+      <div class="c-eyebrow" data-reveal-child>Menlo Park · Eichler Tract</div>
+      <h1 class="c-h1 sf" data-reveal-child data-tw>Oakdell Park</h1>
+      <div class="c-hero-sub" data-reveal-child>Anshen + Allen Eichlers, 1950. A private off-market exchange where every home in the tract is for sale — for the right price.</div>
+      <div class="c-stats" id="c-hero-stats" data-reveal-child>
+        <div class="c-stat"><div class="c-stat-v"><span data-count="140" data-prefix="~">~140</span></div><div class="c-stat-l">Homes in tract</div></div>
+        <div class="c-stat-div"></div>
+        <div class="c-stat"><div class="c-stat-v"><span data-count="4" id="hs-sales">4</span></div><div class="c-stat-l">Sales on record</div></div>
+        <div class="c-stat-div"></div>
+        <div class="c-stat"><div class="c-stat-v"><span data-count="1704" data-prefix="$" data-comma="1" id="hs-ppsf">$1,704</span></div><div class="c-stat-l">Median $/sf</div></div>
       </div>
-      <div class="c-hero-cta" data-reveal>
-        <button class="btn-hero-p" data-reveal-child onclick="openOffer('')">Make an offer →</button>
-        <button class="btn-hero-s" data-reveal-child onclick="openMmsHero()">Name your price ↗</button>
-        <div class="c-hero-credit" data-reveal-child><span class="c-hero-credit-amt">$10,000</span> buyer credit at close · <a href="#" onclick="emOpenSignup('hero-credit');return false;">create a free account →</a></div>
+      <div class="c-hero-actions" data-reveal-child>
+        <button class="btn-hero-p" onclick="openOffer('')">Make an offer →</button>
+        <button class="btn-hero-s" onclick="openMmsHero()">Name your price ↗</button>
+      </div>
+    </div>
+    <div class="c-hero-card" data-reveal>
+      <div class="c-hero-card-photo">
+        <img src="/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg" alt="1611 Oakdell Drive" onerror="this.parentNode.style.display='none'">
+        <div class="c-hero-card-tag">Most recent sale</div>
+      </div>
+      <div class="c-hero-card-body">
+        <div class="c-hero-card-addr">1611 Oakdell Drive</div>
+        <div class="c-hero-card-meta">3 BR · 2 BA · 1,610 sf · sold Mar 2025</div>
+        <div class="c-hero-card-price"><span class="c-hero-card-p">$4.20M</span><span class="c-hero-card-ppsf">$2,609/sf</span></div>
+        <div class="c-hero-card-credit">
+          <div class="c-hero-card-credit-amt">$10,000</div>
+          <div class="c-hero-card-credit-l">buyer credit at close — for members</div>
+        </div>
+        <button class="c-hero-card-cta" onclick="emOpenSignup('hero-card')">Unlock off-market access →</button>
+        <div class="c-hero-card-fine">Free account · see owner-set prices</div>
       </div>
     </div>
   </div>
