@@ -162,6 +162,8 @@
     recentSales: function (limit) { return rpc('eichler_recent_sales', { p_limit: limit || 12 }); },
     // Quarterly median $/sf trajectory (Eichler-wide)
     psfQuarterly: function (quarters) { return rpc('eichler_psf_quarterly', { p_quarters: quarters || 16 }); },
+    // Bedroom-tier medians over a trailing window (months), Eichler-wide
+    bedroomMedians: function (months) { return rpc('eichler_bedroom_medians', { p_months: months || 24 }); },
     money: money, esc: esc, specLine: specLine
   };
 })();
