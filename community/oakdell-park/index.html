@@ -13,6 +13,26 @@
 <style>
 /* ── Community Hero ── */
 .c-hero{height:420px;position:relative;overflow:hidden;margin-top:var(--nav-h,52px);background:linear-gradient(145deg,#1a1f2e 0%,#0e1118 100%)}
+.c-hero-photo{position:absolute;inset:-30px;background-size:cover;background-position:center 40%;filter:blur(22px) saturate(1.1) brightness(.7);opacity:.55;transform:scale(1.12);will-change:transform}
+.c-hero .c-hero-grad{background:linear-gradient(120deg,rgba(14,17,24,.92) 0%,rgba(26,31,46,.74) 48%,rgba(26,31,46,.5) 100%)}
+/* Motion: reveal-up with staggered children */
+[data-reveal-child]{opacity:0;transform:translateY(16px);transition:opacity .55s cubic-bezier(.2,.6,.2,1),transform .55s cubic-bezier(.2,.6,.2,1)}
+[data-reveal].is-in [data-reveal-child]{opacity:1;transform:none}
+[data-reveal].is-in [data-reveal-child]:nth-child(2){transition-delay:.06s}
+[data-reveal].is-in [data-reveal-child]:nth-child(3){transition-delay:.12s}
+[data-reveal].is-in [data-reveal-child]:nth-child(4){transition-delay:.18s}
+[data-reveal].is-in [data-reveal-child]:nth-child(5){transition-delay:.24s}
+/* Typewriter caret */
+.tw-caret{display:inline-block;width:.06em;background:currentColor;margin-left:.04em;animation:tw-blink .9s steps(1) infinite;vertical-align:baseline}
+@keyframes tw-blink{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){
+  [data-reveal-child]{opacity:1!important;transform:none!important;transition:none!important}
+  .c-hero-photo{filter:blur(22px) brightness(.7)}
+  .tw-caret{display:none}
+  [data-reveal-self]{opacity:1!important;transform:none!important}
+}
+[data-reveal-self]{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.2,.6,.2,1),transform .6s cubic-bezier(.2,.6,.2,1)}
+[data-reveal-self].is-in{opacity:1;transform:none}
 .c-hero-img{display:none}
 .c-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(26,31,46,.88) 0%,rgba(26,31,46,.3) 50%,transparent 100%);}
 .c-hero-body{position:absolute;bottom:0;left:0;right:0;padding:28px 48px 32px;}
@@ -184,6 +204,24 @@ a{text-decoration:none;color:inherit}
 .c-info,.cm-sell{padding:72px 64px;background:#fff;}
 .c-info{border-top:2px solid var(--b)}
 .cm-sell{background:#fff;border-top:2px solid var(--n)}
+.sell2{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.sell2-eyebrow{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:12px}
+.sell2-h2{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--n);margin-bottom:14px;line-height:1.12}
+.sell2-p{font-size:14.5px;color:#6b7280;line-height:1.7;margin-bottom:22px;max-width:460px}
+.sell2-pillars{display:flex;flex-direction:column;gap:12px}
+.sell2-pillar{display:flex;gap:11px;align-items:flex-start;font-size:13px;color:#4b5563;line-height:1.55}
+.sell2-pillar b{color:var(--n)}
+.sell2-pi{width:20px;height:20px;border-radius:50%;background:rgba(200,169,110,.15);color:var(--warm);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.sell2-card{background:linear-gradient(160deg,#1a1f2e,#0e1118);border-radius:20px;padding:30px 28px;box-shadow:0 20px 50px rgba(26,31,46,.22)}
+.sell2-card-lab{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pw,#9fb4d8);margin-bottom:10px}
+.sell2-card-val{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:#fff;line-height:1;margin-bottom:6px}
+.sell2-card-sub{font-size:12px;color:rgba(145,161,186,.7);margin-bottom:20px}
+.sell2-range{margin-bottom:8px}
+.sell2 .em-range-ends span{color:rgba(145,161,186,.6)}
+.sell2-cta{width:100%;margin-top:18px;background:var(--warm);color:var(--n);border:none;padding:15px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:12px;transition:filter .15s}
+.sell2-cta:hover{filter:brightness(1.07)}
+.sell2-fine{font-size:11px;color:rgba(145,161,186,.6);text-align:center;margin-top:12px}
+@media(max-width:760px){.sell2{grid-template-columns:1fr;gap:28px}.sell2-h2{font-size:27px}.sell2-card-val{font-size:38px}}
 .c-shd{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:14px}
 .c-desc{font-size:14px;color:#374151;line-height:1.8;margin-bottom:20px}
 .c-ag{display:flex;flex-wrap:wrap;gap:8px}
@@ -516,23 +554,24 @@ a{text-decoration:none;color:inherit}
 </nav>
 
 <div class="c-hero">
+  <div class="c-hero-photo" style="background-image:url('/assets/photos/sm/1611-oakdell-drive-menlo-park.jpg')"></div>
   <div class="c-hero-grad"></div>
   <div class="c-hero-body">
     <div class="c-hero-inner">
-      <div class="c-hero-lead">
-        <div class="c-eyebrow">Menlo Park · Eichler Tract</div>
-        <h1 class="c-h1 sf">Oakdell Park</h1>
-        <div class="c-hero-sub">Anshen + Allen Eichlers · A private off-market exchange for every home in the tract.</div>
-        <div class="c-stats" id="c-hero-stats">
-          <div class="c-stat"><div class="c-stat-v">~140</div><div class="c-stat-l">Homes in tract</div></div>
-          <div class="c-stat"><div class="c-stat-v" id="hs-sales">4</div><div class="c-stat-l">Sales on record</div></div>
-          <div class="c-stat"><div class="c-stat-v" id="hs-ppsf">$1,704</div><div class="c-stat-l">Median $/sf</div></div>
+      <div class="c-hero-lead" data-reveal>
+        <div class="c-eyebrow" data-reveal-child>Menlo Park · Eichler Tract</div>
+        <h1 class="c-h1 sf" data-reveal-child data-tw>Oakdell Park</h1>
+        <div class="c-hero-sub" data-reveal-child>Anshen + Allen Eichlers · A private off-market exchange for every home in the tract.</div>
+        <div class="c-stats" id="c-hero-stats" data-reveal-child>
+          <div class="c-stat"><div class="c-stat-v"><span data-count="140" data-prefix="~">~140</span></div><div class="c-stat-l">Homes in tract</div></div>
+          <div class="c-stat"><div class="c-stat-v"><span data-count="4" id="hs-sales">4</span></div><div class="c-stat-l">Sales on record</div></div>
+          <div class="c-stat"><div class="c-stat-v"><span data-count="1704" data-prefix="$" data-comma="1" id="hs-ppsf">$1,704</span></div><div class="c-stat-l">Median $/sf</div></div>
         </div>
       </div>
-      <div class="c-hero-cta">
-        <button class="btn-hero-p" onclick="openOffer('')">Make an offer →</button>
-        <button class="btn-hero-s" onclick="openMmsHero()">Name your price ↗</button>
-        <div class="c-hero-credit"><span class="c-hero-credit-amt">$10,000</span> buyer credit at close · <a href="#" onclick="emOpenSignup('hero-credit');return false;">create a free account →</a></div>
+      <div class="c-hero-cta" data-reveal>
+        <button class="btn-hero-p" data-reveal-child onclick="openOffer('')">Make an offer →</button>
+        <button class="btn-hero-s" data-reveal-child onclick="openMmsHero()">Name your price ↗</button>
+        <div class="c-hero-credit" data-reveal-child><span class="c-hero-credit-amt">$10,000</span> buyer credit at close · <a href="#" onclick="emOpenSignup('hero-credit');return false;">create a free account →</a></div>
       </div>
     </div>
   </div>
@@ -584,10 +623,10 @@ a{text-decoration:none;color:inherit}
       <div id="mms-banner" class="mms-banner"></div>
 
       <!-- By the numbers (Arden-grade, computed from sales) -->
-      <div class="cm-dossier" id="cm-dossier"></div>
+      <div class="cm-dossier" id="cm-dossier" data-reveal-self></div>
 
       <!-- Interactive chart (toggleable views) + sortable sales table -->
-      <div class="cm-viz" id="cm-viz"></div>
+      <div class="cm-viz" id="cm-viz" data-reveal-self></div>
 
       <div class="c-fr">
         <button class="c-ft on" id="ft-all" onclick="setCmTab('all')">All <span class="c-ftc">4</span></button>
@@ -637,7 +676,7 @@ a{text-decoration:none;color:inherit}
     </div>
 
     <!-- Compare band: how this tract ranks -->
-    <div class="cm-compare" id="cm-compare"></div>
+    <div class="cm-compare" id="cm-compare" data-reveal-self></div>
   </div>
 
   <div class="c-side" id="c-contact">
@@ -677,11 +716,28 @@ a{text-decoration:none;color:inherit}
 </div>
 
 <div class="cm-sell" id="cm-sell">
-  <div style="max-width:640px;margin:0 auto">
-    <div style="font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--g);margin-bottom:12px">Own a home in Oakdell Park?</div>
-    <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--n);margin-bottom:12px;line-height:1.15">How much would you<br>sell your Eichler for?</h2>
-    <p style="font-size:14px;color:#6b7280;line-height:1.8;margin-bottom:24px;max-width:520px">Set a Make Me Move price. Signal you're open to the right offer. Adjust or remove any time. Flat 3% platform fee if a deal closes.</p>
-    <button onclick="openAddHome()" style="background:var(--warm);color:var(--n);border:none;padding:14px 28px;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:10px">NAME MY PRICE →</button>
+  <div class="sell2" data-reveal>
+    <div class="sell2-left" data-reveal-child>
+      <div class="sell2-eyebrow">Own a home in Oakdell Park?</div>
+      <h2 class="sell2-h2">How much would you<br>sell your Eichler for?</h2>
+      <p class="sell2-p">Set a Make-Me-Move price — not a listing. Signal you're open to the right offer, stay in your home, and we'll only reach out when a buyer's number matches yours.</p>
+      <div class="sell2-pillars">
+        <div class="sell2-pillar"><span class="sell2-pi">✓</span><div><b>You don't move out.</b> No staging, no open houses. Stay until a number you like lands — or forever.</div></div>
+        <div class="sell2-pillar"><span class="sell2-pi">✓</span><div><b>You don't go public.</b> Your price shows only to verified members. Never on Zillow, never in MLS.</div></div>
+        <div class="sell2-pillar"><span class="sell2-pi">✓</span><div><b>Flat 3% — only if it closes.</b> Adjust or remove your number any time, at no cost.</div></div>
+      </div>
+    </div>
+    <div class="sell2-right" data-reveal-child>
+      <div class="sell2-card">
+        <div class="sell2-card-lab">The price you'd say yes to</div>
+        <div class="sell2-card-val" id="sell2-val">$3.56M</div>
+        <div class="sell2-card-sub" id="sell2-sub">~ $1,645/sf at 2,164 sf · tract median</div>
+        <input type="range" class="em-range sell2-range" id="sell2-range" min="1000000" max="6000000" step="25000" value="3561500" oninput="sell2Slide(this.value)">
+        <div class="em-range-ends"><span>$1M</span><span>$6M</span></div>
+        <button class="sell2-cta" onclick="openMmsHero()">Name my price →</button>
+        <div class="sell2-fine">Free · zero commitment · takes 60 seconds</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1536,6 +1592,81 @@ function emDoSignup(mode){
     setTimeout(function(){window.location.reload();},900);
   }).catch(function(e){toast&&toast((e&&e.message)||'Could not create account.');});
 }
+</script>
+<script>
+/* ── Motion engine (vanilla; respects reduced-motion) ── */
+(function(){
+  var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  // Animated counter: 0 -> target, eased, on view
+  function animateCount(el){
+    var target=parseFloat(el.getAttribute('data-count'))||0;
+    var prefix=el.getAttribute('data-prefix')||'';
+    var comma=el.getAttribute('data-comma')==='1';
+    var dec=parseInt(el.getAttribute('data-dec')||'0',10);
+    if(RM){ el.textContent=prefix+(comma?Math.round(target).toLocaleString():target.toFixed(dec)); return; }
+    var dur=1400, t0=null;
+    function fmt(v){return prefix+(comma?Math.round(v).toLocaleString():v.toFixed(dec));}
+    function step(ts){
+      if(!t0)t0=ts; var p=Math.min((ts-t0)/dur,1);
+      var e=1-Math.pow(1-p,3); // easeOutCubic
+      el.textContent=fmt(target*e);
+      if(p<1)requestAnimationFrame(step); else el.textContent=fmt(target);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Typewriter: reveal text char-by-char on view
+  function typewrite(el){
+    var full=el.getAttribute('data-tw-text')||el.textContent;
+    el.setAttribute('data-tw-text',full);
+    if(RM){ el.textContent=full; return; }
+    el.textContent='';
+    var caret=document.createElement('span');caret.className='tw-caret';caret.textContent='\u00A0';
+    el.appendChild(caret);
+    var i=0, speed=28;
+    (function tick(){
+      if(i<=full.length){
+        el.textContent=full.slice(0,i);
+        el.appendChild(caret);
+        i++; setTimeout(tick,speed);
+      } else { setTimeout(function(){if(caret.parentNode)caret.parentNode.removeChild(caret);},700); }
+    })();
+  }
+
+  function onIn(el){
+    el.classList.add('is-in');
+    // fire counters within
+    el.querySelectorAll('[data-count]').forEach(function(c){ if(!c.__counted){c.__counted=1;animateCount(c);} });
+    // fire typewriter within
+    el.querySelectorAll('[data-tw]').forEach(function(t){ if(!t.__tw){t.__tw=1;typewrite(t);} });
+  }
+
+  if(!('IntersectionObserver' in window)){
+    document.querySelectorAll('[data-reveal],[data-reveal-self]').forEach(onIn);
+    return;
+  }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ onIn(en.target); io.unobserve(en.target); } });
+  },{threshold:.12,rootMargin:'-40px 0px'});
+  document.querySelectorAll('[data-reveal],[data-reveal-self]').forEach(function(el){ io.observe(el); });
+
+  // Hero is above the fold — reveal immediately so it never starts hidden
+  setTimeout(function(){
+    document.querySelectorAll('.c-hero [data-reveal]').forEach(function(el){ if(!el.classList.contains('is-in'))onIn(el); });
+  },80);
+})();
+
+/* ── Sell-section live slider ── */
+function sell2Slide(v){
+  v=parseInt(v,10);
+  var sf=2164;
+  var val=document.getElementById('sell2-val'), sub=document.getElementById('sell2-sub'), r=document.getElementById('sell2-range');
+  if(val)val.textContent='$'+(v/1e6).toFixed(2)+'M';
+  if(sub)sub.textContent='~ $'+Math.round(v/sf).toLocaleString()+'/sf at '+sf.toLocaleString()+' sf';
+  if(r){var pct=(v-1000000)/(6000000-1000000)*100;r.style.background='linear-gradient(90deg,var(--warm) 0%,var(--warm) '+pct+'%,rgba(145,161,186,.25) '+pct+'%)';}
+}
+setTimeout(function(){ if(document.getElementById('sell2-range'))sell2Slide(document.getElementById('sell2-range').value); },60);
 </script>
 <script src="/assets/cm-track.js" defer></script>
 </body>
