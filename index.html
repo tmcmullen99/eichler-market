@@ -288,6 +288,7 @@ a{text-decoration:none;color:inherit}
 .intel-bd-tiers{display:flex;flex-direction:column;gap:7px;}
 .intel-bd-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
 .intel-bd-row .lbl{color:var(--g);} .intel-bd-row .val{font-weight:700;color:var(--n);}
+.intel-bd-tag{display:inline-block;margin-left:6px;font-size:8.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#c8a96e;border:1px solid rgba(200,169,110,.4);border-radius:5px;padding:1px 4px;vertical-align:middle;}
 .intel-side-btn{display:inline-block;background:none;border:1.5px solid var(--b);border-radius:8px;padding:7px 14px;font-size:11px;font-weight:700;color:var(--n);cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;}
 .intel-side-btn:hover{background:var(--n);color:#fff;border-color:var(--n);}
 
@@ -2335,13 +2336,8 @@ function goSubmitLOI() {
       var b=document.getElementById('intel-spread-body');
       if(b) b.innerHTML='At <strong>$'+iNum(hi.ppsf)+'/sf</strong>, '+iEsc(hi.name)+' commands roughly <strong>'+mult+'×</strong> the per-foot price of '+iEsc(lo.name)+' (<strong>$'+iNum(lo.ppsf)+'/sf</strong>) — the widest value gap in the Eichler market.';
     }
-    // Bedroom tiers
-    var bd=STATS.global.medians_by_bd||{};
-    var order=['2','3','4','5','6','7'];
-    var tEl=document.getElementById('intel-bd-tiers');
-    if(tEl){ tEl.innerHTML=order.filter(function(k){return bd[k];}).map(function(k){
-      return '<div class="intel-bd-row"><span class="lbl">'+k+'-bedroom</span><span class="val">'+iMoney(bd[k])+'</span></div>';
-    }).join(''); }
+    // Bedroom tiers — rendered separately (async, 24mo + all-time fallback)
+    renderBedrooms();
     // Most active
     var byVol=arr.slice().sort(function(a,b){return b.count-a.count;});
     var top=byVol[0];
@@ -2353,6 +2349,31 @@ function goSubmitLOI() {
     }
   }
 
+  // ── BEDROOM TIERS (trailing 24mo where credible, else all-time) ──
+  var BD_MIN_SALES=5;          // a tier needs >=5 recent sales to use the 24mo median
+  var BD_WINDOW_MONTHS=24;
+  function renderBedrooms(){
+    var tEl=document.getElementById('intel-bd-tiers'); if(!tEl||!STATS) return;
+    var allTime=(STATS.global&&STATS.global.medians_by_bd)||{};
+    var order=['2','3','4','5','6','7'];
+    function paint(recentMap){
+      tEl.innerHTML=order.filter(function(k){return allTime[k];}).map(function(k){
+        var r=recentMap[k];
+        var live=!!(r&&r.sale_count>=BD_MIN_SALES);
+        var price=live?r.median_price:allTime[k];
+        var tag=live?' <span class="intel-bd-tag">24mo</span>':'';
+        return '<div class="intel-bd-row"><span class="lbl">'+k+'-bedroom'+tag+'</span><span class="val">'+iMoney(price)+'</span></div>';
+      }).join('');
+    }
+    var L=window.EMListings;
+    if(!L||!L.bedroomMedians){ paint({}); return; }   // graceful: all-time only
+    L.bedroomMedians(BD_WINDOW_MONTHS).then(function(rows){
+      var m={};
+      (rows||[]).forEach(function(r){ m[String(r.beds)]={median_price:r.median_price,sale_count:r.sale_count}; });
+      paint(m);
+    }).catch(function(){ paint({}); });
+  }
+
   // ── BOOT ──
   function boot(){
     buildNameMap();
@@ -2362,7 +2383,7 @@ function goSubmitLOI() {
     }).catch(function(){});
     // live (DB) parts wait for EMListings
     function whenReady(fn){ if(window.EMListings) fn(); else setTimeout(function(){whenReady(fn);},80); }
-    whenReady(function(){ renderFeed(); renderTrajectory(); });
+    whenReady(function(){ renderFeed(); renderTrajectory(); renderBedrooms(); });
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
 })();
