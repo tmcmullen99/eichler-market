@@ -180,6 +180,10 @@ a{text-decoration:none;color:inherit}
 .cm-dot{cursor:pointer;transition:r .12s}
 .cm-dot:hover{r:7}
 .cm-dot.cm-dot-on{r:7.5}
+.cm-bar{cursor:pointer;transition:opacity .12s}
+.cm-bar:hover,.cm-bar.cm-bar-on{opacity:.82}
+.cm-htip-yr{cursor:default}
+.cm-htip-yr .cm-htip-body{padding-top:13px}
 /* Chart hover card */
 .cm-htip{position:absolute;z-index:40;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s,transform .12s;width:194px;background:#1a1f2e;border:1px solid rgba(200,169,110,.35);border-radius:11px;box-shadow:0 12px 32px rgba(14,17,24,.4);overflow:hidden}
 .cm-htip.on{opacity:1;transform:translateY(0)}
@@ -1192,7 +1196,7 @@ function renderViz(){
     +'</div>'
     +'<div class="cm-chart-wrap"><div class="cm-chart" id="cm-chart"></div>'
       +'<div class="cm-htip" id="cm-htip"></div>'
-      +'<div style="font-size:10.5px;color:var(--g);text-align:center;margin-top:8px">Hover a point to see the home · '+d.length+' recorded sale'+(d.length===1?'':'s')+'</div>'
+      +'<div style="font-size:10.5px;color:var(--g);text-align:center;margin-top:8px">'+(_vizMode==="ppsf"?'Hover a point to see the home':'Hover a bar to see that year')+' · '+d.length+' recorded sale'+(d.length===1?'':'s')+'</div>'
     +'</div>';
   drawChart();
 }
@@ -1224,20 +1228,33 @@ function drawChart(){
     // Price by year bars (median per year)
     var byYr={};d.forEach(function(x){var y=x.d.getFullYear();(byYr[y]=byYr[y]||[]).push(x.p.sp);});
     var yrs=Object.keys(byYr).sort(),vals=yrs.map(function(y){var a=byYr[y].slice().sort(function(p,q){return p-q;});return a[Math.floor(a.length/2)];});
+    // build per-year summary for the hover card
+    _barData=yrs.map(function(y,i){var a=byYr[y].slice().sort(function(p,q){return p-q;});return {yr:y,med:vals[i],n:a.length,lo:a[0],hi:a[a.length-1]};});
     var ymax=Math.max.apply(0,vals)*1.12,bw=iw/yrs.length*0.62,gap=iw/yrs.length;
     for(var g2=0;g2<=3;g2++){var yv2=ymax*g2/3,yy2=padT+ih-(yv2/ymax)*ih;svg+='<line class="cm-axis" x1="'+padL+'" y1="'+yy2+'" x2="'+(W-padR)+'" y2="'+yy2+'" opacity="0.5"/><text class="cm-axis-lbl" x="'+(padL-6)+'" y="'+(yy2+3)+'" text-anchor="end">'+cmFmtP(yv2)+'</text>';}
-    yrs.forEach(function(y,i){var bh=(vals[i]/ymax)*ih,bx=padL+i*gap+(gap-bw)/2,by=padT+ih-bh;svg+='<rect class="cm-barv" x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" rx="3"><title>'+y+' · median '+cmFmtP(vals[i])+' ('+byYr[y].length+' sale'+(byYr[y].length>1?'s':'')+')</title></rect><text class="cm-axis-lbl" x="'+(bx+bw/2)+'" y="'+(H-8)+'" text-anchor="middle">'+y+'</text>';});
+    yrs.forEach(function(y,i){var bh=(vals[i]/ymax)*ih,bx=padL+i*gap+(gap-bw)/2,by=padT+ih-bh;svg+='<rect class="cm-barv cm-bar" data-yi="'+i+'" x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" rx="3"/><text class="cm-axis-lbl" x="'+(bx+bw/2)+'" y="'+(H-8)+'" text-anchor="middle">'+y+'</text>';});
   }
   svg+='</svg>';host.innerHTML=svg;
   _vizData=d;
   bindChartHover(host);
 }
 var _vizData=[];
+var _barData=[];
 function bindChartHover(host){
   var tip=document.getElementById('cm-htip');if(!tip)return;
   var wrap=host.closest('.cm-chart-wrap');
   var dots=host.querySelectorAll('.cm-dot');
+  var bars=host.querySelectorAll('.cm-bar');
   var active=null;
+  function place(rectEl){
+    var wr=wrap.getBoundingClientRect(),dr=rectEl.getBoundingClientRect();
+    var cx=dr.left-wr.left+dr.width/2, cy=dr.top-wr.top;
+    tip.classList.add('on');
+    var tw=tip.offsetWidth,th=tip.offsetHeight;
+    var left=cx-tw/2; left=Math.max(6,Math.min(left,wr.width-tw-6));
+    var top=cy-th-12; if(top<6)top=cy+18; // flip below if no room above
+    tip.style.left=left+'px';tip.style.top=top+'px';
+  }
   function show(dot){
     var i=parseInt(dot.getAttribute('data-i'),10);var x=_vizData[i];if(!x)return;var p=x.p;
     if(active)active.classList.remove('cm-dot-on');dot.classList.add('cm-dot-on');active=dot;
@@ -1250,24 +1267,34 @@ function bindChartHover(host){
       +'<div class="cm-htip-date">Sold '+p.dt+'</div>'
       +'<span class="cm-htip-link">Photos &amp; history ↗</span>'
       +'</div></a>';
-    // position: dot center relative to wrap, place above, clamp to edges
-    var wr=wrap.getBoundingClientRect(),dr=dot.getBoundingClientRect();
-    var cx=dr.left-wr.left+dr.width/2, cy=dr.top-wr.top;
-    tip.classList.add('on');
-    var tw=tip.offsetWidth,th=tip.offsetHeight;
-    var left=cx-tw/2; left=Math.max(6,Math.min(left,wr.width-tw-6));
-    var top=cy-th-12; if(top<6)top=cy+18; // flip below if no room above
-    tip.style.left=left+'px';tip.style.top=top+'px';
+    place(dot);
   }
-  function hide(){tip.classList.remove('on');if(active){active.classList.remove('cm-dot-on');active=null;}}
+  function showBar(bar){
+    var i=parseInt(bar.getAttribute('data-yi'),10);var b=_barData[i];if(!b)return;
+    if(active&&active.classList)active.classList.remove('cm-bar-on');bar.classList.add('cm-bar-on');active=bar;
+    var range=(b.lo===b.hi)?cmFmtP(b.med):cmFmtP(b.lo)+' – '+cmFmtP(b.hi);
+    tip.innerHTML='<div class="cm-htip-card cm-htip-yr"><div class="cm-htip-body">'
+      +'<div class="cm-htip-addr">'+b.yr+'</div>'
+      +'<div class="cm-htip-meta">'+b.n+' recorded sale'+(b.n>1?'s':'')+' this year</div>'
+      +'<div class="cm-htip-row"><span class="cm-htip-price">'+cmFmtP(b.med)+'</span><span class="cm-htip-ppsf">median</span></div>'
+      +(b.n>1?'<div class="cm-htip-date">Range '+range+'</div>':'')
+      +'</div></div>';
+    place(bar);
+  }
+  function hide(){tip.classList.remove('on');if(active&&active.classList){active.classList.remove('cm-dot-on');active.classList.remove('cm-bar-on');active=null;}}
   dots.forEach(function(dot){
     dot.addEventListener('mouseenter',function(){show(dot);});
     dot.addEventListener('click',function(e){
       e.stopPropagation();
       var i=parseInt(dot.getAttribute('data-i'),10);var x=_vizData[i];
+      // first click shows card; if already showing this dot, click opens the listing
       if(active===dot && x){window.open(zillowUrl(x.p.a,x.p.c,x.p.z),'_blank','noopener'); }
       else { show(dot); }
     });
+  });
+  bars.forEach(function(bar){
+    bar.addEventListener('mouseenter',function(){showBar(bar);});
+    bar.addEventListener('click',function(e){e.stopPropagation();showBar(bar);});
   });
   wrap.addEventListener('mouseleave',hide);
   // tap-outside dismiss on touch
