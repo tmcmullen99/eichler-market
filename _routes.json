@@ -1,5 +1,19 @@
 {
   "version": 1,
-  "include": ["/listing/*"],
-  "exclude": []
+  "include": ["/*"],
+  "exclude": [
+    "/assets/*",
+    "/*.css",
+    "/*.js",
+    "/*.json",
+    "/*.png",
+    "/*.jpg",
+    "/*.jpeg",
+    "/*.webp",
+    "/*.svg",
+    "/*.ico",
+    "/*.txt",
+    "/*.xml",
+    "/*.woff2"
+  ]
 }
