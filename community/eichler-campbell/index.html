@@ -1183,7 +1183,7 @@ function renderCmMap(){
       if(cmActiveM){cmActiveM.m.setIcon(cmMakeIcon(false));}
       m.setIcon(cmMakeIcon(true));
       cmActiveM={m:m,p:p};
-      var imgH=p.img?'<img class="cm-popup-img" src="'+p.img+'" onerror="this.style.display=\'none\'">':'';
+      var _ph=window.emPhoto?emPhoto(p):p.img;var imgH=_ph?'<img class="cm-popup-img" src="'+_ph+'" onerror="this.style.display=\'none\'">':'';
       m.unbindPopup().bindPopup(L.popup({closeButton:true,maxWidth:220,className:'cm-popup',offset:[0,-12]})
         .setContent(imgH+'<div class="cm-popup-body">'
           +'<div class="cm-popup-addr">'+p.a+'</div>'
@@ -1267,7 +1267,7 @@ function renderCmList(data){
   }
   var page=sorted.slice(0,cmPageSize);
   el.innerHTML=page.map(function(p){
-    var imgH=p.img?'<img src="'+p.img+'" alt="" class="c-u-img" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="c-u-img" style="background:var(--b)"></div>';
+    var _ph=window.emPhoto?emPhoto(p):p.img;var imgH=_ph?'<img src="'+_ph+'" alt="" class="c-u-img" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="c-u-img" style="background:var(--b)"></div>';
     var ru=zillowUrl(p.a,p.c,p.z);
     var safeAddr=p.a.replace(/'/g,'').replace(/"/g,'');
     return '<div class="c-u" style="cursor:default">'
@@ -1423,7 +1423,7 @@ function bindChartHover(host){
   function show(dot){
     var i=parseInt(dot.getAttribute('data-i'),10);var x=_vizData[i];if(!x)return;var p=x.p;
     if(active)active.classList.remove('cm-dot-on');dot.classList.add('cm-dot-on');active=dot;
-    var img=p.img?'<img class="cm-htip-img" src="'+p.img+'" alt="" onerror="this.style.display=\'none\'">':'';
+    var _ph=window.emPhoto?emPhoto(p):p.img;var img=_ph?'<img class="cm-htip-img" src="'+_ph+'" alt="" onerror="this.style.display=\'none\'">':'';
     var zu=zillowUrl(p.a,p.c,p.z);
     tip.innerHTML='<a class="cm-htip-card" href="'+zu+'" target="_blank" rel="noopener nofollow">'+img+'<div class="cm-htip-body">'
       +'<div class="cm-htip-addr">'+p.a+'</div>'
@@ -1584,7 +1584,7 @@ function b3PickFilter(q){
   list.sort(function(a,b){return (_vizParseDt(b.dt)||0)-(_vizParseDt(a.dt)||0);});
   if(!list.length){host.innerHTML='<div class="b3-pick-empty">No recorded sales match &#8220;'+(q||'')+'&#8221;. Use the address box below.</div>';return;}
   host.innerHTML=list.slice(0,40).map(function(p){
-    var img=p.img?'<img class="b3-pick-img" src="'+p.img+'" alt="" onerror="this.style.visibility=\'hidden\'">':'<div class="b3-pick-img"></div>';
+    var _ph=window.emPhoto?emPhoto(p):p.img;var img=_ph?'<img class="b3-pick-img" src="'+_ph+'" alt="" onerror="this.style.visibility=\'hidden\'">':'<div class="b3-pick-img"></div>';
     var sa=(p.a||'').replace(/'/g,'').replace(/"/g,'');
     return '<button class="b3-pick-row" onclick="b3PickSelect(\''+sa+'\')">'+img
       +'<div class="b3-pick-body"><div class="b3-pick-addr">'+p.a+'</div>'
