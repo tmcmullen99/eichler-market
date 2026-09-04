@@ -3,17 +3,13 @@
   "include": ["/*"],
   "exclude": [
     "/assets/*",
-    "/*.css",
-    "/*.js",
-    "/*.json",
-    "/*.png",
-    "/*.jpg",
-    "/*.jpeg",
-    "/*.webp",
-    "/*.svg",
-    "/*.ico",
-    "/*.txt",
-    "/*.xml",
-    "/*.woff2"
+    "/cm.css",
+    "/em.css",
+    "/em-auth-nav.css",
+    "/cm-track.js",
+    "/em-supabase.js",
+    "/em-props.json",
+    "/em-props-full.json",
+    "/em-market-stats.json"
   ]
 }
