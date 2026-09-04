@@ -245,10 +245,10 @@ export async function onRequest(context) {
   if (!photos.length) {
     photo = `<div class="hero-img-none">No photo available</div>`;
   } else if (photos.length === 1) {
-    photo = `<div class="gal"><div class="gal-track"><div class="gal-slide"><img src="${esc(photos[0])}" alt="${esc(p.address)}"></div></div></div>`;
+    photo = `<div class="gal"><div class="gal-track"><div class="gal-slide"><img src="${esc(photos[0])}" alt="${esc(p.address)}" data-a="${esc(p.address)}" data-c="${esc(p.city)}" onerror="window.emSvSwap&&window.emSvSwap(this)"></div></div></div>`;
   } else {
-    const slides = photos.map((u) => `<div class="gal-slide"><img src="${esc(u)}" alt="${esc(p.address)}" loading="lazy"></div>`).join("");
-    const thumbs = photos.map((u, j) => `<div class="thumb${j === 0 ? " on" : ""}" data-i="${j}"><img src="${esc(u)}" loading="lazy" alt=""></div>`).join("");
+    const slides = photos.map((u) => `<div class="gal-slide"><img src="${esc(u)}" alt="${esc(p.address)}" loading="lazy" data-a="${esc(p.address)}" data-c="${esc(p.city)}" onerror="window.emSvSwap&&window.emSvSwap(this)"></div>`).join("");
+    const thumbs = photos.map((u, j) => `<div class="thumb${j === 0 ? " on" : ""}" data-i="${j}"><img src="${esc(u)}" loading="lazy" alt="" data-a="${esc(p.address)}" data-c="${esc(p.city)}" onerror="window.emSvSwap&&window.emSvSwap(this)"></div>`).join("");
     photo = `<div class="gal" id="gal">
         <div class="gal-track">${slides}</div>
         <button class="gal-btn prev" type="button" aria-label="Previous">‹</button>

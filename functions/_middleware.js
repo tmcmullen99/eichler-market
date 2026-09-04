@@ -77,6 +77,25 @@ const PHOTO_HELPER =
   'if(!p.lat&&!p.a)return "";' +
   'return "https://maps.googleapis.com/maps/api/streetview?size=640x400&location="' +
   '+encodeURIComponent(loc)+"&fov=72&pitch=0&source=outdoor&key="+encodeURIComponent(k);' +
+  '};' +
+  /* MLS photo rescue.
+     Active listings carry photo_url straight from the portal:
+     search.mlslistings.com/MediaServer/GetMedia.ashx?Key=... Those are
+     portal-session URLs. MLSListings does not serve them to third-party
+     sites, so every one renders as a broken-image icon — which is what the
+     active-listings grid was showing.
+     Until the photos are rehosted onto our own storage, this catches the
+     failure and swaps in Street View. Marked on the element so a Street View
+     miss cannot loop back into another error. */
+  'window.emSvSwap=function(img){' +
+  'if(!img||img.getAttribute("data-sv"))return void(img.style.visibility="hidden");' +
+  'img.setAttribute("data-sv","1");' +
+  'var m=document.querySelector(\'meta[name="gmaps-key"]\');' +
+  'var k=(m&&m.content&&m.content.indexOf("__")!==0)?m.content:"";' +
+  'var a=img.getAttribute("data-a")||"",c=img.getAttribute("data-c")||"";' +
+  'if(!k||!a)return void(img.style.visibility="hidden");' +
+  'img.src="https://maps.googleapis.com/maps/api/streetview?size=640x400&location="' +
+  '+encodeURIComponent(a+", "+c+", CA")+"&fov=72&pitch=0&source=outdoor&key="+encodeURIComponent(k);' +
   '};<\/script>';
 
 /* Unkeyed CARTO raster tile URLs. The negative lookahead keeps this idempotent
