@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Account and redirect surfaces hold nothing to index.
+Disallow: /auth/
+Disallow: /dashboard/
+Disallow: /r/
+
+Sitemap: https://eichlermarket.com/sitemap.xml
