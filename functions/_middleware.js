@@ -102,17 +102,41 @@ const PHOTO_HELPER =
    and stops it touching a URL that already carries a key. */
 const TILE = /(https:\/\/\{s\}\.basemaps\.cartocdn\.com\/[a-z_\/]+\/\{z\}\/\{x\}\/\{y\}(?:\{r\})?\.png)(?!\?)/g;
 
+function addNewsNav(html) {
+  if (html.indexOf('class="nav-link" href="/news/"') === -1 && html.indexOf('href="/news/" class="nav-link"') === -1) {
+    html = html.replace(/(<a href="\/make-me-move\/" class="nav-link"[^>]*>Make Me Move<\/a>)/,
+      '$1\n    <a href="/news/" class="nav-link" style="text-decoration:none">Local news</a>');
+  }
+  if (html.indexOf('nav-drawer-item" href="/news/"') === -1) {
+    html = html.replace(/(\+'<a class="nav-drawer-item" href="\/make-me-move\/">Make Me Move<\/a>')/,
+      "$1\n      +'<a class=\"nav-drawer-item\" href=\"/news/\">Local news</a>'");
+  }
+  if (html.indexOf('<li><a href="/news/">') === -1) {
+    html = html.replace(/(<li><a href="\/make-me-move\/">Make-Me-Move<\/a><\/li>)/, '$1<li><a href="/news/">Local news</a></li>');
+  }
+  return html;
+}
+
 export async function onRequest(context) {
   const res = await context.next();
 
   try {
     const key = context.env && context.env.CARTO_KEY;
-    if (!key) return res;                       // unset: behave exactly as before
-
     const type = res.headers.get('content-type') || '';
     if (!type.includes('text/html')) return res; // assets stream through
 
     let html = await res.text();
+
+    /* LOCAL NEWS in the menus (Tim, 25 Sep 2026). The header, the mobile drawer
+       and the footer list are repeated in ~100 static pages; one seam here puts
+       the link in all of them. Each insert is guarded, so a page that already
+       links /news/ in that spot is left alone. */
+    html = addNewsNav(html);
+
+    if (!key) {                                  // no CARTO key: only the nav changed
+      const h0 = new Headers(res.headers); h0.delete('content-length');
+      return new Response(html, { status: res.status, statusText: res.statusText, headers: h0 });
+    }
 
     html = html.split(TOKEN).join(key);
 
