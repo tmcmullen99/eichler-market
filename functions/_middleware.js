@@ -17,7 +17,7 @@
  * WHAT IT DOES
  *
  *   1. Replaces the literal token __CARTO_KEY__ anywhere in an HTML response.
- *   2. Appends ?api_key=… to any unkeyed basemaps.cartocdn.com tile URL, so
+ *   2. Appends ?key=… to any unkeyed basemaps.cartocdn.com tile URL, so
  *      the 78 existing pages are fixed without touching one of them, and a
  *      page added tomorrow is fixed whether or not its author knew about this.
  *   3. Injects <meta name="carto-key"> so scripts under /assets/*.js can read
@@ -127,7 +127,9 @@ export async function onRequest(context) {
         html = html.replace(/<\/head>/i, PHOTO_HELPER + '</head>');
       }
     }
-    html = html.replace(TILE, (m, url) => url + '?api_key=' + encodeURIComponent(key));
+    /* CARTO reads ?key=, not ?api_key= -- an api_key tile is served watermarked
+       "API KEY REQUIRED" exactly as if no key were sent (fixed 25 Sep 2026). */
+    html = html.replace(TILE, (m, url) => url + '?key=' + encodeURIComponent(key));
 
     /* One meta tag, for scripts that build tile URLs at runtime. Guarded so a
        page that already declares it is left alone. */
