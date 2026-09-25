@@ -228,7 +228,8 @@ async function newsIndex() {
       '<h2>' + esc(a.headline) + '</h2>' + (a.dek ? '<p>' + esc(a.dek) + '</p>' : '') +
       '<div class="nw-meta">' + esc(cmNewsDate(a.published_at)) + (a.word_count ? ' \u00b7 ' + Math.max(1, Math.round(a.word_count / 220)) + ' min read' : '') + '</div></div></a>';
   }).join('');
-  const sale = (posts || []).map(p => `<a class="card" href="/news/${attr(p.slug)}"><div class="card-pocket">${esc(p.pocket_name || '')}</div>` +
+  /* a refused or failed query answers with an object, not a list */
+  const sale = (Array.isArray(posts) ? posts : []).map(p => `<a class="card" href="/news/${attr(p.slug)}"><div class="card-pocket">${esc(p.pocket_name || '')}</div>` +
     `<div class="card-title">${esc(p.title)}</div><div class="card-meta">${fmtP(p.sale_price)}${p.ppsf ? ' · $' + p.ppsf + '/sqft' : ''} · ${fmtD(p.sale_date)}</div></a>`).join('');
   const title = 'Eichler news & monthly market reports \u00b7 Eichler Market';
   const desc = 'What is moving the Silicon Valley Eichler market: new listings, recorded sales and a monthly report, with the sample behind every number.';
@@ -285,7 +286,7 @@ async function newsArticle(slug) {
 
 async function legacyPost(slug) {
   const rows = await sbFetch(`em_posts?select=*&slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`);
-  const p = rows && rows[0];
+  const p = Array.isArray(rows) ? rows[0] : null;
   if (!p) return null;
   const jsonld = `<script type="application/ld+json">${JSON.stringify({
     "@context": "https://schema.org", "@type": "Article", "headline": p.title, "datePublished": p.created_at,
@@ -309,7 +310,7 @@ export async function onRequest(context) {
     ]);
     const arts = (idx && idx.ok && Array.isArray(idx.articles)) ? idx.articles : [];
     const urls = arts.map(a => `<url><loc>https://eichlermarket.com/news/${a.slug}/</loc><lastmod>${String(a.published_at || '').slice(0, 10)}</lastmod></url>`).join('') +
-      (posts || []).map(p => `<url><loc>https://eichlermarket.com/news/${p.slug}</loc><lastmod>${p.created_at.slice(0,10)}</lastmod></url>`).join('');
+      (Array.isArray(posts) ? posts : []).map(p => `<url><loc>https://eichlermarket.com/news/${p.slug}</loc><lastmod>${p.created_at.slice(0,10)}</lastmod></url>`).join('');
     return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://eichlermarket.com/news/</loc></url>${urls}</urlset>`,
       { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=3600' } });
   }
