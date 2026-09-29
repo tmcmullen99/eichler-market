@@ -505,6 +505,18 @@ function openMmsModal(){
 }
 function closeMmsModal(){document.getElementById('mms-modal-bg').classList.remove('open');}
 document.getElementById('mms-modal-bg').addEventListener('click',function(e){if(e.target===this)closeMmsModal();});
+/* Arriving from mcmullenresidential.com/meet-tim (28 Sep 2026): ?address=&price= opens the
+   form with both already filled in, so the owner only adds their name and email. */
+(function(){
+  try{
+    var q=new URLSearchParams(location.search), a=q.get('address'), p=q.get('price');
+    if(!a && !p) return;
+    var fa=document.getElementById('mf-addr'), fp=document.getElementById('mf-price');
+    if(fa && a) fa.value=a;
+    if(fp && p){ var n=parseInt(String(p).replace(/\D/g,''),10); if(n>0) fp.value='$'+n.toLocaleString(); }
+    openMmsModal();
+  }catch(e){}
+})();
 
 function fmtMfP(inp){
   var n=parseInt(inp.value.replace(/\D/g,''));
