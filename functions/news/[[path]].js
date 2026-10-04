@@ -216,7 +216,8 @@ ${EM_VARS}
 
 /* LOCAL NEWS vs MARKET REPORTS (Tim, 4 Oct 2026): two tabs, two pages. Reports are named by one rule
    ("Eichler Q3 2026 Market Report") and live under /market-reports/. */
-const emHref = (a) => (a && a.kind === 'market_review' ? '/market-reports/' : '/news/') + a.slug + '/';
+// every article, report or news, keeps the address it was published and shared under (Tim, 4 Oct 2026)
+const emHref = (a) => '/news/' + a.slug + '/';
 const emReportType = (a) => /\bQ[1-4] \d{4}\b/.test(a.headline || '') ? 'Quarterly'
   : /Year-to-Date/.test(a.headline || '') ? 'Year to date'
   : /\b\d{4} Market Report$/.test(a.headline || '') && !/(January|February|March|April|May|June|July|August|September|October|November|December) \d{4}/.test(a.headline || '') ? 'Annual' : 'Monthly';
@@ -282,7 +283,7 @@ async function newsArticle(slug, area) {
   if (data && data.error === 'moved' && data.redirect_slug)
     return new Response(null, { status: 301, headers: { Location: emHref({ kind: data.kind, slug: data.redirect_slug }), 'Cache-Control': 'public, max-age=3600' } });
   if (!data || !data.ok || !data.article) return null;
-  if ((area || 'news') !== (data.article.kind === 'market_review' ? 'reports' : 'news'))
+  if (area === 'reports')   // /market-reports/ is the index tab only
     return new Response(null, { status: 301, headers: { Location: emHref(data.article), 'Cache-Control': 'public, max-age=3600' } });
   const rep = data.article.kind === 'market_review';
   const a = data.article, canonical = base + emHref(a);
