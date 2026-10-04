@@ -214,42 +214,78 @@ ${EM_VARS}
 </body></html>`;
 }
 
-async function newsIndex() {
+/* LOCAL NEWS vs MARKET REPORTS (Tim, 4 Oct 2026): two tabs, two pages. Reports are named by one rule
+   ("Eichler Q3 2026 Market Report") and live under /market-reports/. */
+const emHref = (a) => (a && a.kind === 'market_review' ? '/market-reports/' : '/news/') + a.slug + '/';
+const emReportType = (a) => /\bQ[1-4] \d{4}\b/.test(a.headline || '') ? 'Quarterly'
+  : /Year-to-Date/.test(a.headline || '') ? 'Year to date'
+  : /\b\d{4} Market Report$/.test(a.headline || '') && !/(January|February|March|April|May|June|July|August|September|October|November|December) \d{4}/.test(a.headline || '') ? 'Annual' : 'Monthly';
+const EM_TABS_CSS = '<style>.nw-tabs{display:flex;gap:6px;margin:0 0 28px;padding:5px;border:1px solid rgba(232,227,216,.14);border-radius:14px;width:max-content;max-width:100%}' +
+  '.nw-tabs a{display:flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-weight:600;font-size:15px;color:rgba(232,227,216,.65);text-decoration:none;white-space:nowrap}' +
+  '.nw-tabs a span{font:500 11px "JetBrains Mono",monospace;background:rgba(232,227,216,.1);border-radius:99px;padding:2px 8px}' +
+  '.nw-tabs a.on{background:#c8a96e;color:#141821}.nw-tabs a.on span{background:rgba(20,24,33,.18);color:#141821}' +
+  '.nw-sect{font-family:"Playfair Display",serif;font-size:22px;font-weight:500;color:#fff;margin:30px 0 6px}' +
+  '.nw-sub{font-family:"Playfair Display",serif;font-style:italic;font-size:20px;line-height:1.35;color:rgba(232,227,216,.75);margin:6px 0 10px}' +
+  '@media(max-width:600px){.nw-tabs{width:100%}.nw-tabs a{flex:1;justify-content:center;padding:11px 8px}}</style>';
+function emTabs(active, counts) {
+  const c = counts || {};
+  return '<nav class="nw-tabs" aria-label="Local news and market reports">' +
+    '<a href="/news/" class="' + (active === 'local_news' ? 'on' : '') + '">Local News' + (c.local_news ? '<span>' + c.local_news + '</span>' : '') + '</a>' +
+    '<a href="/market-reports/" class="' + (active === 'market_review' ? 'on' : '') + '">Market Reports' + (c.market_review ? '<span>' + c.market_review + '</span>' : '') + '</a></nav>';
+}
+
+async function newsIndex(kind) {
+  const rep = kind === 'market_review';
   const base = 'https://eichlermarket.com';
   const [data, posts] = await Promise.all([
-    aNewsRpc('get_news_index', { p_market_id: EM_MARKET_ID, p_limit: 30, p_offset: 0 }),
-    sbFetch('em_posts?select=slug,title,pocket_name,sale_price,sale_date,ppsf,created_at&status=eq.published&order=created_at.desc&limit=40').catch(() => []),
+    aNewsRpc('get_news_index', { p_market_id: EM_MARKET_ID, p_limit: rep ? 60 : 30, p_offset: 0, p_kind: rep ? 'market_review' : 'local_news' }),
+    rep ? Promise.resolve([]) : sbFetch('em_posts?select=slug,title,pocket_name,sale_price,sale_date,ppsf,created_at&status=eq.published&order=created_at.desc&limit=40').catch(() => []),
   ]);
   const arts = (data && data.ok && Array.isArray(data.articles)) ? data.articles : [];
-  const cards = arts.map(a => {
+  const counts = (data && data.counts) || {};
+  const card = a => {
     const img = a.hero_path ? '<div class="ph"><img src="' + attr(cmNewsMedia(a.hero_path)) + '" alt="' + attr(a.hero_alt || a.headline) + '" loading="lazy"></div>' : '';
-    return '<a class="nw-card" href="/news/' + attr(a.slug) + '/">' + img + '<div class="bd">' +
-      '<div class="nw-kind">' + (a.kind === 'market_review' ? 'Monthly market report' : 'Local news') + '</div>' +
-      '<h2>' + esc(a.headline) + '</h2>' + (a.dek ? '<p>' + esc(a.dek) + '</p>' : '') +
+    const text = rep ? (a.subhead || a.dek) : a.dek;
+    return '<a class="nw-card" href="' + emHref(a) + '">' + img + '<div class="bd">' +
+      '<div class="nw-kind">' + (rep ? emReportType(a) + ' market report' : 'Local news') + '</div>' +
+      '<h2>' + esc(a.headline) + '</h2>' + (text ? '<p>' + esc(text) + '</p>' : '') +
       '<div class="nw-meta">' + esc(cmNewsDate(a.published_at)) + (a.word_count ? ' \u00b7 ' + Math.max(1, Math.round(a.word_count / 220)) + ' min read' : '') + '</div></div></a>';
-  }).join('');
+  };
+  let cards = '';
+  if (rep) {
+    const big = arts.filter(a => emReportType(a) !== 'Monthly'), monthly = arts.filter(a => emReportType(a) === 'Monthly');
+    cards = (big.length ? '<h2 class="nw-sect">Quarterly &amp; annual reports</h2><div class="nw-list">' + big.map(card).join('') + '</div>' : '') +
+            (monthly.length ? '<h2 class="nw-sect">Monthly reports</h2><div class="nw-list">' + monthly.map(card).join('') + '</div>' : '');
+  } else if (arts.length) cards = '<div class="nw-list">' + arts.map(card).join('') + '</div>';
   /* a refused or failed query answers with an object, not a list */
   const sale = (Array.isArray(posts) ? posts : []).map(p => `<a class="card" href="/news/${attr(p.slug)}"><div class="card-pocket">${esc(p.pocket_name || '')}</div>` +
     `<div class="card-title">${esc(p.title)}</div><div class="card-meta">${fmtP(p.sale_price)}${p.ppsf ? ' · $' + p.ppsf + '/sqft' : ''} · ${fmtD(p.sale_date)}</div></a>`).join('');
-  const title = 'Eichler news & monthly market reports \u00b7 Eichler Market';
-  const desc = 'What is moving the Silicon Valley Eichler market: new listings, recorded sales and a monthly report, with the sample behind every number.';
-  const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, url: base + '/news/', description: desc,
-    hasPart: arts.slice(0, 20).map(a => ({ '@type': 'NewsArticle', headline: a.headline, url: base + '/news/' + a.slug + '/', datePublished: a.published_at })) };
-  const body = CM_NEWS_CSS +
-    '<p class="kick">Eichler Market \u00b7 Local news</p><h1>Eichler news</h1>' +
-    '<p class="lede">What actually moved the Eichler market, from the recorded sales. A monthly report on the first of every month, and coverage of anything notable in between.</p>' +
-    (cards ? '<div class="nw-list">' + cards + '</div>'
-           : '<div class="nw-empty">The first Local News pieces are being written. The monthly report for the month just ended goes up in the first days of each month.</div>') +
+  const title = rep ? 'Eichler Market Reports \u00b7 Eichler Market' : 'Eichler news \u00b7 Eichler Market';
+  const desc = rep ? 'Every Eichler market report in one place: monthly, quarterly and annual closings, volume and median prices from recorded sales, with the sample behind every number.'
+                   : 'What is moving the Silicon Valley Eichler market: new listings and recorded sales, with the sample behind every number.';
+  const path = rep ? '/market-reports/' : '/news/';
+  const jsonld = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, url: base + path, description: desc,
+    hasPart: arts.slice(0, 30).map(a => ({ '@type': rep ? 'Report' : 'NewsArticle', headline: a.headline, url: base + emHref(a), datePublished: a.published_at })) };
+  const body = CM_NEWS_CSS + EM_TABS_CSS + emTabs(rep ? 'market_review' : 'local_news', counts) +
+    '<p class="kick">Eichler Market \u00b7 ' + (rep ? 'Market reports' : 'Local news') + '</p><h1>' + (rep ? 'Eichler market reports' : 'Eichler news') + '</h1>' +
+    '<p class="lede">' + esc(desc) + '</p>' +
+    (cards || '<div class="nw-empty">' + (rep ? 'The first market report goes up in the first days of next month.' : 'The first Local News pieces are being written.') + '</div>') +
     (sale ? '<div class="em-sec"><h2>Eichler sale reports</h2><p class="sub">Every recorded Eichler sale, published as it closes.</p>' + sale + '</div>' : '');
-  return new Response(NSHELL(title, desc, base + '/news/', jsonld, body),
+  return new Response(NSHELL(title, desc, base + path, jsonld, body),
     { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=900' } });
 }
 
-async function newsArticle(slug) {
+async function newsArticle(slug, area) {
   const base = 'https://eichlermarket.com';
   const data = await aNewsRpc('get_news_article', { p_market_id: EM_MARKET_ID, p_slug: slug });
+  // a renamed report answers with where it moved; a report under /news/ (or the reverse) moves too
+  if (data && data.error === 'moved' && data.redirect_slug)
+    return new Response(null, { status: 301, headers: { Location: emHref({ kind: data.kind, slug: data.redirect_slug }), 'Cache-Control': 'public, max-age=3600' } });
   if (!data || !data.ok || !data.article) return null;
-  const a = data.article, canonical = base + '/news/' + a.slug + '/';
+  if ((area || 'news') !== (data.article.kind === 'market_review' ? 'reports' : 'news'))
+    return new Response(null, { status: 301, headers: { Location: emHref(data.article), 'Cache-Control': 'public, max-age=3600' } });
+  const rep = data.article.kind === 'market_review';
+  const a = data.article, canonical = base + emHref(a);
   const imgs = Array.isArray(data.images) ? data.images : [];
   const blocks = cmNewsBlocks(a.body_md);
   const fig = im => '<figure class="nw-fig"><img src="' + attr(cmNewsMedia(im.storage_path)) + '" alt="' + attr(im.alt || im.caption || '') + '" loading="lazy">' +
@@ -269,12 +305,12 @@ async function newsArticle(slug) {
     '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(canonical) + '" target="_blank" rel="noopener">Facebook</a>' +
     '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(canonical) + '" target="_blank" rel="noopener">LinkedIn</a></div>';
   const title = a.meta_title || a.headline, desc = a.meta_description || a.dek || '';
-  const jsonld = { '@context': 'https://schema.org', '@type': 'NewsArticle', headline: a.headline, description: desc, url: canonical,
+  const jsonld = { '@context': 'https://schema.org', '@type': rep ? 'Report' : 'NewsArticle', headline: a.headline, alternativeHeadline: rep && a.subhead ? a.subhead : undefined, description: desc, url: canonical,
     datePublished: a.published_at, dateModified: a.updated_at || a.published_at, image: a.hero_path ? [cmNewsMedia(a.hero_path)] : undefined,
     author: au.name ? { '@type': 'Person', name: au.name } : undefined, publisher: { '@type': 'Organization', name: 'Eichler Market' } };
-  const body = CM_NEWS_CSS + '<article class="nw-art">' +
-    '<p class="nw-crumb"><a href="/">Eichler Market</a> \u203a <a href="/news/">News</a></p>' +
-    '<h1>' + esc(a.headline) + '</h1>' + (a.dek ? '<p class="nw-dek">' + esc(a.dek) + '</p>' : '') +
+  const body = CM_NEWS_CSS + EM_TABS_CSS + '<article class="nw-art">' +
+    '<p class="nw-crumb"><a href="/">Eichler Market</a> \u203a ' + (rep ? '<a href="/market-reports/">Market reports</a>' : '<a href="/news/">News</a>') + '</p>' +
+    '<h1>' + esc(a.headline) + '</h1>' + (rep && a.subhead ? '<p class="nw-sub">' + esc(a.subhead) + '</p>' : '') + (a.dek ? '<p class="nw-dek">' + esc(a.dek) + '</p>' : '') +
     '<div class="nw-by">' + (au.name ? 'By ' + esc(au.name) + ' \u00b7 ' : '') + esc(cmNewsDate(a.published_at)) + '</div>' +
     hero + '<div class="nw-body">' + bodyHtml + '</div>' + src + share +
     '<p class="nw-legal">' + (au.name ? esc(au.name) + (au.dre ? ', CA DRE #' + esc(au.dre) : '') + '. ' : '') +
@@ -302,6 +338,13 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   const parts = url.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
   const slug = parts[1] || null;
+  if (parts[0] === 'market-reports') {
+    if (!slug) return newsIndex('market_review');
+    if (/^[a-z0-9-]+$/.test(slug)) { const r = await newsArticle(slug, 'reports'); if (r) return r; }
+    return new Response(NSHELL('Not found \u00b7 Eichler Market', 'Report not found.', 'https://eichlermarket.com/market-reports/', {},
+      '<article class="nw-art"><h1>That report isn\u2019t here</h1><p class="nw-dek"><a href="/market-reports/">See all Eichler market reports</a>.</p></article>'),
+      { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+  }
 
   if (slug === 'sitemap.xml') {
     const [posts, idx] = await Promise.all([
@@ -309,17 +352,17 @@ export async function onRequest(context) {
       aNewsRpc('get_news_index', { p_market_id: EM_MARKET_ID, p_limit: 500, p_offset: 0 }),
     ]);
     const arts = (idx && idx.ok && Array.isArray(idx.articles)) ? idx.articles : [];
-    const urls = arts.map(a => `<url><loc>https://eichlermarket.com/news/${a.slug}/</loc><lastmod>${String(a.published_at || '').slice(0, 10)}</lastmod></url>`).join('') +
+    const urls = arts.map(a => `<url><loc>https://eichlermarket.com${emHref(a)}</loc><lastmod>${String(a.published_at || '').slice(0, 10)}</lastmod></url>`).join('') +
       (Array.isArray(posts) ? posts : []).map(p => `<url><loc>https://eichlermarket.com/news/${p.slug}</loc><lastmod>${p.created_at.slice(0,10)}</lastmod></url>`).join('');
-    return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://eichlermarket.com/news/</loc></url>${urls}</urlset>`,
+    return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://eichlermarket.com/news/</loc></url><url><loc>https://eichlermarket.com/market-reports/</loc></url>${urls}</urlset>`,
       { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=3600' } });
   }
   if (slug) {
-    if (/^[a-z0-9-]+$/.test(slug)) { const r = await newsArticle(slug); if (r) return r; }
+    if (/^[a-z0-9-]+$/.test(slug)) { const r = await newsArticle(slug, 'news'); if (r) return r; }
     const l = await legacyPost(slug); if (l) return l;
     return new Response(NSHELL('Not found \u00b7 Eichler Market', 'Article not found.', 'https://eichlermarket.com/news/', {},
       '<article class="nw-art"><h1>That article isn\u2019t here</h1><p class="nw-dek">It may have been moved or taken down. <a href="/news/">See all Eichler news</a>.</p></article>'),
       { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
   }
-  return newsIndex();
+  return newsIndex('local_news');
 }
