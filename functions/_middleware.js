@@ -154,6 +154,18 @@ function addCanonical(html, url) {
   return html;
 }
 
+/* App shells. /r/<code> (referral and mailer links), /auth/<anything> and
+   /dashboard/<anything> are one page each that reads the path in the browser.
+   _redirects rewrites never run on this project (Functions handle every route,
+   and Pages does not apply _redirects to Function-served requests), so these
+   used to fall through to the home page. Served here instead. */
+function appShell(pathname) {
+  for (const base of ['/r/', '/auth/', '/dashboard/']) {
+    if (pathname.startsWith(base) && pathname.length > base.length) return base;
+  }
+  return null;
+}
+
 function redirect(location, status) {
   return new Response(null, { status: status || 301, headers: { Location: location, 'Cache-Control': 'public, max-age=3600' } });
 }
@@ -195,7 +207,10 @@ export async function onRequest(context) {
 }
 
 async function render(context, url) {
-  const res = await context.next();
+  const shell = appShell(url.pathname);
+  const res = (shell && context.env && context.env.ASSETS)
+    ? await context.env.ASSETS.fetch(new URL(shell, url.origin))
+    : await context.next();
 
   try {
     const key = context.env && context.env.CARTO_KEY;

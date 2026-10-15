@@ -1,5 +1,7 @@
-# /communities, /save-10k, /refer, www → apex and the retired duplicate community
-# pages are 301s in functions/_middleware.js (the middleware runs before these rules).
+# NOTE: Pages does not apply _redirects to requests handled by Functions, and
+# functions/_middleware.js handles every route (_routes.json includes /*). The rules
+# below are inert; redirects, app-shell rewrites (/r/<code>, /auth/*, /dashboard/*)
+# and www → apex live in the middleware.
 # Directory pages (/community/<slug>/, /homes/<slug>/, /how-it-works/) are served by Pages
 # itself, which redirects the no-slash form to the slash form; a path with no page answers
 # 404 with 404.html instead of the home page.

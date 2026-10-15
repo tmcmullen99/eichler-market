@@ -1327,7 +1327,7 @@ function renderDossier(){
       +'<div class="cm-num"><div class="cm-num-v">'+cmFmtP(medPrice)+'</div><div class="cm-num-l">Median sale price</div><div class="cm-num-s">All recorded closings</div></div>'
       +'<div class="cm-num"><div class="cm-num-v">'+soldLabel+'</div><div class="cm-num-l">Recent sales</div><div class="cm-num-s">Closed, '+soldWindow+'</div></div>'
       +'<div class="cm-num"><div class="cm-num-v">'+cmFmtP(last.sp)+'</div><div class="cm-num-l">Last sale</div><div class="cm-num-s">'+last.a+' · '+last.dt+'</div></div>'
-      +'<div class="cm-num"><div class="cm-num-v">'+d.length+'</div><div class="cm-num-l">Sales on record</div><div class="cm-num-s">Out of ~140 homes in tract</div></div>'
+      +'<div class="cm-num"><div class="cm-num-v">'+d.length+'</div><div class="cm-num-l">Sales on record</div><div class="cm-num-s">Recorded closings</div></div>'
       +'<div class="cm-num"><div class="cm-num-v">'+yrRange+'</div><div class="cm-num-l">Sale years</div><div class="cm-num-s">Earliest–latest on record</div></div>'
     +'</div>'
     +'<div class="cm-num-cmp"><div class="cm-cmp-chip">vs. all Eichler median ($'+ALL_EICHLER_PPSF.toLocaleString()+'/sf) <b class="'+diffCls+'">'+diffSign+diff+'%</b></div></div>';
@@ -1768,13 +1768,9 @@ function addNext(){
 <!-- ── VIP Waitlist Section ── -->
 <div class="vip-section" id="vip-waitlist">
   <div class="vip-inner">
-    <div class="vip-notify-bar" id="vip-notif">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-      A buyer just joined the waitlist for <strong style="color:#c8a96e;margin:0 3px">Hillsborough Eichlers</strong> — 4 members waiting
-    </div>
     <div class="vip-badge"><span class="vip-badge-dot"></span><span class="vip-badge-txt">VIP Access · Hillsborough Eichlers</span></div>
     <h2 class="vip-title">See off-market Eichlers<br>before anyone else does.</h2>
-    <p class="vip-sub">Join the private waitlist for Hillsborough Eichlers in Menlo Park. You'll get first access to Make Me Move prices, coming-soon properties, and off-market opportunities — weeks before they ever hit the MLS.</p>
+    <p class="vip-sub">Join the private waitlist for Hillsborough Eichlers. You'll get first access to Make Me Move prices, coming-soon properties, and off-market opportunities — weeks before they ever hit the MLS.</p>
     <div class="vip-benefits">
       <div class="vip-ben"><div class="vip-ben-icon">🔑</div><div class="vip-ben-txt"><strong>Off-market before it lists.</strong> Get notified the moment a homeowner in Hillsborough Eichlers sets a Make Me Move price — before the general public can see it.</div></div>
       <div class="vip-ben"><div class="vip-ben-icon">⚡</div><div class="vip-ben-txt"><strong>Coming-soon alerts.</strong> Be the first buyer Tim calls when a homeowner in Hillsborough Eichlers signals they're ready to sell. No bidding wars. No competition.</div></div>
@@ -1793,12 +1789,6 @@ function addNext(){
       <div class="vip-thanks-title">You're on the list.</div>
       <div class="vip-thanks-sub">Tim will reach out directly when off-market opportunities open up in Hillsborough Eichlers. Check your email for confirmation.</div>
     </div>
-  </div>
-  <div class="vip-social-proof">
-    <div class="vip-sp-avatars">
-      <div class="vip-sp-avatar">PE</div><div class="vip-sp-avatar">NR</div><div class="vip-sp-avatar">DH</div><div class="vip-sp-avatar">TF</div>
-    </div>
-    <div class="vip-sp-text"><strong>4 buyers</strong> on the Hillsborough Eichlers waitlist &nbsp;·&nbsp; 9 off-market opportunities opened this quarter</div>
   </div>
 </div>
 
