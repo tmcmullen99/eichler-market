@@ -218,7 +218,7 @@ async function render(context, url) {
     if (!type.includes('text/html')) return res; // assets stream through
 
     let html = await res.text();
-    if (res.status === 200) html = addCanonical(html, url);
+    if (res.status === 200) html = addCanonical(html, shell ? new URL(shell, url.origin) : url);
 
     /* LOCAL NEWS in the menus (Tim, 25 Sep 2026). The header, the mobile drawer
        and the footer list are repeated in ~100 static pages; one seam here puts
