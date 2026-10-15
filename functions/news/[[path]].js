@@ -356,9 +356,19 @@ export async function onRequest(context) {
       aNewsRpc('get_news_index', { p_market_id: EM_MARKET_ID, p_limit: 500, p_offset: 0 }),
     ]);
     const arts = (idx && idx.ok && Array.isArray(idx.articles)) ? idx.articles : [];
-    const urls = arts.map(a => `<url><loc>https://eichlermarket.com${emHref(a)}</loc><lastmod>${String(a.published_at || '').slice(0, 10)}</lastmod></url>`).join('') +
-      (Array.isArray(posts) ? posts : []).map(p => `<url><loc>https://eichlermarket.com/news/${p.slug}</loc><lastmod>${p.created_at.slice(0,10)}</lastmod></url>`).join('');
-    return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://eichlermarket.com/news/</loc></url><url><loc>https://eichlermarket.com/market-reports/</loc></url>${urls}</urlset>`,
+    const sales = Array.isArray(posts) ? posts : [];
+    /* lastmod is the last real change: an article's update (falling back to its
+       publication), a sale report's creation (they are not edited), and for the
+       two index pages the newest item they list (SEO audit S64). */
+    const day = v => String(v || '').slice(0, 10);
+    const artDay = a => day(a.updated_at || a.published_at);
+    const newest = list => list.reduce((m, d) => (d > m ? d : m), '');
+    const newsDay = newest(arts.filter(a => a.kind !== 'market_review').map(artDay).concat(sales.map(p => day(p.created_at))));
+    const repDay = newest(arts.filter(a => a.kind === 'market_review').map(artDay));
+    const lm = d => (d ? `<lastmod>${d}</lastmod>` : '');
+    const urls = arts.map(a => `<url><loc>https://eichlermarket.com${emHref(a)}</loc>${lm(artDay(a))}</url>`).join('') +
+      sales.map(p => `<url><loc>https://eichlermarket.com/news/${p.slug}</loc>${lm(day(p.created_at))}</url>`).join('');
+    return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://eichlermarket.com/news/</loc>${lm(newsDay)}</url><url><loc>https://eichlermarket.com/market-reports/</loc>${lm(repDay)}</url>${urls}</urlset>`,
       { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=3600' } });
   }
   if (slug) {

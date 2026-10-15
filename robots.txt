@@ -6,4 +6,5 @@ Disallow: /auth/
 Disallow: /dashboard/
 Disallow: /r/
 
+# Sitemap index: static pages + news and sale reports.
 Sitemap: https://eichlermarket.com/sitemap.xml
