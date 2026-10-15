@@ -123,7 +123,26 @@ const MOVED = {
   '/save-10k': '/make-me-move/',          // credit offer withdrawn from public pages (Oct 2026)
   '/refer': '/auth/?tab=signup',          // same: the page was the credit pitch; accounts are made at /auth/
   '/communities': '/',                    // a stale copy of the home page (1,298 homes, July data)
-  '/community/pomeroy-west': '/community/maywood-park/', // linked from 60 sale reports; Maywood Park covers Pomeroy West
+  '/community/pomeroy-west': '/community/eichler-santa-clara/', // linked from 60 sale reports, never built; the Santa Clara page covers it
+  /* Duplicate community pages (S28): each pair listed the same homes under two
+     URLs. The survivor is the page with the correct description and the most
+     search impressions; the Vanderbilt pages listed all of Sunnyvale under a
+     tract name, so they go to Rancho Verde, which holds the Vanderbilt homes. */
+  '/community/eichler-campbell': '/community/campbell-eichlers/',
+  '/community/eichler-gilroy': '/community/gilroy-eichlers/',
+  '/community/eichler-los-altos-hills': '/community/los-altos-hills-eichlers/',
+  '/community/eichler-los-gatos': '/community/los-gatos-eichlers/',
+  '/community/eichler-milpitas': '/community/milpitas-eichlers/',
+  '/community/eichler-monte-sereno': '/community/monte-sereno-eichlers/',
+  '/community/eichler-morgan-hill': '/community/morgan-hill-eichlers/',
+  '/community/eichler-san-jose': '/community/san-jose-eichlers/',
+  '/community/eichler-saratoga': '/community/saratoga-eichlers/',
+  '/community/eichler-sunnyvale': '/community/sunnyvale-eichlers/',
+  '/community/eichler-sunnyvale-vanderbilt-area': '/community/rancho-verde/',
+  '/community/sunnyvale-vanderbilt-tract': '/community/rancho-verde/',
+  '/community/eichler-stanford': '/community/stanford-eichlers/',
+  '/community/stanford-palo-alto-hills': '/community/stanford-eichlers/',
+  '/community/south-los-altos-eichlers': '/community/los-altos-eichlers/',
 };
 
 function movedTarget(pathname) {

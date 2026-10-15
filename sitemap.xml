@@ -73,49 +73,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://eichlermarket.com/community/eichler-campbell/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://eichlermarket.com/community/eichler-cupertino/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-gilroy/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-los-altos-hills/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-los-gatos/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-milpitas/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-monte-sereno/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-morgan-hill/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -127,37 +85,7 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://eichlermarket.com/community/eichler-san-jose/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://eichlermarket.com/community/eichler-santa-clara/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-saratoga/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-stanford/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-sunnyvale-vanderbilt-area/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/eichler-sunnyvale/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -409,12 +337,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://eichlermarket.com/community/south-los-altos-eichlers/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://eichlermarket.com/community/stanford-eichlers/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -427,12 +349,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://eichlermarket.com/community/stanford-palo-alto-hills/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://eichlermarket.com/community/sunnyvale-eichlers/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -440,12 +356,6 @@
   </url>
   <url>
     <loc>https://eichlermarket.com/community/sunnyvale-other-eichlers/</loc>
-    <lastmod>2026-09-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://eichlermarket.com/community/sunnyvale-vanderbilt-tract/</loc>
     <lastmod>2026-09-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

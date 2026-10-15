@@ -18,21 +18,9 @@
   "cuernavaca",
   "cupertino-eichlers",
   "east-palo-alto-eichlers",
-  "eichler-campbell",
   "eichler-cupertino",
-  "eichler-gilroy",
-  "eichler-los-altos-hills",
-  "eichler-los-gatos",
-  "eichler-milpitas",
-  "eichler-monte-sereno",
-  "eichler-morgan-hill",
   "eichler-mountain-view",
-  "eichler-san-jose",
   "eichler-santa-clara",
-  "eichler-saratoga",
-  "eichler-stanford",
-  "eichler-sunnyvale",
-  "eichler-sunnyvale-vanderbilt-area",
   "el-granada-eichlers",
   "fairbrae",
   "fairglen",
@@ -74,13 +62,10 @@
   "saratoga-eichlers",
   "sequoia-meadow",
   "shadygrove",
-  "south-los-altos-eichlers",
   "stanford-eichlers",
   "stanford-gardens",
-  "stanford-palo-alto-hills",
   "sunnyvale-eichlers",
   "sunnyvale-other-eichlers",
-  "sunnyvale-vanderbilt-tract",
   "treasure-isle",
   "woodside-eichlers"
   ];
@@ -89,7 +74,23 @@
 
   // Aliases: DB slug -> existing page slug (covers fallback communities).
   var ALIAS = {
-    'portola-valley-eichlers': 'ladera'
+    'portola-valley-eichlers': 'ladera',
+    'eichler-campbell': 'campbell-eichlers',
+    'eichler-gilroy': 'gilroy-eichlers',
+    'eichler-los-altos-hills': 'los-altos-hills-eichlers',
+    'eichler-los-gatos': 'los-gatos-eichlers',
+    'eichler-milpitas': 'milpitas-eichlers',
+    'eichler-monte-sereno': 'monte-sereno-eichlers',
+    'eichler-morgan-hill': 'morgan-hill-eichlers',
+    'eichler-san-jose': 'san-jose-eichlers',
+    'eichler-saratoga': 'saratoga-eichlers',
+    'eichler-sunnyvale': 'sunnyvale-eichlers',
+    'eichler-sunnyvale-vanderbilt-area': 'rancho-verde',
+    'sunnyvale-vanderbilt-tract': 'rancho-verde',
+    'eichler-stanford': 'stanford-eichlers',
+    'stanford-palo-alto-hills': 'stanford-eichlers',
+    'south-los-altos-eichlers': 'los-altos-eichlers',
+    'pomeroy-west': 'eichler-santa-clara'
   };
 
   // Returns a safe community URL, or null if no page exists (caller renders plain text).
