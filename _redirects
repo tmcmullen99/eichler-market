@@ -1,8 +1,9 @@
+# /communities, /save-10k, /refer, www → apex and the retired duplicate community
+# pages are 301s in functions/_middleware.js (the middleware runs before these rules).
+# Directory pages (/community/<slug>/, /homes/<slug>/, /how-it-works/) are served by Pages
+# itself, which redirects the no-slash form to the slash form; a path with no page answers
+# 404 with 404.html instead of the home page.
 / /index.html 200
-/communities /index.html 200
-/community/* /community/:splat/index.html 200
-/homes/* /homes/:splat/index.html 200
-/how-it-works /how-it-works/index.html 200
 
 # Marketplace auth routes
 /auth/*       /auth/index.html 200

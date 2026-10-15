@@ -102,6 +102,69 @@ const PHOTO_HELPER =
    and stops it touching a URL that already carries a key. */
 const TILE = /(https:\/\/\{s\}\.basemaps\.cartocdn\.com\/[a-z_\/]+\/\{z\}\/\{x\}\/\{y\}(?:\{r\})?\.png)(?!\?)/g;
 
+/* ONE HOST, ONE URL PER PAGE (SEO audit S27/S13/S28/S29, 15 Oct 2026).
+
+   eichlermarket.com (the apex) is the canonical host: the sitemap, the news
+   pages and every published link already use it. www.eichlermarket.com
+   answered 200 with the same pages, so every page existed twice with no
+   canonical. Now:
+     - www → apex, 301, path and query kept;
+     - retired URLs (the credit pages, the stale /communities/ copy of the home
+       page, duplicate community pages) → 301 to the page that replaced them;
+     - every HTML page without its own <link rel="canonical"> gets one, on the
+       apex, in the trailing-slash form the sitemap uses;
+     - *.pages.dev (preview and project hosts) answer X-Robots-Tag: noindex. */
+const APEX = 'eichlermarket.com';
+const ORIGIN = 'https://' + APEX;
+
+/* Retired path (no trailing slash) → where it lives now. Published news URLs
+   never appear here: they do not change. */
+const MOVED = {
+  '/save-10k': '/make-me-move/',          // credit offer withdrawn from public pages (Oct 2026)
+  '/refer': '/auth/?tab=signup',          // same: the page was the credit pitch; accounts are made at /auth/
+  '/communities': '/',                    // a stale copy of the home page (1,298 homes, July data)
+  '/community/pomeroy-west': '/community/maywood-park/', // linked from 60 sale reports; Maywood Park covers Pomeroy West
+};
+
+function movedTarget(pathname) {
+  let p = pathname.replace(/\/index\.html$/i, '/');
+  if (p.length > 1) p = p.replace(/\/+$/, '');
+  return Object.prototype.hasOwnProperty.call(MOVED, p) ? MOVED[p] : null;
+}
+
+/* The canonical form of a path: directory pages end in "/", files keep their
+   name. /homes/ is one page per home through ?p=<slug>, so that one
+   parameter is kept; every other query (utm, ref, fbclid) is dropped. */
+function canonicalUrl(url) {
+  let p = url.pathname.replace(/\/index\.html$/i, '/');
+  if (!/\.[a-z0-9]+$/i.test(p) && !p.endsWith('/')) p += '/';
+  if (p === '/homes/') {
+    const slug = url.searchParams.get('p');
+    if (slug && /^[a-z0-9-]+$/.test(slug)) return ORIGIN + p + '?p=' + slug;
+  }
+  return ORIGIN + p;
+}
+
+function addCanonical(html, url) {
+  if (/<link[^>]+rel=["']?canonical/i.test(html)) return html;     // page already says
+  if (/<meta[^>]+name=["']robots["'][^>]+noindex/i.test(html)) return html;
+  const tag = '<link rel="canonical" href="' + canonicalUrl(url).replace(/"/g, '&quot;') + '">';
+  if (/<\/title>/i.test(html)) return html.replace(/<\/title>/i, '</title>\n' + tag);
+  if (/<head[^>]*>/i.test(html)) return html.replace(/<head([^>]*)>/i, '<head$1>' + tag);
+  return html;
+}
+
+function redirect(location, status) {
+  return new Response(null, { status: status || 301, headers: { Location: location, 'Cache-Control': 'public, max-age=3600' } });
+}
+
+function withRobots(res, host) {
+  if (!host.endsWith('.pages.dev')) return res;
+  const h = new Headers(res.headers);
+  h.set('X-Robots-Tag', 'noindex, nofollow');
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers: h });
+}
+
 function addNewsNav(html) {
   if (html.indexOf('class="nav-link" href="/news/"') === -1 && html.indexOf('href="/news/" class="nav-link"') === -1) {
     html = html.replace(/(<a href="\/make-me-move\/" class="nav-link"[^>]*>Make Me Move<\/a>)/,
@@ -118,6 +181,20 @@ function addNewsNav(html) {
 }
 
 export async function onRequest(context) {
+  const url = new URL(context.request.url);
+  const host = url.hostname.toLowerCase();
+  const method = context.request.method;
+
+  if (method === 'GET' || method === 'HEAD') {
+    if (host === 'www.' + APEX) return redirect(ORIGIN + url.pathname + url.search);
+    const moved = movedTarget(url.pathname);
+    if (moved) return withRobots(redirect(moved.indexOf('?') === -1 ? moved + url.search : moved), host);
+  }
+
+  return withRobots(await render(context, url), host);
+}
+
+async function render(context, url) {
   const res = await context.next();
 
   try {
@@ -126,6 +203,7 @@ export async function onRequest(context) {
     if (!type.includes('text/html')) return res; // assets stream through
 
     let html = await res.text();
+    if (res.status === 200) html = addCanonical(html, url);
 
     /* LOCAL NEWS in the menus (Tim, 25 Sep 2026). The header, the mobile drawer
        and the footer list are repeated in ~100 static pages; one seam here puts

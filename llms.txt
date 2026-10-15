@@ -1,0 +1,33 @@
+# Eichler Market
+
+> eichlermarket.com is a marketplace for Eichler homes in Silicon Valley and on the San Francisco Peninsula. It maps the Eichler homes it has on record (1,768) with each home's last recorded sale, publishes a report for each recorded Eichler sale, and lets buyers make an offer on any Eichler, listed or not. Owners can set a private Make Me Move price. The site is run by Tim McMullen (CA DRE #02016832), McMullen Properties.
+
+## What is on the site
+
+- Tract and city pages, /community/<slug>/: the homes on record in each Eichler tract or city, with recorded sale prices, $/sq ft, the number of sales and the years they cover.
+- Sale reports, /news/<slug>: one page per recorded Eichler sale (address, date, price, $/sq ft, tract).
+- Local news and market reports, /news/ and /market-reports/: monthly, quarterly and annual figures from recorded sales, each with the sample behind it.
+- Listings, /active-listings/ and /listing/<mls>/: Eichlers currently for sale, from MLSListings.
+- How the figures are made, /methodology/: sources (county recorder data, MLS records, owner input) and their limits.
+
+## What the site does not do
+
+- It does not estimate the value of individual homes. Figures are recorded sales, or aggregates of recorded sales shown with their sample size and period.
+- It does not publish owners' names. Owners' Make Me Move prices are not public.
+
+## How to cite
+
+Cite the page and the figure with its sample and period as shown on the page, for example:
+"Eichler Market (eichlermarket.com), <page title>, <figure> (<n> recorded sales, <period>), accessed <date>."
+Questions about a figure: tim@eichlermarket.com.
+
+## Key URLs
+
+- Home and map: https://eichlermarket.com/
+- How it works: https://eichlermarket.com/how-it-works/
+- Methodology and sources: https://eichlermarket.com/methodology/
+- Make Me Move (owners): https://eichlermarket.com/make-me-move/
+- Eichlers for sale: https://eichlermarket.com/active-listings/
+- News and sale reports: https://eichlermarket.com/news/
+- Market reports: https://eichlermarket.com/market-reports/
+- Sitemap: https://eichlermarket.com/sitemap.xml

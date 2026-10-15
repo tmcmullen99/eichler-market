@@ -332,7 +332,10 @@ async function legacyPost(slug) {
     "about": { "@type": "Residence", "address": p.sale_address, "name": p.sale_address } })}</scr` + `ipt>`;
   const body = `<div class="eyebrow">${esc(p.pocket_name || 'Eichler Market')} · Sale Report</div><h1>${esc(p.title)}</h1>
     <div class="post-meta">Published ${fmtD(p.created_at.slice(0,10))} · ${esc(p.pocket_name || '')}</div><div class="post-body">${p.body_html}</div>`;
-  return new Response(SHELL(p.title, p.meta_desc, body, jsonld), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300' } });
+  /* Sale reports are listed in /news/sitemap.xml and linked from /news/ without a
+     trailing slash; that is their canonical form (SEO audit S27). */
+  const canon = `<link rel="canonical" href="https://eichlermarket.com/news/${encodeURIComponent(p.slug)}">`;
+  return new Response(SHELL(p.title, p.meta_desc, body, canon + '\n' + jsonld), { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=300' } });
 }
 
 export async function onRequest(context) {
