@@ -178,7 +178,7 @@ footer a{color:var(--warm);text-decoration:none}
   <a href="/make-me-move/" class="nav-cta">Make Me Move</a>
 </nav>
 ${inner}
-<footer>Eichler Market · McMullen Properties · DRE #02016832 · Operating under Real Broker, DRE #02228473 · <a href="/">eichlermarket.com</a></footer>
+<footer>Eichler Market · McMullen Properties LLC · Tim McMullen, Broker, CA DRE #02016832 · <a href="/">eichlermarket.com</a></footer>
 <script>
 (function(){
   var gal=document.getElementById('gal'); if(!gal) return;
@@ -312,7 +312,7 @@ export async function onRequest(context) {
     </div>
   </div>
   <div class="disc">
-    Listing data from MLSListings, refreshed twice daily. Eichler Market is operated by Tim McMullen, McMullen Properties (DRE #02016832), under Real Broker (DRE #02228473). Information deemed reliable but not guaranteed; buyers to verify all details. Not intended to solicit currently listed properties.
+    Listing data from MLSListings, refreshed twice daily. Eichler Market is operated by Tim McMullen, Broker, CA DRE #02016832, McMullen Properties LLC. Information deemed reliable but not guaranteed; buyers to verify all details. Not intended to solicit currently listed properties.
   </div>
 </div>`;
 
