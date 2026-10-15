@@ -964,7 +964,7 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
   </div>
 </section>
 
-<script src="/assets/em-listings.js?v=20261015" defer></script>
+<script src="/assets/em-listings.js?v=20261015b" defer></script>
 <script src="/assets/em-lead.js" defer></script>
 <script defer>
 (function(){
@@ -983,7 +983,7 @@ footer{background:#0a0e18;padding:32px 64px;display:flex;align-items:center;just
         function money(n){ if(n==null) return ''; return n>=1e6 ? '$'+(n/1e6).toFixed(n%1e6===0?0:2)+'M' : '$'+Number(n).toLocaleString(); }
         function pretty(iso){ if(!iso) return ''; var d=new Date(iso+'T00:00:00'); return isNaN(d)?'':d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
         function item(r){
-          var href = (L.communityHref && L.communityHref(r.building_slug)) || ('/community/'+r.building_slug+'/');
+          var href = (L.communityHref && L.communityHref(r.building_slug)) || '/#map';   // no page for this tract: the map, not a 404
           var bits = [
             '<span class="em-tick-tag">Just sold</span>',
             L.esc(r.unit_address||''),
@@ -2224,7 +2224,7 @@ function goSubmitLOI() {
   function iMoney(n){ if(n==null)return'—'; if(n>=1e6)return '$'+(n/1e6).toFixed(n%1e6===0?0:2)+'M'; return '$'+Number(n).toLocaleString(); }
   function iNum(n){ return Number(n||0).toLocaleString(); }
   function iEsc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
-  function tractHref(slug){ var L=window.EMListings; var h=L&&L.communityHref?L.communityHref(slug):null; return h||('/community/'+slug+'/'); }
+  function tractHref(slug){ var L=window.EMListings; var h=L&&L.communityHref?L.communityHref(slug):null; return h||'/#map'; }
   function prettyDate(iso){ if(!iso)return''; var d=new Date(iso+'T00:00:00'); if(isNaN(d))return''; return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
 
   // Build tract display-name map from the property dataset if present, else titlecase the slug

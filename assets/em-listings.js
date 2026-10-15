@@ -90,7 +90,8 @@
     'eichler-stanford': 'stanford-eichlers',
     'stanford-palo-alto-hills': 'stanford-eichlers',
     'south-los-altos-eichlers': 'los-altos-eichlers',
-    'pomeroy-west': 'eichler-santa-clara'
+    'pomeroy-west': 'eichler-santa-clara',
+    'monta-loma': 'mountain-view-eichlers'
   };
 
   // Returns a safe community URL, or null if no page exists (caller renders plain text).

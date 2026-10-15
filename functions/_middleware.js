@@ -123,6 +123,7 @@ const MOVED = {
   '/save-10k': '/make-me-move/',          // credit offer withdrawn from public pages (Oct 2026)
   '/refer': '/auth/?tab=signup',          // same: the page was the credit pitch; accounts are made at /auth/
   '/communities': '/',                    // a stale copy of the home page (1,298 homes, July data)
+  '/community/monta-loma': '/community/mountain-view-eichlers/',   // sale feeds tag Monta Loma sales; that page holds them
   '/community/pomeroy-west': '/community/eichler-santa-clara/', // linked from 60 sale reports, never built; the Santa Clara page covers it
   /* Duplicate community pages (S28): each pair listed the same homes under two
      URLs. The survivor is the page with the correct description and the most

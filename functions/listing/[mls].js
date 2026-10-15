@@ -84,7 +84,8 @@ const ALIAS = { 'portola-valley-eichlers': 'ladera',
     'eichler-stanford': 'stanford-eichlers',
     'stanford-palo-alto-hills': 'stanford-eichlers',
     'south-los-altos-eichlers': 'los-altos-eichlers',
-    'pomeroy-west': 'eichler-santa-clara' };
+    'pomeroy-west': 'eichler-santa-clara',
+    'monta-loma': 'mountain-view-eichlers' };
 
 function communityHref(slug) {
   if (!slug) return null;
