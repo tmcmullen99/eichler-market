@@ -68,7 +68,9 @@ window.EM = (function () {
     const { data, error } = await sb.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } }
+      /* The market the account was opened on (20 Oct 2026): the lead sync reads it, so an Eichler sign-up is never
+         filed under San Francisco Condo Market by default. */
+      options: { data: { full_name: fullName, market_slug: 'eichler-market', signup_host: (typeof location !== 'undefined' && location.hostname) || 'eichlermarket.com' } }
     });
     if (error) throw error;
 

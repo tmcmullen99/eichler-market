@@ -454,6 +454,8 @@ async function doSignUp(e) {
 
   try {
     const { user, session } = await EM.signUp(email, pw, fullName, phone);
+    // the visit becomes a known person (the lead sync links the visitor to the account by this event)
+    if (window.cmTrack) { try { window.cmTrack('signup_succeeded', { type: 'signup', confirmed: !!session, stage: session ? 'account_created' : 'email_confirmation_pending' }); } catch (e) {} }
     if (!session) {
       // Email confirmation required
       setMsg('signup-msg', 'ok',
