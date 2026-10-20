@@ -65,4 +65,46 @@
     },
     _toAmount: toAmount
   };
+
+  /* 20 Oct 2026 — the community pages' VIP waitlist. Every one of the 75 pages called joinWaitlist()
+     from its "Join waitlist →" button and none defined it, so the click did nothing and nothing was
+     stored. The lead goes to lead_captures (intent 'interest', the community as the building slug, the
+     first name in the message) and on to the desk through the inbound feed; the page then shows its
+     own "You're on the list" panel. */
+  function communitySlug() {
+    var m = document.querySelector('meta[name="em-community-slug"]');
+    if (m && m.content) return m.content;
+    var p = (location.pathname.match(/^\/community\/([a-z0-9-]+)\/?/) || [])[1];
+    return p || null;
+  }
+  window.joinWaitlist = function () {
+    var nameEl = document.getElementById('vip-name');
+    var emailEl = document.getElementById('vip-email');
+    var email = emailEl ? String(emailEl.value || '').trim() : '';
+    var name = nameEl ? String(nameEl.value || '').trim() : '';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      if (emailEl) { emailEl.focus(); emailEl.style.outline = '2px solid #b4533a'; setTimeout(function () { emailEl.style.outline = ''; }, 1500); }
+      return;
+    }
+    var btn = document.querySelector('#vip-form .vip-btn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Joining…'; }
+    var slug = communitySlug();
+    var badge = document.querySelector('.vip-badge-txt');
+    var label = (document.querySelector('meta[name="em-community"]') || {}).content
+      || (badge && badge.textContent.indexOf('·') > -1 ? badge.textContent.split('·').pop().trim() : '')
+      || slug || 'Eichler Market';
+    window.EMLead.submitLead({
+      email: email,
+      intent: 'interest',
+      building_slug: slug,
+      message: 'VIP waitlist · ' + label + (name ? ' · ' + name : '')
+    }).then(function () {
+      // form_submit is on the site_events allowlist; a new event name would be dropped silently.
+      try { if (window.cmTrack) window.cmTrack('form_submit', { form: 'vip_waitlist', community: slug }); } catch (_) {}
+      var form = document.getElementById('vip-form'), thanks = document.getElementById('vip-thanks');
+      if (form) form.style.display = 'none';
+      if (thanks) { thanks.style.display = 'block'; thanks.classList.add('show'); }
+      if (btn) { btn.disabled = false; btn.textContent = 'Join waitlist →'; }
+    });
+  };
 })();

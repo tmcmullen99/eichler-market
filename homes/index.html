@@ -620,6 +620,10 @@ document.getElementById('b3-bg').addEventListener('click',function(e){if(e.targe
 function b3Submit(){
   var n=document.getElementById('b3n').value,em=document.getElementById('b3e').value,c=document.getElementById('b3c').value;
   var p=window._p||{};
+  /* 20 Oct 2026: the offer is stored (offers, via submit_eichler_offer) before the EmailJS note to Tim;
+     until now it reached an inbox and nothing else. */
+  try { if (window.EMLead) EMLead.submitOffer({ name:n, email:em, building_slug:p.ts||'eichler-direct', unit_label:(p.a||'')+(p.c?' \u00b7 '+p.c:''), amount:B3.offer,
+    message:'Phone: '+c+' \u00b7 Pre-approved: '+(B3.pa?'yes':'no')+(B3.pa?'':' \u00b7 All cash: '+(B3.ac?'yes':'no'))+' \u00b7 Prefers: '+(B3.cp||'')+' \u00b7 From /homes/' }); } catch (_) {}
   fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({service_id:'service_733sibl',template_id:'template_dqt85kb',user_id:'rjIXPckMwcWAXnyPx',template_params:{to_name:'Tim',from_name:n,from_email:em,phone:c,offer_amount:fP(B3.offer)+' ($'+(Math.round(B3.offer/(p.sf||1)).toLocaleString())+'/sf)',preapproved:B3.pa?'Yes':'No',allcash:B3.pa?'N/A':B3.ac?'Yes':'No',contact_pref:B3.cp||'',property:p.a+' · '+p.c+' CA',subject:'New Offer: '+p.a}})}).catch(function(){});
   document.getElementById('b3-s3-addr').textContent=p.a||'';
   document.getElementById('b3-s3-price').textContent=fP(B3.offer);
@@ -832,5 +836,6 @@ function b3Submit(){
   {"@context":"https://schema.org","@type":"RealEstateAgent","name":"Eichler Market","description":"The marketplace for Silicon Valley Eichler and mid-century modern homes.","url":"https://eichlermarket.com/","email":"Tim@eichlermarket.com","telephone":"+1-415-691-9272","areaServed":[{"@type":"AdministrativeArea","name":"Santa Clara County, California"},{"@type":"AdministrativeArea","name":"San Mateo County, California"},{"@type":"AdministrativeArea","name":"Marin County, California"}],"founder":{"@type":"Person","name":"Tim McMullen"},"parentOrganization":{"@type":"Organization","name":"McMullen Properties LLC"}}
   </script>
 </footer>
+<script src="/assets/em-lead.js"></script>
 </body>
 </html>

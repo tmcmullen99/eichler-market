@@ -543,6 +543,9 @@ function submitAlert(e){
   } else { sendAlert(email, btn); }
 }
 function sendAlert(email, btn){
+  /* 20 Oct 2026: stored first (lead_captures, intent 'interest', via em-lead.js); the EmailJS send
+     to Tim stays as the notification. Until now this form reached an inbox and nothing else. */
+  try { if (window.EMLead) EMLead.submitLead({ email: email, intent: 'interest', message: 'Listing alerts \u00b7 active-listings' }); } catch (_) {}
   emailjs.send(EJ.svc, EJ.tB, {
     to_email:'Tim@eichlermarket.com', from_email:email,
     message:'New listing alert signup from Eichler Market active-listings. Email: '+email
@@ -555,5 +558,6 @@ function sendAlert(email, btn){
   });
 }
 </script>
+<script src="/assets/em-lead.js"></script>
 </body>
 </html>

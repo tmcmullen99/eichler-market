@@ -8,9 +8,15 @@
 
 const SUPABASE_URL      = 'https://kfqphwerygccpzntbbif.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_cR53l68E0KtOpANRKiVi7Q_Vx57yQb0';
+// markets.id for eichler-market (public, not a secret): every row this site writes is filed under it.
+const EICHLER_MARKET_ID = '0259ef6e-8f67-4a8b-ac31-dca54442ede9';
 
-// EmailJS (existing credentials + new template IDs)
-const EJ = {
+// EmailJS (existing credentials + new template IDs).
+// 20 Oct 2026: named EM_EJ. The 75 community pages declare their own global `var EJ` before this script
+// runs (it is deferred), and a top-level `const EJ` here then threw "Identifier 'EJ' has already been
+// declared" — so this whole file never ran on a community page: no window.EM, no sign-up modal, no
+// Make Me Move save.
+const EM_EJ = {
   svc:              'service_733sibl',
   key:              'rjIXPckMwcWAXnyPx',
   t_offer_to_tim:   'template_dqt85kb',   // existing — offer to Tim
@@ -81,7 +87,7 @@ window.EM = (function () {
         .eq('id', data.user.id);
 
       // Welcome email
-      _ejSend(EJ.t_welcome, {
+      _ejSend(EM_EJ.t_welcome, {
         to_email:   email,
         user_name:  fullName || email.split('@')[0],
       });
@@ -160,6 +166,9 @@ window.EM = (function () {
       result = await sb.from('listings')
         .insert({
           user_id:   _user.id,
+          /* 20 Oct 2026: filed under the Eichler market. Without it the row fell under the condo
+             verified-claim rule (building + unit) and every Make Me Move write was rejected. */
+          market_id: EICHLER_MARKET_ID,
           address:   opts.address,
           city:      opts.city || '',
           community: opts.community || null,
@@ -178,7 +187,7 @@ window.EM = (function () {
     const ppsf = opts.sqft ? Math.round(opts.price / opts.sqft) : null;
     const fmtP = '$' + Number(opts.price).toLocaleString();
     const fmtPpsf = ppsf ? '$' + ppsf.toLocaleString() + '/sf' : '';
-    _ejSend(EJ.t_mms_to_tim, {
+    _ejSend(EM_EJ.t_mms_to_tim, {
       to_email:'tim@mcmullen.properties', to_name:'Tim',
       owner_name: (_profile && _profile.full_name) || _user.email,
       owner_email: _user.email,
@@ -188,7 +197,7 @@ window.EM = (function () {
       price: fmtP, ppsf: fmtPpsf, notes: opts.notes || '',
       subject: 'New Make Me Move: ' + opts.address + ' — ' + fmtP,
     });
-    _ejSend(EJ.t_welcome, {
+    _ejSend(EM_EJ.t_welcome, {
       to_email: _user.email,
       to_name: (_profile && _profile.full_name) || 'Homeowner',
       address: opts.address, city: opts.city || '',
@@ -290,7 +299,7 @@ window.EM = (function () {
         .eq('id', listing.user_id)
         .single();
       if (ownerProfile) {
-        _ejSend(EJ.t_offer_to_owner, {
+        _ejSend(EM_EJ.t_offer_to_owner, {
           to_email:    ownerProfile.email,
           owner_name:  ownerProfile.full_name || 'Homeowner',
           buyer_name:  buyerName,
@@ -368,9 +377,9 @@ window.EM = (function () {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        service_id:      EJ.svc,
+        service_id:      EM_EJ.svc,
         template_id:     templateId,
-        user_id:         EJ.key,
+        user_id:         EM_EJ.key,
         template_params: { ...params, to_email: params.to_email || 'tim@mcmullen.properties' },
       }),
     }).catch(() => {});
