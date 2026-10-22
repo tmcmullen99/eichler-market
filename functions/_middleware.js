@@ -212,12 +212,22 @@ function addNewsNav(html) {
   return html;
 }
 
+/* ONE ACCOUNT (Tim, 21 Oct 2026: "Deactivate and unlink however he landed on the old version of the user account").
+   Accounts live in the member app at app.eichlermarket.com, on the city market platform. This site's own sign-in
+   (/auth/), its seller dashboard (/dashboard/, where the header's avatar and "Manage existing listing" pointed) and
+   /account/ (the link in the welcome email) belonged to the old account system; a member signed in there landed in
+   an empty seller dashboard instead of their account. They all open the app now. 302, so it can be undone. */
+const APP = 'https://app.' + APEX;
+const OLD_ACCOUNT = /^\/(auth|dashboard|account)(\/|$)/i;
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const host = url.hostname.toLowerCase();
   const method = context.request.method;
 
   if (method === 'GET' || method === 'HEAD') {
+    const old = url.pathname.match(OLD_ACCOUNT);
+    if (old) return withRobots(redirect(APP + (old[1].toLowerCase() === 'auth' ? '/signin' : '/'), 302), host);
     if (host === 'www.' + APEX) return redirect(ORIGIN + url.pathname + url.search);
     const moved = movedTarget(url.pathname);
     if (moved) return withRobots(redirect(moved.indexOf('?') === -1 ? moved + url.search : moved), host);
